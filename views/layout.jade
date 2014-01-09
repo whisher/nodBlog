@@ -1,0 +1,42 @@
+doctype html
+html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='appNodBlog')
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, user-scalable=no')
+        meta(name='robots', content='index,follow')
+        title= NodBlog
+        meta(name='title', content='nodBlog') 
+        meta(name='description', content='nodBlog') 
+        meta(name='author', content='whisher') 
+        link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/css/default.css')
+        | <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <![endif]-->
+        | <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script> <![endif]-->
+    body(data-ng-controller="MainCtrl")
+        div.navbar.navbar-fixed-top.navbar-inverse
+            div.container
+                div.navbar-header
+                    a.navbar-brand(href='#') Nodblog
+                div.collapse.navbar-collapse
+                    ul.nav.navbar-nav
+                        li.active
+                            a(href='#') Home
+                        li
+                            a(href='#/about') About
+                        li
+                            a(href='#/contact') Contact
+        div.container
+            div.row.row-offcanvas.row-offcanvas-right
+                div.col-xs-12.col-sm-9
+                    div.jumbotron
+                        h1 Hello, world!
+                    div.row
+                        div.col-6.col-sm-6.col-lg-4
+                            h2 Heading
+                            p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo
+                div#sidebar.col-xs-6.col-sm-3.sidebar-offcanvas
+                    div.list-group
+                        a.active.list-group-item(href='#') Link
+            footer
+                p &copy; Company 2013
+   

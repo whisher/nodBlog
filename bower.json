@@ -1,0 +1,10 @@
+{
+    "name": "nodBlog",
+    "version": "0.0.1",
+    "dependencies": {
+        "angular": "1.2.7",
+        "angular-ui-router": "0.2.7",
+        "jquery":"1.10.2",
+        "bootstrap": "3.0.3"
+    }
+}
