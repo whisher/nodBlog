@@ -1,0 +1,28 @@
+<div class="well">
+    <a href="#/blog/create" class="btn btn-primary">New</a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Body</th>
+            <th>Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-ng-repeat="article in articles">
+            <td>{{article.title}}</td>
+            <td>{{article.body}}</td>
+            <td>{{article.created | date:'medium'}}</td>
+            <td>
+                <a ng-href="#/blog/edit/{{article._id}}" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon-floppy-open"></span> Edit
+                </a>
+                <a ng-href="#/blog/delete/{{article._id}}" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-floppy-remove"></span> Delete
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
