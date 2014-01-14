@@ -1,5 +1,5 @@
 'use strict';
 
 exports.render = function(req, res) {
-    res.render('admin/index', { title: 'Express' });
+    res.render('admin/index', {});
 };

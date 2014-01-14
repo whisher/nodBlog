@@ -1,10 +1,15 @@
 'use strict';
  
-angular.module('nodblog',['ngRoute']).config(['$routeProvider',
-    function($routeProvider) {
+angular.module('nodblog.route',['ngRoute','nodblog.api.article']).config(['$routeProvider','ArticleProvider',
+    function($routeProvider,ArticleProvider) {
         $routeProvider
         .when('/', {
             templateUrl: 'default/views/index.html',
+            resolve: {
+                articles: function(Article){
+                    return Article.all();
+                }
+            },
             controller: 'IndexCtrl'
         })
         .when('/about', {
@@ -20,16 +25,18 @@ angular.module('nodblog',['ngRoute']).config(['$routeProvider',
         });
     }
 ]);
-angular.module('nodblog').config(['$locationProvider',
+angular.module('nodblog.mode',['ngRoute']).config(['$locationProvider',
     function($locationProvider) {
         $locationProvider.html5Mode(true).hashPrefix('!');
     }
 ]);
-angular.module('nodblog').controller('MainCtrl', function ($scope) {
+
+angular.module('nodblog',['nodblog.route','nodblog.mode']).controller('MainCtrl', function ($scope) {
         
     })
-    .controller('IndexCtrl', function ($scope) {
-        $scope.test = 'index';
+    .controller('IndexCtrl', function ($scope,articles) {
+        $scope.articles = articles;
+        console.log($scope.articles);
     })
     .controller('AboutCtrl', function ($scope) {
         $scope.test = 'about';
