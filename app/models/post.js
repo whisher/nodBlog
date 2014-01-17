@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
 /**
  * Article Schema
  */
-var ArticleSchema = new Schema({
+var PostSchema = new Schema({
     created: {
         type: Date,
         default: Date.now
@@ -30,13 +30,13 @@ var ArticleSchema = new Schema({
 /**
  * Validations
  */
-ArticleSchema.path('title').validate(function(title) {
+PostSchema.path('title').validate(function(title) {
     return title.length;
 }, 'Title cannot be blank');
 
-ArticleSchema.path('body').validate(function(body) {
+PostSchema.path('body').validate(function(body) {
     return body.length;
 }, 'Body cannot be blank');
 
 
-mongoose.model('Article', ArticleSchema);
+mongoose.model('Post', PostSchema);

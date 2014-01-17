@@ -27,9 +27,14 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
                             li.active
                                 a(href='#/') Home
                             li
-                                a(href='#/blog') Blog
+                                a(href='#/post') Post
                             li
-                                a(href='/contact') User
+                                a(href='#/user') User
+                            li.dropdown(data-ng-controller='MainCtrl')
+                                a.dropdown-toggle Add
+                                ul.dropdown-menu
+                                    li(data-ng-repeat='choice in items')
+                                        a(href='{{choice.route}}') {{choice.title}}
             div.container
                 block content
         footer
@@ -39,6 +44,11 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
         script(type='text/javascript', src='/vendor/angular-route/angular-route.js')
         script(type='text/javascript', src='/vendor/lodash/dist/lodash.js')
         script(type='text/javascript', src='/vendor/restangular/dist/restangular.js')
-        script(type='text/javascript', src='/lib/api/article.js')
+        script(type='text/javascript', src='/vendor/angular-bootstrap/ui-bootstrap-tpls.js')
+        script(type='text/javascript', src='/vendor/angular-ui/build/angular-ui.js')
+        script(type='text/javascript', src='/lib/api/post.js')
         script(type='text/javascript', src='/admin/js/app.js')
-   
+
+
+
+  

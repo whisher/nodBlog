@@ -6,14 +6,14 @@ module.exports = function(app, passport,auth) {
     var indexAdminController = require('../app/controllers/admin/index');
     app.get('/admin',auth.requiresLogin ,indexAdminController.render);
     
-    var articleController = require('../app/controllers/api/articles');
-    app.post('/api/articles', articleController.create);
-    app.get('/api/articles', articleController.all);
-    app.put('/api/articles/:id', articleController.update);
-    app.del('/api/articles/:id', articleController.destroy);
-    app.get('/api/articles/:id', articleController.show);
+    var postController = require('../app/controllers/api/post');
+    app.post('/api/post', postController.create);
+    app.get('/api/post', postController.all);
+    app.put('/api/post/:id', postController.update);
+    app.del('/api/post/:id', postController.destroy);
+    app.get('/api/post/:id', postController.show);
     
-    app.param('id', articleController.article);
+    app.param('id', postController.post);
     
     var users = require('../app/controllers/users');
     app.get('/signin', users.signin);

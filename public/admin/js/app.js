@@ -1,88 +1,159 @@
 'use strict';     
-angular.module('nodblog.route',['ngRoute','nodblog.api.article']).config(['$routeProvider','ArticleProvider',
-    function($routeProvider,ArticleProvider) {
+angular.module('nodblog.route',['ngRoute','nodblog.api.post']).config(['$routeProvider','PostProvider',
+    function($routeProvider,PostProvider) {
         $routeProvider
         .when('/', {
             templateUrl: 'admin/views/index.html',
-            controller: 'IndexCtrl'
+            controller: 'HomeCtrl'
         })
-        .when('/blog', {
-            templateUrl: 'admin/views/blog/index.html',
+        .when('/post', {
+            templateUrl: 'admin/views/post/index.html',
             resolve: {
-                articles: function(Article){
-                    return Article.all();
+                posts: function(Post){
+                    return Post.all();
                 }
             },
-            controller: 'IndexCtrl'
+            controller: 'PostIndexCtrl'
         })
-        .when('/blog/create', {
-            templateUrl: 'admin/views/blog/form.html',
-            controller: 'CreateCtrl'
+        .when('/post/create', {
+            templateUrl: 'admin/views/post/form.html',
+            controller: 'PostCreateCtrl'
         })
-        .when('/blog/edit/:id', {
-            templateUrl: 'admin/views/blog/form.html',
+        .when('/post/edit/:id', {
+            templateUrl: 'admin/views/post/form.html',
             resolve: {
-                article: function(Article, $route){
-                    return Article.one($route.current.params.id);
+                post: function(Post, $route){
+                    return Post.one($route.current.params.id);
                 }
             },
-            controller: 'EditCtrl'
+            controller: 'PostEditCtrl'
         })
-        .when('/blog/delete/:id', {
-            templateUrl: 'admin/views/blog/delete.html',
+        .when('/post/delete/:id', {
+            templateUrl: 'admin/views/post/delete.html',
             resolve: {
-                article: function(Article, $route){
-                    return Article.one($route.current.params.id);
+                post: function(Post, $route){
+                    return Post.one($route.current.params.id);
                 }
             },
-            controller: 'DeleteCtrl'
+            controller: 'PostDeleteCtrl'
+        })
+        .when('/media', {
+            templateUrl: 'admin/views/media/index.html',
+            controller: 'MediaIndexCtrl'
+        })
+        .when('/media/create', {
+            templateUrl: 'admin/views/media/form.html',
+            controller: 'MediaCreateCtrl'
         })
         .otherwise({
             redirectTo: '/'
         });
     }
 ]);
-angular.module('nodblog',['nodblog.route'])
-    .controller('MainCtrl', function ($scope) {
+angular.module('nodblog',['nodblog.route','ui.bootstrap'])
+.directive("autosaveForm", function($timeout,$location,Post) {
+    var promise;
+    return {
+        restrict: "A",
+        controller:function($scope){
+            $scope.save = function(){
+                $timeout.cancel(promise);
+                if(typeof $scope.post.put === 'function'){
+                    $scope.post.put().then(function() {
+                        return $location.path('/post');
+                    });
+                }
+                else{
+                    Post.store($scope.post).then(
+                        function(data) {
+                            return $location.path('/post');
+                        }, 
+                        function error(reason) {
+                            throw new Error(reason);
+                        }
+                    );
+                }
+            };
+            
+        },
+        link: function (scope, element, attrs) {
+            scope.$watch('form.$valid', function(validity) {
+                element.find('#status').removeClass('btn-success');
+                element.find('#status').addClass('btn-danger');
+                if(validity){
+                    Post.store(scope.post).then(
+                        function(data) {
+                            element.find('#status').removeClass('btn-danger');
+                            element.find('#status').addClass('btn-success');
+                            scope.post = Post.copy(data);
+                            _autosave();
+                        }, 
+                        function error(reason) {
+                            throw new Error(reason);
+                        }
+                    );
+                }  
+            })
+            function _autosave(){
+                    scope.post.put().then(
+                    function() {
+                        promise = $timeout(_autosave, 2000);
+                    },
+                    function error(reason) {
+                        throw new Error(reason);
+                    }
+                );
+            }
+        }
+    }
+})
+
+    .controller('MainCtrl', function ($scope,$location) {
+        $scope.items = [
+            {route:'#/post/create',title:'Post'},
+            {route:'#/media/create',title:'Media'},
+            {route:'#/page/create',title:'Page'},
+        ];
         
     })
-    .controller('IndexCtrl', function ($scope) {
+    .controller('HomeCtrl', function ($scope) {
        
     })
-    .controller('CreateCtrl', function ($scope,$location,Article) {
-        $scope.article = {};
-        $scope.save = function(){
-            Article.store($scope.article).then(
-                function(data) {
-                    return $location.path('/blog');
-                }, 
-                function error(reason) {
-                    throw new Error(reason);
-                }
-            );
-        };
+    .controller('PostIndexCtrl', function ($scope,posts) {
+       $scope.posts = posts;
     })
-    .controller('EditCtrl', function ($scope,$location,Article,article) {
-        var original = article;
-        $scope.article = Article.copy(original);
+    .controller('PostCreateCtrl', function ($scope,$location,Post) {
+        
+     })
+    .controller('PostEditCtrl', function ($scope,$location,Post,post) {
+        var original = post;
+        
+        $scope.post = Post.copy(original);
         $scope.isClean = function() {
-            return angular.equals(original, $scope.article);
+            return angular.equals(original, $scope.post);
         }
         $scope.save = function() {
-            $scope.article.put().then(function() {
-                return $location.path('/blog');
+            $scope.post.put().then(function() {
+                return $location.path('/post');
             });
         };
     })
-    .controller('DeleteCtrl', function ($scope,$location,article) {
-        var original = article;
+    .controller('PostDeleteCtrl', function ($scope,$location,post) {
         $scope.save = function() {
-            return $location.path('/blog');
+            return $location.path('/post');
         }
         $scope.destroy = function() {
-            original.remove().then(function() {
-                return $location.path('/blog');
+            post.remove().then(function() {
+                return $location.path('/post');
             });
         };
+    })
+    .controller('MediaIndexCtrl', function ($scope) {
+       
+    })
+    .controller('MediaCreateCtrl', function ($scope) {
+        $scope.media = {};
     });
+    
+    
     

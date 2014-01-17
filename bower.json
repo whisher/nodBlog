@@ -6,6 +6,8 @@
     "angular-route": "~1.2.7",
     "jquery": "1.10.2",
     "bootstrap": "3.0.3",
-    "restangular": "~1.2.2"
+    "restangular": "~1.2.2",
+    "angular-ui": "~0.4.0",
+    "angular-bootstrap": "~0.10.0"
   }
 }

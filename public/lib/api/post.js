@@ -1,6 +1,6 @@
 (function(window, angular, undefined) {
     'use strict';
-    angular.module('nodblog.api.article', ['restangular'])
+    angular.module('nodblog.api.post', ['restangular'])
         .config(function (RestangularProvider) {
             RestangularProvider.setBaseUrl('/api');
             RestangularProvider.setRestangularFields({
@@ -14,23 +14,23 @@
                 return elem;
             }); 
         })
-        .provider('Article', function() {
+        .provider('Post', function() {
             this.$get = function(Restangular) {
-                function ngArticle() {};
-                ngArticle.prototype.articles = Restangular.all('articles');
-                ngArticle.prototype.one = function(id) {
-                    return Restangular.one('articles', id).get();
+                function ngPost() {};
+                ngPost.prototype.articles = Restangular.all('post');
+                ngPost.prototype.one = function(id) {
+                    return Restangular.one('post', id).get();
                 };
-                ngArticle.prototype.all = function() {
+                ngPost.prototype.all = function() {
                     return this.articles.getList();
                 };
-                ngArticle.prototype.store = function(data) {
+                ngPost.prototype.store = function(data) {
                     return this.articles.post(data);
                 };
-                ngArticle.prototype.copy = function(original) {
+                ngPost.prototype.copy = function(original) {
                     return  Restangular.copy(original);
                 };
-                return new ngArticle;
+                return new ngPost;
             }
     })
 })(window, angular);
