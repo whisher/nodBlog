@@ -1,12 +1,13 @@
 'use strict';     
-angular.module('nodblog.route',['ngRoute','nodblog.api.post']).config(['$routeProvider','PostProvider',
-    function($routeProvider,PostProvider) {
-        $routeProvider
-        .when('/', {
+angular.module('nodblog.route',['ui.router','nodblog.api.post']).config(function($stateProvider,PostProvider) {
+        $stateProvider
+        .state('index', {
+            url: '/',
             templateUrl: 'admin/views/index.html',
             controller: 'HomeCtrl'
         })
-        .when('/post', {
+        .state('post', {
+            url: '/post',
             templateUrl: 'admin/views/post/index.html',
             resolve: {
                 posts: function(Post){
@@ -15,98 +16,48 @@ angular.module('nodblog.route',['ngRoute','nodblog.api.post']).config(['$routePr
             },
             controller: 'PostIndexCtrl'
         })
-        .when('/post/create', {
+        .state('postcreate', {
+            url: '/post/create',
             templateUrl: 'admin/views/post/form.html',
             controller: 'PostCreateCtrl'
         })
-        .when('/post/edit/:id', {
+        .state('postedit', {
+            url: '/post/edit/:id',
             templateUrl: 'admin/views/post/form.html',
             resolve: {
-                post: function(Post, $route){
-                    return Post.one($route.current.params.id);
+                post: function(Post, $stateParams){
+                    return Post.one($stateParams.id);
                 }
             },
             controller: 'PostEditCtrl'
         })
-        .when('/post/delete/:id', {
+        .state('postdelete', {
+            url: '/post/delete/:id',
             templateUrl: 'admin/views/post/delete.html',
             resolve: {
-                post: function(Post, $route){
-                    return Post.one($route.current.params.id);
+                post: function(Post,$stateParams){
+                    return Post.one($stateParams.id);
                 }
             },
             controller: 'PostDeleteCtrl'
         })
-        .when('/media', {
+        .state('media', {
+            url: 'media',
             templateUrl: 'admin/views/media/index.html',
             controller: 'MediaIndexCtrl'
         })
-        .when('/media/create', {
+        .state('/media/create', {
+            url: 'media',
             templateUrl: 'admin/views/media/form.html',
             controller: 'MediaCreateCtrl'
-        })
-        .otherwise({
-            redirectTo: '/'
         });
     }
-]);
-angular.module('nodblog',['nodblog.route','ui.bootstrap'])
-.directive("autosaveForm", function($timeout,$location,Post) {
-    var promise;
-    return {
-        restrict: "A",
-        controller:function($scope){
-            $scope.save = function(){
-                $timeout.cancel(promise);
-                if(typeof $scope.post.put === 'function'){
-                    $scope.post.put().then(function() {
-                        return $location.path('/post');
-                    });
-                }
-                else{
-                    Post.store($scope.post).then(
-                        function(data) {
-                            return $location.path('/post');
-                        }, 
-                        function error(reason) {
-                            throw new Error(reason);
-                        }
-                    );
-                }
-            };
-            
-        },
-        link: function (scope, element, attrs) {
-            scope.$watch('form.$valid', function(validity) {
-                element.find('#status').removeClass('btn-success');
-                element.find('#status').addClass('btn-danger');
-                if(validity){
-                    Post.store(scope.post).then(
-                        function(data) {
-                            element.find('#status').removeClass('btn-danger');
-                            element.find('#status').addClass('btn-success');
-                            scope.post = Post.copy(data);
-                            _autosave();
-                        }, 
-                        function error(reason) {
-                            throw new Error(reason);
-                        }
-                    );
-                }  
-            })
-            function _autosave(){
-                    scope.post.put().then(
-                    function() {
-                        promise = $timeout(_autosave, 2000);
-                    },
-                    function error(reason) {
-                        throw new Error(reason);
-                    }
-                );
-            }
-        }
-    }
+)
+.run(function ($state) {
+   $state.transitionTo('index');
 })
+
+angular.module('nodblog',['nodblog.route','ui.bootstrap'])
 
     .controller('MainCtrl', function ($scope,$location) {
         $scope.items = [
@@ -123,19 +74,32 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap'])
        $scope.posts = posts;
     })
     .controller('PostCreateCtrl', function ($scope,$location,Post) {
-        
-     })
+        $scope.save = function(){
+            Post.store($scope.post).then(
+                function(data) {
+                    return $location.path('/post');
+                }, 
+                function error(reason) {
+                    throw new Error(reason);
+                }
+           );
+        };
+    })
     .controller('PostEditCtrl', function ($scope,$location,Post,post) {
         var original = post;
-        
         $scope.post = Post.copy(original);
         $scope.isClean = function() {
             return angular.equals(original, $scope.post);
         }
         $scope.save = function() {
-            $scope.post.put().then(function() {
-                return $location.path('/post');
-            });
+            $scope.post.put().then(
+                function(data) {
+                    return $location.path('/post');
+                },
+                function error(reason) {
+                    throw new Error(reason);
+                }
+            );
         };
     })
     .controller('PostDeleteCtrl', function ($scope,$location,post) {
@@ -143,9 +107,14 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap'])
             return $location.path('/post');
         }
         $scope.destroy = function() {
-            post.remove().then(function() {
-                return $location.path('/post');
-            });
+            post.remove().then(
+                function() {
+                    return $location.path('/post');
+                },
+                function error(reason) {
+                    throw new Error(reason);
+                }
+            );
         };
     })
     .controller('MediaIndexCtrl', function ($scope) {
