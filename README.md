@@ -1,1 +1,1 @@
-A blog with node + express + mongoosejs + angularjs
+A blog with node, express, mongoosejs e angularjs

@@ -8,6 +8,7 @@
     "restangular": "~1.2.2",
     "angular-ui": "~0.4.0",
     "angular-bootstrap": "~0.10.0",
-    "angular-ui-router": "~0.2.8"
+    "angular-ui-router": "0.2.8-bowratic-tedium",
+    "ngUpload": "~0.5.6"
   }
 }

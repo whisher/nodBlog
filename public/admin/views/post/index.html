@@ -16,10 +16,10 @@
             <td>{{post.body}}</td>
             <td>{{post.created | date:'medium'}}</td>
             <td>
-                <a ng-href="#/post/edit/{{post._id}}" class="btn btn-warning btn-sm">
+                <a data-ng-href="#/post/edit/{{post._id}}" class="btn btn-warning btn-sm">
                     <span class="glyphicon glyphicon-floppy-open"></span> Edit
                 </a>
-                <a ng-href="#/post/delete/{{post._id}}" class="btn btn-danger btn-sm">
+                <a data-ng-href="#/post/delete/{{post._id}}" class="btn btn-danger btn-sm">
                     <span class="glyphicon glyphicon-floppy-remove"></span> Delete
                 </a>
             </td>

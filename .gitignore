@@ -1,4 +1,6 @@
 npm-debug.log
 node_modules
 public/vendor
+public/upload
+tmp
 

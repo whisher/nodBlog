@@ -42,12 +42,12 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post']).config(function
             controller: 'PostDeleteCtrl'
         })
         .state('media', {
-            url: 'media',
+            url: '/media',
             templateUrl: 'admin/views/media/index.html',
             controller: 'MediaIndexCtrl'
         })
-        .state('/media/create', {
-            url: 'media',
+        .state('mediacreate', {
+            url: '/media/create',
             templateUrl: 'admin/views/media/form.html',
             controller: 'MediaCreateCtrl'
         });
@@ -57,7 +57,7 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post']).config(function
    $state.transitionTo('index');
 })
 
-angular.module('nodblog',['nodblog.route','ui.bootstrap'])
+angular.module('nodblog',['nodblog.route','ui.bootstrap','ngUpload'])
 
     .controller('MainCtrl', function ($scope,$location) {
         $scope.items = [
@@ -120,8 +120,18 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap'])
     .controller('MediaIndexCtrl', function ($scope) {
        
     })
-    .controller('MediaCreateCtrl', function ($scope) {
-        $scope.media = {};
+    .controller('MediaCreateCtrl', function ($scope,$location,$timeout) {
+        $scope.isUploaded = false;
+        $scope.complete = function(content) {
+            $scope.isUploaded = true;
+            $scope.url = content.url;
+            $scope.title = content.title;
+            console.log(content);
+           /* $timeout(function(){
+                $location.path('/media');
+            },3000);*/
+        }
+        
     });
     
     

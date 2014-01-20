@@ -8,6 +8,7 @@ var express = require('express'),
     passport = require('passport'),
     logger = require('mean-logger');
 
+
 /**
  * Main application entry file.
  * Please note that the order of loading is important.
@@ -22,6 +23,11 @@ var config = require('./config/config'),
     auth = require('./config/middlewares/authorization'),
     mongoose = require('mongoose');
 
+// set temp directory for uploads
+process.env.TMPDIR = config.tmp;
+
+
+    
 //Bootstrap db connection
 var db = mongoose.connect(config.db);
 

@@ -20,7 +20,12 @@ var MediaSchema = new Schema({
         default: '',
         trim: true
     },
-    body: {
+    type: {
+        type: String,
+        default: '',
+        trim: true
+    },
+    url: {
         type: String,
         default: '',
         trim: true
@@ -34,7 +39,7 @@ MediaSchema.path('title').validate(function(title) {
     return title.length;
 }, 'Title cannot be blank');
 
-MediaSchema.path('body').validate(function(body) {
+MediaSchema.path('url').validate(function(body) {
     return body.length;
 }, 'Body cannot be blank');
 
