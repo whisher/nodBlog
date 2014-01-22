@@ -40,24 +40,72 @@ exports.create = function(req, res,next) {
         var type = files.media.type;
         var tmp = path.basename(files.media.path) + ext;
         var filename = uploadDir + '/' + tmp;
-        var data = {url:tmp,type:type}
+        var data = {url:tmp,type:type};
         fs.rename(files.media.path, filename , function(err) {
             if (err){
                 return next(new Error(err.code));
             }
-            res.jsonp(data);       
+            var media = new Media(data);
+            res.jsonp(media);
+            console.log(media);
+            /*media.save(function(err) {
+                if (err) {
+                   return next(new Error(err.code));
+                } 
+                res.jsonp(media);
+            }); */  
         });
         
     });
+};
 
-  
-   
-  //  var media = new Media(req.body);
-   /* media.save(function(err) {
+/**
+ * Update a media
+ */
+exports.update = function(req, res) {
+    var media = req.media;
+    media = _.extend(media, req.body);
+    media.save(function(err) {
         if (err) {
-            console.log(err);
+             console.log(err);
         } else {
             res.jsonp(media);
         }
-    });*/
+    });
+};
+
+/**
+ * Delete a media
+ */
+exports.destroy = function(req, res) {
+    var media = req.media;
+    media.remove(function(err) {
+        if (err) {
+            console.log(err); 
+        } else {
+            res.jsonp(post);
+        }
+    });
+};
+
+/**
+ * Show an post
+ */
+exports.show = function(req, res) {
+    res.jsonp(req.media);
+};
+
+/**
+ * List of medias
+ */
+exports.all = function(req, res) {
+    Media.find().sort('-created').exec(function(err, medias) {
+        if (err) {
+            res.render('error', {
+                status: 500
+            });
+        } else {
+            res.jsonp(medias);
+        }
+    });
 };

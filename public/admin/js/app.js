@@ -1,5 +1,5 @@
 'use strict';     
-angular.module('nodblog.route',['ui.router','nodblog.api.post']).config(function($stateProvider,PostProvider) {
+angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.media']).config(function($stateProvider,PostProvider,MediaProvider) {
         $stateProvider
         .state('index', {
             url: '/',
@@ -44,6 +44,11 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post']).config(function
         .state('media', {
             url: '/media',
             templateUrl: 'admin/views/media/index.html',
+            resolve: {
+                medias: function(Media){
+                    return Media.all();
+                }
+            },
             controller: 'MediaIndexCtrl'
         })
         .state('mediacreate', {
@@ -120,16 +125,28 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','ngUpload'])
     .controller('MediaIndexCtrl', function ($scope) {
        
     })
-    .controller('MediaCreateCtrl', function ($scope,$location,$timeout) {
+    .controller('MediaCreateCtrl', function ($scope,$location,$timeout,Media) {
+        $scope.media = {};
+       
         $scope.isUploaded = false;
         $scope.complete = function(content) {
+            content.title = $scope.media.title;
+            //console.log(content);
             $scope.isUploaded = true;
-            $scope.url = content.url;
-            $scope.title = content.title;
-            console.log(content);
-           /* $timeout(function(){
-                $location.path('/media');
-            },3000);*/
+           var media = Media.copy(content);
+            console.log(media);
+            media.put().then(
+                function(data) {
+                    /*$timeout(function(){
+                       // $location.path('/media');
+                    },5000);*/
+                },
+                function error(reason) {
+                    throw new Error(reason);
+                }
+            );
+        
+            
         }
         
     });

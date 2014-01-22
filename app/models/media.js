@@ -15,6 +15,11 @@ var MediaSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    user: {
+        type: String,
+        default: 'whisher',
+        trim: true
+    },
     title: {
         type: String,
         default: '',
@@ -35,12 +40,12 @@ var MediaSchema = new Schema({
 /**
  * Validations
  */
-MediaSchema.path('title').validate(function(title) {
+/*MediaSchema.path('title').validate(function(title) {
     return title.length;
 }, 'Title cannot be blank');
-
-MediaSchema.path('url').validate(function(body) {
-    return body.length;
+*/
+MediaSchema.path('url').validate(function(url) {
+    return url.length;
 }, 'Body cannot be blank');
 
 

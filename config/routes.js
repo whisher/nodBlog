@@ -22,8 +22,14 @@ module.exports = function(app, passport,auth) {
     
     /* Media */
     var mediaController = require('../app/controllers/api/media');
-    app.get('/admin/upload',indexAdminController.upload);
     app.post('/api/media', mediaController.create);
+    app.get('/api/media', mediaController.all);
+    app.put('/api/media/:mediaId', mediaController.update);
+    app.del('/api/media/:mediaId', mediaController.destroy);
+    app.get('/api/media/:mediaId', mediaController.show);
+    
+    /* Media Param */
+    app.param('mediaId', mediaController.media);
     
     /* Users */
     var users = require('../app/controllers/users');
@@ -41,8 +47,4 @@ module.exports = function(app, passport,auth) {
         failureRedirect: '/signin',
         failureFlash: true
     }), users.session);
-    
-    
-    
-    
 }
