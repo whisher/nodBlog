@@ -35,25 +35,23 @@ exports.create = function(req, res,next) {
     form.parse(req, function(err, fields, files){
         if(err){
             return next(new Error('Failed to upload media'));
-        }
+        } console.log(files);
         var ext = path.extname(files.media.name);
         var type = files.media.type;
         var tmp = path.basename(files.media.path) + ext;
         var filename = uploadDir + '/' + tmp;
-        var data = {url:tmp,type:type};
+        var data = {url:tmp,type:type,title:fields.title};
         fs.rename(files.media.path, filename , function(err) {
             if (err){
                 return next(new Error(err.code));
             }
             var media = new Media(data);
-            res.jsonp(media);
-            console.log(media);
-            /*media.save(function(err) {
+            media.save(function(err) {
                 if (err) {
                    return next(new Error(err.code));
                 } 
                 res.jsonp(media);
-            }); */  
+            });   
         });
         
     });

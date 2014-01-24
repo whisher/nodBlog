@@ -14,13 +14,73 @@ html, body {
 #wrap > .container {
     padding: 60px 15px 0;
 }
-.container .text-muted {
-    margin: 20px 0;
-}
 #footer > .container {
     padding-left: 15px;
     padding-right: 15px;
 }
-code {
-    font-size: 80%;
+.drop-box {
+    border: 5px dashed #DDD;
+    height: 150px; 
+    text-align: center;
+}
+.drop-box.dragover {
+	border: 5px dashed blue;
+}
+.media-pic{
+   width: 80px; 
+}
+input[type="file"] {	
+	width: 6.3em \0/IE9;
+	height: 1.5em;
+	margin: 5px;
+}
+
+input[multiple] {
+	width: 6.2em \0/IE9;
+}
+
+.sel-file {
+	padding: 1px 5px;
+	font-size: smaller;
+	color: grey;
+}
+
+.response {
+	padding-top: 30px;
+}
+
+.response>ul {
+	list-style-type: decimal;
+}
+
+.response li {
+	color: blue;
+	font-size: smaller;
+	padding-bottom: 5px; 
+}
+
+
+/* for IE*/
+.js-fileapi-wrapper {
+	display: inline-block;
+	vertical-align: middle;	
+}
+
+
+.ng-v {
+	float: right;
+}
+
+.sel-file img {
+	float: left;
+	width: 18px;
+	height: 18px;
+	padding-right: 10px;
+}
+
+.sub {
+	font-size: smaller;
+	color: #777;
+	padding-top: 5px;
+	padding-left: 10px;
 }

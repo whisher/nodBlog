@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
 
 
 /**
- * Article Schema
+ * Media Schema
  */
 var MediaSchema = new Schema({
     created: {

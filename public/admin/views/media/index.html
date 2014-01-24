@@ -1,0 +1,28 @@
+<div class="well">
+    <a href="#/media/create" class="btn btn-primary">New</a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Media</th>
+            <th>Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-ng-repeat="media in medias">
+            <td>{{media.title}}</td>
+            <td><img data-ng-src="/upload/{{media.url}}" alt="media.title" class="img-thumbnail" width="140"></td>
+            <td>{{media.created | date:'medium'}}</td>
+            <td>
+                <a data-ng-href="#/media/edit/{{media._id}}" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon-floppy-open"></span> Edit
+                </a>
+                <a data-ng-href="#/media/delete/{{media._id}}" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-floppy-remove"></span> Delete
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
