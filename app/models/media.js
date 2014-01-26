@@ -11,29 +11,35 @@ var mongoose = require('mongoose'),
  * Media Schema
  */
 var MediaSchema = new Schema({
-    created: {
-        type: Date,
-        default: Date.now
-    },
-    user: {
-        type: String,
-        default: 'whisher',
-        trim: true
-    },
     title: {
         type: String,
         default: '',
         trim: true
     },
-    type: {
+    description: {
         type: String,
         default: '',
         trim: true
     },
+    user:{
+        type: String,
+        required: true,
+        default: 'whisher'
+    },
+    type: {
+        type: String,
+        required: true,
+        trim: true
+    },
     url: {
         type: String,
-        default: '',
+        required: true,
         trim: true
+    },
+    created: {
+        type: Date,
+        required: true,
+        default: Date.now
     }
 });
 

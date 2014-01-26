@@ -1,6 +1,6 @@
 //'use strict';     
-angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.media'])
-    .config(function($stateProvider,RestangularProvider,PostProvider,MediaProvider) {
+angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.posts','nodblog.api.media'])
+    .config(function($stateProvider,RestangularProvider,PostProvider,PostsProvider,MediaProvider) {
         $stateProvider
             .state('index', {
                 url: '/',
@@ -11,8 +11,8 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.medi
                 url: '/post',
                 templateUrl: 'admin/views/post/index.html',
                 resolve: {
-                    posts: function(Post){
-                        return Post.all();
+                    posts: function(Posts){
+                        return Posts.all();
                     }
                 },
                 controller: 'PostIndexCtrl'
@@ -60,11 +60,21 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.medi
             .state('mediaedit', {
                 url: '/media/edit/:id',
                 templateUrl: 'admin/views/media/form.html',
+                resolve: {
+                    media: function(Media, $stateParams){
+                        return Media.one($stateParams.id);
+                    }
+                },
                 controller: 'MediaEditCtrl'
             })
             .state('mediadelete', {
                 url: '/media/delete/:id',
                 templateUrl: 'admin/views/media/delete.html',
+                resolve: {
+                    media: function(Media, $stateParams){
+                        return Media.one($stateParams.id);
+                    }
+                },
                 controller: 'MediaDeleteCtrl'
             });
             RestangularProvider.setBaseUrl('/api');
@@ -92,16 +102,53 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
             {route:'#/media/create',title:'Media'},
             {route:'#/page/create',title:'Page'},
         ];
+        $scope.today = function() {
+            $scope.dt = new Date();
+        };
+        $scope.today();
+        $scope.showWeeks = true;
+        $scope.toggleWeeks = function () {
+            $scope.showWeeks = ! $scope.showWeeks;
+        };
+
+        $scope.clear = function () {
+            $scope.dt = null;
+        };
+
+        $scope.toggleMin = function() {
+            $scope.minDate = ( $scope.minDate ) ? null : new Date();
+        };
+        $scope.toggleMin();
+
+        $scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.opened = true;
+        };
+
+        $scope.dateOptions = {
+            'year-format': "'yy'",
+            'starting-day': 1
+        };
+
         
+        $scope.format = 'dd-MMMM-yyyy';
     })
     .controller('HomeCtrl', function ($scope) {
        
     })
     .controller('PostIndexCtrl', function ($scope,posts) {
-       $scope.posts = posts;
+        $scope.posts = posts;
     })
     .controller('PostCreateCtrl', function ($scope,$location,Post) {
-        $scope.save = function(){
+        $scope.header = 'Add New Post';
+        $scope.status = Post.status;
+        $scope.post = {};
+        $scope.save = function(status){
+            $scope.post.status = status;
+            $scope.post.tags = _.map($scope.post.tags.split(','), function(s){
+                return s.trim();  
+            });
             Post.store($scope.post).then(
                 function(data) {
                     return $location.path('/post');
@@ -109,16 +156,19 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
                 function error(reason) {
                     throw new Error(reason);
                 }
-           );
+            );
         };
     })
     .controller('PostEditCtrl', function ($scope,$location,Post,post) {
+        $scope.header = 'Edit Post';
+        $scope.status = Post.status;
         var original = post;
         $scope.post = Post.copy(original);
         $scope.isClean = function() {
             return angular.equals(original, $scope.post);
         }
-        $scope.save = function() {
+        $scope.save = function(status) {
+            $scope.post.status = status;
             $scope.post.put().then(
                 function(data) {
                     return $location.path('/post');
@@ -226,8 +276,20 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
     .controller('MediaEditCtrl', function ($scope,medias) {
        $scope.medias = medias;
     })
-     .controller('MediaDeleteCtrl', function ($scope,medias) {
-       $scope.medias = medias;
+    .controller('MediaDeleteCtrl', function ($scope,$location,media) {
+        $scope.save = function() {
+            return $location.path('/media');
+        }
+        $scope.destroy = function() {
+            media.remove().then(
+                function() {
+                    return $location.path('/media');
+                },
+                function error(reason) {
+                    throw new Error(reason);
+                }
+            );
+        };
     })
     .directive('uploader',function() {
         return {
@@ -239,6 +301,4 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
             }
         };
     });
-    
-    
     

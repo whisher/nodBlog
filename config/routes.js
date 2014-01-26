@@ -20,6 +20,9 @@ module.exports = function(app, passport,auth) {
     /* Post Param */
     app.param('postId', postController.post);
     
+    /* List Post For Admin */
+    app.get('/api/posts', postController.allxadmin);
+    
     /* Media */
     var mediaController = require('../app/controllers/api/media');
     app.post('/api/media', mediaController.create);

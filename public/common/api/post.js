@@ -4,15 +4,16 @@
         .provider('Post', function() {
             this.$get = function(Restangular) {
                 function ngPost() {};
-                ngPost.prototype.articles = Restangular.all('post');
+                ngPost.prototype.status = ['draft','publish'];
+                ngPost.prototype.posts = Restangular.all('post');
                 ngPost.prototype.one = function(id) {
                     return Restangular.one('post', id).get();
                 };
                 ngPost.prototype.all = function() {
-                    return this.articles.getList();
+                    return this.posts.getList();
                 };
                 ngPost.prototype.store = function(data) {
-                    return this.articles.post(data);
+                    return this.posts.post(data);
                 };
                 ngPost.prototype.copy = function(original) {
                     return  Restangular.copy(original);

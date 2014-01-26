@@ -18,13 +18,19 @@ html, body {
     padding-left: 15px;
     padding-right: 15px;
 }
+.form-control[disabled],
+.form-control[readonly],
+fieldset[disabled] .form-control {
+  cursor:default;
+  background-color: #eeeeee;
+}
 .drop-box {
     border: 5px dashed #DDD;
     height: 150px; 
     text-align: center;
 }
 .drop-box.dragover {
-	border: 5px dashed blue;
+    border: 5px dashed blue;
 }
 .media-pic{
    width: 80px; 

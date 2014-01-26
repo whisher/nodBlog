@@ -30,7 +30,7 @@ exports.create = function(req, res) {
     var post = new Post(req.body);
     post.save(function(err) {
         if (err) {
-            console.log(err);
+            res.jsonp(500,{ error: err.message });
         } else {
             res.jsonp(post);
         }
@@ -45,7 +45,7 @@ exports.update = function(req, res) {
     post = _.extend(post, req.body);
     post.save(function(err) {
         if (err) {
-             console.log(err);
+             res.jsonp(500,{ error: err.message });
         } else {
             res.jsonp(post);
         }
@@ -59,7 +59,7 @@ exports.destroy = function(req, res) {
     var post = req.post;
     post.remove(function(err) {
         if (err) {
-            console.log(err); 
+            res.jsonp(500,{ error: err.message });
         } else {
             res.jsonp(post);
         }
@@ -74,16 +74,27 @@ exports.show = function(req, res) {
 };
 
 /**
- * List of posts
+ * List of public posts
  */
 exports.all = function(req, res) {
+    Post.find({created: { $lt: Date.now()}}).sort('-created').exec(function(err, posts) {
+        if (err) {
+           res.jsonp(500,{ error: err.message });
+        } else {
+            res.jsonp(200,posts);
+        }
+    });
+};
+
+/**
+ * List of admin posts
+ */
+exports.allxadmin = function(req, res) {
     Post.find().sort('-created').exec(function(err, posts) {
         if (err) {
-            res.render('error', {
-                status: 500
-            });
+           res.jsonp(500,{ error: err.message });
         } else {
-            res.jsonp(posts);
+            res.jsonp(200,posts);
         }
     });
 };

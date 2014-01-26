@@ -23,6 +23,10 @@ var config = require('./config/config'),
     auth = require('./config/middlewares/authorization'),
     mongoose = require('mongoose');
 
+//Use only for development env
+if (process.env.NODE_ENV === 'development') {
+    //mongoose.set('debug', true);
+}
 // set temp directory for uploads
 process.env.TMPDIR = config.tmp;
 
@@ -32,7 +36,7 @@ process.env.TMPDIR = config.tmp;
 var db = mongoose.connect(config.db);
 
 //Bootstrap models
-var models_path = __dirname + '/app/models';
+var modelsPath = __dirname + '/app/models';
 var walk = function(path) {
     fs.readdirSync(path).forEach(function(file) {
         var newPath = path + '/' + file;
@@ -46,7 +50,7 @@ var walk = function(path) {
         }
     });
 };
-walk(models_path);
+walk(modelsPath);
 
 //bootstrap passport config
 require('./config/passport')(passport);

@@ -81,7 +81,7 @@ exports.destroy = function(req, res) {
         if (err) {
             console.log(err); 
         } else {
-            res.jsonp(post);
+            res.jsonp(media);
         }
     });
 };

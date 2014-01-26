@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    monguurl = require('monguurl'),
     Schema = mongoose.Schema;
 
 
@@ -11,19 +12,39 @@ var mongoose = require('mongoose'),
  * Article Schema
  */
 var PostSchema = new Schema({
-    created: {
-        type: Date,
-        default: Date.now
-    },
     title: {
         type: String,
-        default: '',
+        required: true,
         trim: true
+    },
+    slug: {
+        type: String,
+        index: { unique: true }
     },
     body: {
         type: String,
-        default: '',
+        required: true,
         trim: true
+    },
+    status: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    created: {
+        type: Date,
+        required: true,
+        default: Date.now
+    },
+    published: {
+        type: Date,
+        required: true,
+        default: Date.now
+    },
+    tags: {
+        type: [String], 
+        required: true,
+        index: true
     }
 });
 
@@ -38,5 +59,9 @@ PostSchema.path('body').validate(function(body) {
     return body.length;
 }, 'Body cannot be blank');
 
+PostSchema.plugin(monguurl({
+  source: 'title',
+  target: 'slug'
+}));
 
 mongoose.model('Post', PostSchema);
