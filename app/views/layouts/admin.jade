@@ -24,10 +24,10 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
                         a.navbar-brand(href='#') Nodblog
                     div.collapse.navbar-collapse
                         ul.nav.navbar-nav
-                            li.active
-                                a(href='#/') Home
-                            li
-                                a(href='#/post') Post
+                            li(ng-class="{ active: $state.includes('index') }")
+                                a(ui-sref='index') Home
+                            li(ng-class="{ active: $state.includes('post') }")
+                                a(ui-sref='post') Post
                             li
                                 a(href='#/media') Media
                             li

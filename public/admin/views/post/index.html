@@ -5,7 +5,8 @@
     <thead>
         <tr>
             <th>Title</th>
-            <th>Body</th>
+            <th>Author</th>
+            <th>Tags</th>
             <th>Created</th>
             <th>Actions</th>
         </tr>
@@ -13,7 +14,8 @@
     <tbody>
         <tr data-ng-repeat="post in posts">
             <td>{{post.title}}</td>
-            <td>{{post.body}}</td>
+            <td>{{post.author}}</td>
+            <td>{{post.tags | arraytostrcs}}</td>
             <td>{{post.created | date:'medium'}}</td>
             <td>
                 <a data-ng-href="#/post/edit/{{post._id}}" class="btn btn-warning btn-sm">

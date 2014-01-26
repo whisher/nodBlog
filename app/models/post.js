@@ -17,6 +17,11 @@ var PostSchema = new Schema({
         required: true,
         trim: true
     },
+    author:{
+        type: String,
+        required: true,
+        default: 'whisher'
+    },
     slug: {
         type: String,
         index: { unique: true }
@@ -38,8 +43,7 @@ var PostSchema = new Schema({
     },
     published: {
         type: Date,
-        required: true,
-        default: Date.now
+        required: true
     },
     tags: {
         type: [String], 

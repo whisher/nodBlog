@@ -21,7 +21,7 @@ var MediaSchema = new Schema({
         default: '',
         trim: true
     },
-    user:{
+    author:{
         type: String,
         required: true,
         default: 'whisher'

@@ -102,10 +102,6 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
             {route:'#/media/create',title:'Media'},
             {route:'#/page/create',title:'Page'},
         ];
-        $scope.today = function() {
-            $scope.dt = new Date();
-        };
-        $scope.today();
         $scope.showWeeks = true;
         $scope.toggleWeeks = function () {
             $scope.showWeeks = ! $scope.showWeeks;
@@ -132,29 +128,30 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
         };
 
         
-        $scope.format = 'dd-MMMM-yyyy';
+        $scope.format = 'MMM d, yyyy';
     })
     .controller('HomeCtrl', function ($scope) {
        
     })
-    .controller('PostIndexCtrl', function ($scope,posts) {
+    .controller('PostIndexCtrl', function ($scope,posts,$state) {
         $scope.posts = posts;
+        console.log($state.includes('post'));
     })
-    .controller('PostCreateCtrl', function ($scope,$location,Post) {
+    .controller('PostCreateCtrl', function ($scope,$location,$filter,Post) {
         $scope.header = 'Add New Post';
         $scope.status = Post.status;
         $scope.post = {};
-        $scope.save = function(status){
-            $scope.post.status = status;
-            $scope.post.tags = _.map($scope.post.tags.split(','), function(s){
-                return s.trim();  
-            });
+        $scope.post.status = $scope.status[0];
+        $scope.post.published = new Date();
+        $scope.save = function(){
+            $scope.post.published = $filter('datetots')($scope.post.published);
+            $scope.post.tags = $filter('strcstoarray')($scope.post.tags);
             Post.store($scope.post).then(
                 function(data) {
                     return $location.path('/post');
                 }, 
-                function error(reason) {
-                    throw new Error(reason);
+                function error(err) {
+                    throw new Error(err);
                 }
             );
         };
@@ -300,5 +297,22 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
                 }); 
             }
         };
+    })
+    .filter('datetots', function() {
+        return function(input) {
+            return Date.parse(input);
+        }
+    })
+    .filter('strcstoarray', function() {
+        return function(input) {
+            return _.map(input.split(','), function(s){
+                return s.trim();  
+            });
+        }
+    })
+    .filter('arraytostrcs', function() {
+        return function(input) {
+            return input.join(',');
+        }
     });
     

@@ -4,7 +4,7 @@
         .provider('Post', function() {
             this.$get = function(Restangular) {
                 function ngPost() {};
-                ngPost.prototype.status = ['draft','publish'];
+                ngPost.prototype.status = ['publish','draft'];
                 ngPost.prototype.posts = Restangular.all('post');
                 ngPost.prototype.one = function(id) {
                     return Restangular.one('post', id).get();

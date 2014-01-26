@@ -98,3 +98,16 @@ exports.allxadmin = function(req, res) {
         }
     });
 };
+
+/**
+ * List of admin posts
+ */
+exports.alltags = function(req, res) {
+    Post.find().distinct('tags').exec(function(err, tags) {
+        if (err) {
+           res.jsonp(500,{ error: err.message });
+        } else {
+            res.jsonp(200,tags);
+        }
+    });
+};

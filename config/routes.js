@@ -23,6 +23,9 @@ module.exports = function(app, passport,auth) {
     /* List Post For Admin */
     app.get('/api/posts', postController.allxadmin);
     
+    /* Fetch all the distinct tags */
+    app.get('/api/tags', postController.alltags);
+    
     /* Media */
     var mediaController = require('../app/controllers/api/media');
     app.post('/api/media', mediaController.create);
