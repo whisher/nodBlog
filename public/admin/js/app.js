@@ -102,40 +102,25 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
             {route:'#/media/create',title:'Media'},
             {route:'#/page/create',title:'Page'},
         ];
+        
         $scope.showWeeks = true;
-        $scope.toggleWeeks = function () {
-            $scope.showWeeks = ! $scope.showWeeks;
-        };
-
-        $scope.clear = function () {
-            $scope.dt = null;
-        };
-
-        $scope.toggleMin = function() {
-            $scope.minDate = ( $scope.minDate ) ? null : new Date();
-        };
-        $scope.toggleMin();
-
+        $scope.minDate = new Date();
         $scope.open = function($event) {
             $event.preventDefault();
             $event.stopPropagation();
             $scope.opened = true;
         };
-
         $scope.dateOptions = {
             'year-format': "'yy'",
             'starting-day': 1
         };
-
-        
         $scope.format = 'MMM d, yyyy';
     })
     .controller('HomeCtrl', function ($scope) {
        
     })
-    .controller('PostIndexCtrl', function ($scope,posts,$state) {
+    .controller('PostIndexCtrl', function ($scope,posts) {
         $scope.posts = posts;
-        console.log($state.includes('post'));
     })
     .controller('PostCreateCtrl', function ($scope,$location,$filter,Post) {
         $scope.header = 'Add New Post';
@@ -164,8 +149,7 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
         $scope.isClean = function() {
             return angular.equals(original, $scope.post);
         }
-        $scope.save = function(status) {
-            $scope.post.status = status;
+        $scope.save = function() {
             $scope.post.put().then(
                 function(data) {
                     return $location.path('/post');
@@ -300,6 +284,7 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
     })
     .filter('datetots', function() {
         return function(input) {
+            //Number(new Date("26-January-2014"))var date = new Date(("26-January-2014").replace(/-/g, " "));
             return Date.parse(input);
         }
     })

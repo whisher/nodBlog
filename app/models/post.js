@@ -45,10 +45,28 @@ var PostSchema = new Schema({
         type: Date,
         required: true
     },
+    categories: {
+        type: [String], 
+        index: { unique: true }
+    },
     tags: {
         type: [String], 
         required: true,
         index: true
+    },
+    comment: {
+        type: Schema.Types.ObjectId, 
+        ref: 'CommentSchema'
+    },
+    meta: {
+        votes: {
+            type: Number,
+            default: 0
+        },
+        comments: {
+            type: Number,
+            default: 0
+        } 
     }
 });
 
@@ -57,11 +75,15 @@ var PostSchema = new Schema({
  */
 PostSchema.path('title').validate(function(title) {
     return title.length;
-}, 'Title cannot be blank');
+}, 'Title cannot be empty');
 
 PostSchema.path('body').validate(function(body) {
     return body.length;
-}, 'Body cannot be blank');
+}, 'Body cannot be empty');
+
+PostSchema.path('status').validate(function(status) {
+    return /publish|draft/.test(status);
+}, 'Is not a valid status');
 
 PostSchema.plugin(monguurl({
   source: 'title',

@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
     Post = mongoose.model('Post'),
     _ = require('lodash');
 
+
 /**
  * Find post by id
  */
@@ -77,7 +78,7 @@ exports.show = function(req, res) {
  * List of public posts
  */
 exports.all = function(req, res) {
-    Post.find({created: { $lt: Date.now()}}).sort('-created').exec(function(err, posts) {
+    Post.find().sort('-created').exec(function(err, posts) {
         if (err) {
            res.jsonp(500,{ error: err.message });
         } else {

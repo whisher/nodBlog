@@ -8,6 +8,10 @@
             <th>Author</th>
             <th>Tags</th>
             <th>Created</th>
+            <th>Published</th>
+            <th>Votes</th>
+            <th>Comments</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -17,6 +21,10 @@
             <td>{{post.author}}</td>
             <td>{{post.tags | arraytostrcs}}</td>
             <td>{{post.created | date:'medium'}}</td>
+            <td>{{post.published | date:'medium'}}</td>
+            <td>{{post.meta.votes}}</td>
+            <td>{{post.meta.comments}}</td>
+            <td>{{post.status}}</td>
             <td>
                 <a data-ng-href="#/post/edit/{{post._id}}" class="btn btn-warning btn-sm">
                     <span class="glyphicon glyphicon-floppy-open"></span> Edit
