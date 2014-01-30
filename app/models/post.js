@@ -31,6 +31,10 @@ var PostSchema = new Schema({
         required: true,
         trim: true
     },
+    avatar:{
+        type: String,
+        required: true
+    },
     status: {
         type: String,
         required: true,
@@ -46,8 +50,7 @@ var PostSchema = new Schema({
         required: true
     },
     categories: {
-        type: [String], 
-        index: { unique: true }
+        type: [String]
     },
     tags: {
         type: [String], 
@@ -73,6 +76,7 @@ var PostSchema = new Schema({
 /**
  * Validations
  */
+
 PostSchema.path('title').validate(function(title) {
     return title.length;
 }, 'Title cannot be empty');
@@ -84,6 +88,10 @@ PostSchema.path('body').validate(function(body) {
 PostSchema.path('status').validate(function(status) {
     return /publish|draft/.test(status);
 }, 'Is not a valid status');
+
+PostSchema.path('avatar').validate(function(avatar) {
+    return /\.(jpeg|jpg|gif|png)$/i.test(avatar);
+}, 'Is not a valid avatar url');
 
 PostSchema.plugin(monguurl({
   source: 'title',

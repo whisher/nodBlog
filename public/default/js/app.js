@@ -1,16 +1,25 @@
 'use strict';
  
-angular.module('nodblog.route',['ngRoute','nodblog.api.article']).config(['$routeProvider','ArticleProvider',
-    function($routeProvider,ArticleProvider) {
+angular.module('nodblog.route',['ngRoute','nodblog.api.post']).config(
+    function($routeProvider,RestangularProvider,PostProvider) {
         $routeProvider
         .when('/', {
-            templateUrl: 'default/views/index.html',
+            templateUrl: '/default/views/index.html',
             resolve: {
-                articles: function(Article){
-                    return Article.all();
+                posts: function(Post){
+                    return Post.all();
                 }
             },
             controller: 'IndexCtrl'
+        })
+        .when('/post/:slug', {
+            templateUrl: '/default/views/details.html',
+            resolve: {
+                post: function(Post,$route){
+                    return Post.one($route.current.params.id);
+                }
+            },
+            controller: 'DetailsCtrl'
         })
         .when('/about', {
             templateUrl: 'default/views/about.html',
@@ -23,20 +32,24 @@ angular.module('nodblog.route',['ngRoute','nodblog.api.article']).config(['$rout
         .otherwise({
             redirectTo: '/'
         });
+        RestangularProvider.setBaseUrl('/api');
     }
-]);
+);
 angular.module('nodblog.mode',['ngRoute']).config(['$locationProvider',
     function($locationProvider) {
         $locationProvider.html5Mode(true).hashPrefix('!');
     }
 ]);
 
-angular.module('nodblog',['nodblog.route','nodblog.mode']).controller('MainCtrl', function ($scope) {
+angular.module('nodblog',['ngSanitize','nodblog.route','nodblog.mode']).controller('MainCtrl', function ($scope) {
         
     })
-    .controller('IndexCtrl', function ($scope,articles) {
-        $scope.articles = articles;
-        console.log($scope.articles);
+    .controller('IndexCtrl', function ($scope,posts) {
+        $scope.posts = posts;
+    })
+    .controller('DetailsCtrl', function ($scope,post) {
+        $scope.post = post;
+       
     })
     .controller('AboutCtrl', function ($scope) {
         $scope.test = 'about';

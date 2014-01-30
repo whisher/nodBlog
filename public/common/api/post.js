@@ -5,6 +5,10 @@
             this.$get = function(Restangular) {
                 function ngPost() {};
                 ngPost.prototype.status = ['publish','draft'];
+                ngPost.prototype.labels = {
+                    frmCreateHeader:'Add New Post',
+                    frmEditHeader:'Edit Post'
+                };
                 ngPost.prototype.posts = Restangular.all('post');
                 ngPost.prototype.one = function(id) {
                     return Restangular.one('post', id).get();

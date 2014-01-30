@@ -13,12 +13,13 @@ module.exports = function(app, passport,auth) {
     var postController = require('../app/controllers/api/post');
     app.post('/api/post', postController.create);
     app.get('/api/post', postController.all);
-    app.put('/api/post/:postId', postController.update);
-    app.del('/api/post/:postId', postController.destroy);
-    app.get('/api/post/:postId', postController.show);
+    app.put('/api/post/:postSlug', postController.update);
+    app.del('/api/post/:postSlug', postController.destroy);
+    app.get('/api/post/:postSlug', postController.show);
+    app.post('/api/post/upload', postController.upload);
     
     /* Post Param */
-    app.param('postId', postController.post);
+    app.param('postSlug', postController.post);
     
     /* List Post For Admin */
     app.get('/api/posts', postController.allxadmin);
@@ -53,4 +54,6 @@ module.exports = function(app, passport,auth) {
         failureRedirect: '/signin',
         failureFlash: true
     }), users.session);
+    
+   
 }

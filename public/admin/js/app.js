@@ -5,7 +5,7 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.post
             .state('index', {
                 url: '/',
                 templateUrl: 'admin/views/index.html',
-                controller: 'HomeCtrl'
+                controller: 'IndexCtrl'
             })
             .state('post', {
                 url: '/post',
@@ -23,21 +23,21 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.post
                 controller: 'PostCreateCtrl'
             })
             .state('postedit', {
-                url: '/post/edit/:id',
+                url: '/post/edit/:slug',
                 templateUrl: 'admin/views/post/form.html',
                 resolve: {
                     post: function(Post, $stateParams){
-                        return Post.one($stateParams.id);
+                        return Post.one($stateParams.slug);
                     }
                 },
                 controller: 'PostEditCtrl'
             })
             .state('postdelete', {
-                url: '/post/delete/:id',
+                url: '/post/delete/:slug',
                 templateUrl: 'admin/views/post/delete.html',
                 resolve: {
                     post: function(Post,$stateParams){
-                        return Post.one($stateParams.id);
+                        return Post.one($stateParams.slug);
                     }
                 },
                 controller: 'PostDeleteCtrl'
@@ -97,12 +97,14 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.post
 angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
 
     .controller('MainCtrl', function ($scope,$location) {
+        /* Nav add tab */
         $scope.items = [
             {route:'#/post/create',title:'Post'},
             {route:'#/media/create',title:'Media'},
             {route:'#/page/create',title:'Page'},
         ];
         
+        /* Datepicker config */
         $scope.showWeeks = true;
         $scope.minDate = new Date();
         $scope.open = function($event) {
@@ -115,22 +117,106 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
             'starting-day': 1
         };
         $scope.format = 'MMM d, yyyy';
+        
+        
+        
+        
     })
-    .controller('HomeCtrl', function ($scope) {
-       
+    .factory('MyTest',function(){
+        return {
+            prop: 'Mytest',
+            myFunc: function(){
+               alert('Hello'); 
+            }
+        }
+    })
+    .service('PostUploader',function($upload){
+        var that = this;
+        var fileReaderSupported = window.FileReader !== null;
+        this.notify = null;
+        this.success = null;
+        this.showAlert = false;
+        this.avatar = '';
+        this.onFileSelect = function($files) {
+            var $file = $files[0];
+            var filename = $file.name;
+            this.avatar = filename;
+            var isImage = /\.(jpeg|jpg|gif|png)$/i.test(filename);
+            if(!isImage){
+                this.showAlert = true;
+                return;
+            }
+            this.showAlert = false;
+            if (fileReaderSupported && $file.type.indexOf('image') > -1) {
+                var fileReader = new FileReader();
+                fileReader.readAsDataURL($file);
+                fileReader.onload = that.notify;
+            }
+            $upload.upload({
+                url :'/api/post/upload',
+		method: 'POST',
+		headers: {'x-ng-file-upload': 'nodeblog'},
+		data :null,
+		file: $file,
+		fileFormDataName: 'avatar'
+            })
+            .success(that.success)
+            .progress(function(evt) {
+                
+            })
+            .error(function(data, status, headers, config) {
+                throw new Error('Upload error status: '+status);
+            })
+         
+        };
+        this.closeAlert = function() {
+            this.showAlert = false;
+        };
+    })
+    .controller('IndexCtrl', function ($scope,MyTest) {
+       angular.extend($scope,MyTest);
+       console.log($scope);
     })
     .controller('PostIndexCtrl', function ($scope,posts) {
         $scope.posts = posts;
     })
-    .controller('PostCreateCtrl', function ($scope,$location,$filter,Post) {
-        $scope.header = 'Add New Post';
+    .controller('PostCreateCtrl', function ($scope,$location,$filter,$timeout,PostUploader,Post) {
+        $scope.header = Post.labels.frmCreateHeader;
         $scope.status = Post.status;
         $scope.post = {};
         $scope.post.status = $scope.status[0];
         $scope.post.published = new Date();
+        
+        /* Uploader post */
+        $scope.dataUrl = null;
+        $scope.avatar = PostUploader.avatar;
+        $scope.showAlert = PostUploader.showAlert;
+        $scope.onFileSelect = PostUploader.onFileSelect;
+        $scope.closeAlert = PostUploader.closeAlert;
+        PostUploader.notify = function(e){
+            $timeout(function() {
+                $scope.dataUrl = e.target.result;
+            });
+        };
+        PostUploader.success = function(data, status, headers, config) {
+           $timeout(function() {
+                $scope.post.avatar = data.url;
+            });
+        }
+        $scope.$watch('avatar',function(newVal, oldVal){
+            if(newVal) { 
+                $scope.avatar = newVal;
+            }  
+        }); 
+        $scope.$watch('showAlert',function(newVal, oldVal){
+            $scope.showAlert = newVal;
+            $scope.dataUrl = null;
+        });
+       
         $scope.save = function(){
             $scope.post.published = $filter('datetots')($scope.post.published);
             $scope.post.tags = $filter('strcstoarray')($scope.post.tags);
+            $scope.post.categories = ['kkkk'];
             Post.store($scope.post).then(
                 function(data) {
                     return $location.path('/post');
@@ -140,12 +226,15 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
                 }
             );
         };
+        
+        
     })
     .controller('PostEditCtrl', function ($scope,$location,Post,post) {
-        $scope.header = 'Edit Post';
+        $scope.header =  Post.labels.frmEditHeader;
         $scope.status = Post.status;
         var original = post;
         $scope.post = Post.copy(original);
+        $scope.dataUrl = '/upload/'+original.avatar;
         $scope.isClean = function() {
             return angular.equals(original, $scope.post);
         }
@@ -181,7 +270,7 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
     .controller('MediaCreateCtrl', function ($scope,$location,$timeout,$upload,Media) {
         $scope.media = {};
         $scope.isUploaded = false;
-        $scope.fileReaderSupported = window.FileReader != null;
+        
 	$scope.uploadRightAway = false;
 	$scope.changeAngularVersion = function() {
 		window.location.hash = $scope.angularVersion;
@@ -249,10 +338,10 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
                 function error(reason) {
                     throw new Error(reason);
                 }, 
-                function(evt) {console.log(evt);
+                function(evt) {
                     $scope.progress[index] = parseInt(100.0 * evt.loaded / evt.total);
             });
-            } 
+        } 
     })
     .controller('MediaEditCtrl', function ($scope,medias) {
        $scope.medias = medias;
@@ -300,4 +389,4 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
             return input.join(',');
         }
     });
-    
+  

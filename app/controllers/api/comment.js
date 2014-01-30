@@ -3,24 +3,21 @@
 /**
  * Module dependencies.
  */
-var fs = require('fs'),
-    path = require('path'),
-    formidable = require('formidable'),
-    mongoose = require('mongoose'),
-    Post = mongoose.model('Post'),
+var mongoose = require('mongoose'),
+    Comment = mongoose.model('Comment'),
     _ = require('lodash');
 
 
 /**
- * Find post by id
+ * Find comment by id
  */
-exports.post = function(req, res, next, slug) {
-   Post.findOne({'slug': slug }, function (err, post) {
+exports.post = function(req, res, next, id) {
+   Post.findOne({ '_id': id }, function (err, post) {
         if (err) {
             return next(err);
         }
         if (!post) {
-            return res.jsonp(404,{ error: 'Failed to load post ' + slug });
+            return next(new Error('Failed to load post ' + id));
         }
         req.post = post;
         next();
@@ -65,18 +62,17 @@ exports.destroy = function(req, res) {
         if (err) {
             res.jsonp(500,{ error: err.message });
         } else {
-            res.jsonp(200,post);
+            res.jsonp(post);
         }
     });
 };
 
 /**
- * Show a post by id
+ * Show an post
  */
 exports.show = function(req, res) {
-    res.jsonp(200,req.post);
+    res.jsonp(req.post);
 };
-
 
 /**
  * List of public posts
@@ -115,28 +111,4 @@ exports.alltags = function(req, res) {
             res.jsonp(200,tags);
         }
     });
-};
-
-/**
- * Upload post avatar
- */
-exports.upload = function(req, res,next) {
-    var form = new formidable.IncomingForm;
-    var uploadDir = path.normalize(__dirname + '/../../../public/upload');
-    form.parse(req, function(err, fields, files){
-        if(err){
-            return next(new Error('Failed to upload media'));
-        } 
-        var ext = path.extname(files.avatar.name);
-        var type = files.avatar.type;
-        var tmp = path.basename(files.avatar.path) + ext;
-        var filename = uploadDir + '/' + tmp;
-        var data = {url:tmp};
-        fs.rename(files.avatar.path, filename , function(err) {
-            if (err){
-                return next(new Error(err.code));
-            }
-            res.jsonp(data);
-        });
-   });
 };

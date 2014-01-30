@@ -19,10 +19,10 @@ html, body {
     padding-right: 15px;
 }
 .form-control[disabled],
-.form-control[readonly],
-fieldset[disabled] .form-control {
-  cursor:default;
-  background-color: #eeeeee;
+    .form-control[readonly],
+        fieldset[disabled] .form-control {
+            cursor:default;
+            background-color: #eeeeee;
 }
 .drop-box {
     border: 5px dashed #DDD;
@@ -31,6 +31,12 @@ fieldset[disabled] .form-control {
 }
 .drop-box.dragover {
     border: 5px dashed blue;
+}
+img.post-avatar{
+  width: 50px;  
+}
+img.avatar-to-upload{
+   width: 100px;   
 }
 .media-pic{
    width: 80px; 

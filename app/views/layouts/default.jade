@@ -5,7 +5,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
         meta(name='viewport', content='width=device-width, initial-scale=1, user-scalable=no')
         meta(name='robots', content='index,follow')
         meta(name='fragment', content='!')
-        title= NodBlog
+        title= appTitle
         meta(name='title', content='nodBlog') 
         meta(name='description', content='nodBlog') 
         meta(name='author', content='whisher') 
@@ -43,8 +43,9 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
         script(type='text/javascript', src='/vendor/lodash/dist/lodash.js')
         script(type='text/javascript', src='/vendor/jquery/jquery.js')
         script(type='text/javascript', src='/vendor/angular/angular.js')
+        script(type='text/javascript', src='/vendor/angular-sanitize/angular-sanitize.js')
         script(type='text/javascript', src='/vendor/angular-route/angular-route.js')
         script(type='text/javascript', src='/vendor/restangular/dist/restangular.js')
-        script(type='text/javascript', src='/lib/api/article.js')
+        script(type='text/javascript', src='/common/api/post.js')
         script(type='text/javascript', src='/default/js/app.js')
-   
+        

@@ -5,12 +5,14 @@
     <thead>
         <tr>
             <th>Title</th>
+            <th>Slug</th>
             <th>Author</th>
             <th>Tags</th>
             <th>Created</th>
             <th>Published</th>
             <th>Votes</th>
             <th>Comments</th>
+            <th>Avatar</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
@@ -18,18 +20,20 @@
     <tbody>
         <tr data-ng-repeat="post in posts">
             <td>{{post.title}}</td>
+            <td>{{post.slug}}</td>
             <td>{{post.author}}</td>
             <td>{{post.tags | arraytostrcs}}</td>
             <td>{{post.created | date:'medium'}}</td>
             <td>{{post.published | date:'medium'}}</td>
             <td>{{post.meta.votes}}</td>
             <td>{{post.meta.comments}}</td>
+            <td><img alt="{{post.title}}" title="{{post.title}}" class="img-thumbnail post-avatar" data-ng-src="/upload/{{post.avatar}}"></td>
             <td>{{post.status}}</td>
             <td>
-                <a data-ng-href="#/post/edit/{{post._id}}" class="btn btn-warning btn-sm">
+                <a data-ng-href="#/post/edit/{{post.slug}}" class="btn btn-warning btn-sm" title="edit post">
                     <span class="glyphicon glyphicon-floppy-open"></span> Edit
                 </a>
-                <a data-ng-href="#/post/delete/{{post._id}}" class="btn btn-danger btn-sm">
+                <a data-ng-href="#/post/delete/{{post.slug}}" class="btn btn-danger btn-sm" title="delete post">
                     <span class="glyphicon glyphicon-floppy-remove"></span> Delete
                 </a>
             </td>
