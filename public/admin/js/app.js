@@ -1,6 +1,6 @@
 //'use strict';     
 angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.posts','nodblog.api.media'])
-    .config(function($stateProvider,RestangularProvider,PostProvider,PostsProvider,MediaProvider) {
+    .config(function($stateProvider,RestangularProvider) {
         $stateProvider
             .state('index', {
                 url: '/',
@@ -78,9 +78,6 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.post
                 controller: 'MediaDeleteCtrl'
             });
             RestangularProvider.setBaseUrl('/api');
-            RestangularProvider.setRestangularFields({
-                id: "_id"
-            });
             RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
                 if (operation === 'put') {
                     elem._id = undefined;
@@ -122,12 +119,14 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
         
         
     })
-    .factory('MyTest',function(){
+    
+    .factory('WindowUtils', function($window) {
         return {
-            prop: 'Mytest',
-            myFunc: function(){
-               alert('Hello'); 
-            }
+           setTitle:function(title){
+              var sep = ' - ';
+              var current = $window.document.title.split(sep)[0];
+              $window.document.title = current + sep + title;
+           }
         }
     })
     .service('PostUploader',function($upload){
@@ -173,26 +172,14 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
             this.showAlert = false;
         };
     })
-    .controller('IndexCtrl', function ($scope,MyTest) {
-       angular.extend($scope,MyTest);
-       console.log($scope);
+    .controller('IndexCtrl', function ($scope) {
+      
+       
     })
-    .controller('PostIndexCtrl', function ($scope,posts) {
-        $scope.posts = posts;
-    })
-    .controller('PostCreateCtrl', function ($scope,$location,$filter,$timeout,PostUploader,Post) {
-        $scope.header = Post.labels.frmCreateHeader;
-        $scope.status = Post.status;
-        $scope.post = {};
-        $scope.post.status = $scope.status[0];
-        $scope.post.published = new Date();
-        
+    .controller('PostParentCtrl', function ($scope,$timeout,PostUploader) {
+      
         /* Uploader post */
-        $scope.dataUrl = null;
-        $scope.avatar = PostUploader.avatar;
-        $scope.showAlert = PostUploader.showAlert;
-        $scope.onFileSelect = PostUploader.onFileSelect;
-        $scope.closeAlert = PostUploader.closeAlert;
+        angular.extend($scope,PostUploader);
         PostUploader.notify = function(e){
             $timeout(function() {
                 $scope.dataUrl = e.target.result;
@@ -211,7 +198,24 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
         $scope.$watch('showAlert',function(newVal, oldVal){
             $scope.showAlert = newVal;
             $scope.dataUrl = null;
-        });
+        }); 
+     
+    })
+    .controller('PostIndexCtrl', function ($scope,WindowUtils,posts) {
+        WindowUtils.setTitle('Post');
+        $scope.posts = posts;
+    })
+    .controller('PostCreateCtrl', function ($scope,$location,$filter,$timeout,$controller,WindowUtils,Post,PostUploader) {
+        
+        WindowUtils.setTitle('Create post');
+        
+        $scope.header = Post.labels.frmCreateHeader;
+        $scope.status = Post.status;
+        $scope.post = {};
+        $scope.post.status = $scope.status[0];
+        $scope.post.published = new Date();
+        
+        angular.extend($scope, new $controller('PostParentCtrl', {$scope:$scope,$timeout:$timeout,PostUploader:PostUploader}) );
        
         $scope.save = function(){
             $scope.post.published = $filter('datetots')($scope.post.published);
@@ -229,12 +233,22 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
         
         
     })
-    .controller('PostEditCtrl', function ($scope,$location,Post,post) {
+    .controller('PostEditCtrl', function ($scope,$location,$timeout,$controller,WindowUtils,PostUploader,Post,post) {
+        
+        WindowUtils.setTitle('Edit post');
+        
         $scope.header =  Post.labels.frmEditHeader;
         $scope.status = Post.status;
+        
+        angular.extend($scope, new $controller('PostParentCtrl', {$scope:$scope,$timeout:$timeout,PostUploader:PostUploader}) );
+        
         var original = post;
         $scope.post = Post.copy(original);
-        $scope.dataUrl = '/upload/'+original.avatar;
+        
+        $timeout(function(){
+            $scope.dataUrl = '/upload/'+post.avatar;
+        });
+       
         $scope.isClean = function() {
             return angular.equals(original, $scope.post);
         }
@@ -249,7 +263,8 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
             );
         };
     })
-    .controller('PostDeleteCtrl', function ($scope,$location,post) {
+    .controller('PostDeleteCtrl', function ($scope,$location,WindowUtils,post) {
+        WindowUtils.setTitle('Delete post');
         $scope.save = function() {
             return $location.path('/post');
         }
@@ -389,4 +404,4 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
             return input.join(',');
         }
     });
-  
+

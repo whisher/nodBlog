@@ -10,8 +10,8 @@
             <th>Tags</th>
             <th>Created</th>
             <th>Published</th>
-            <th>Votes</th>
-            <th>Comments</th>
+            <th><span class="glyphicon glyphicon-thumbs-up" title="Votes"></th>
+            <th><span class="glyphicon glyphicon-comment" title="Comments"></span></th>
             <th>Avatar</th>
             <th>Status</th>
             <th>Actions</th>
@@ -23,18 +23,18 @@
             <td>{{post.slug}}</td>
             <td>{{post.author}}</td>
             <td>{{post.tags | arraytostrcs}}</td>
-            <td>{{post.created | date:'medium'}}</td>
-            <td>{{post.published | date:'medium'}}</td>
+            <td>{{post.created | date:'short'}}</td>
+            <td>{{post.published | date:'short'}}</td>
             <td>{{post.meta.votes}}</td>
             <td>{{post.meta.comments}}</td>
             <td><img alt="{{post.title}}" title="{{post.title}}" class="img-thumbnail post-avatar" data-ng-src="/upload/{{post.avatar}}"></td>
             <td>{{post.status}}</td>
             <td>
                 <a data-ng-href="#/post/edit/{{post.slug}}" class="btn btn-warning btn-sm" title="edit post">
-                    <span class="glyphicon glyphicon-floppy-open"></span> Edit
+                    <span class="glyphicon glyphicon-edit"></span> Edit
                 </a>
                 <a data-ng-href="#/post/delete/{{post.slug}}" class="btn btn-danger btn-sm" title="delete post">
-                    <span class="glyphicon glyphicon-floppy-remove"></span> Delete
+                    <span class="glyphicon glyphicon-trash"></span> Delete
                 </a>
             </td>
         </tr>
