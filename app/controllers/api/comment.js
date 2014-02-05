@@ -11,104 +11,94 @@ var mongoose = require('mongoose'),
 /**
  * Find comment by id
  */
-exports.post = function(req, res, next, id) {
-   Post.findOne({ '_id': id }, function (err, post) {
+exports.comment = function(req, res, next, id) {
+   Comment.findOne({ '_id': id }, function (err, comment) {
         if (err) {
             return next(err);
         }
-        if (!post) {
-            return next(new Error('Failed to load post ' + id));
+        if (!comment) {
+            return res.jsonp(404,{ error: 'Failed to load comment ' + id });
         }
-        req.post = post;
+        req.comment = comment;
         next();
     });
 };
 
 /**
- * Create a post
+ * Find comment by post id
+ */
+exports.commentByPostId = function(req, res, next, id) {
+   Comment.find({ 'post_id': id }).sort('-created').exec(function(err, comments) {
+        if (err) {
+            return next(err);
+        }
+        req.comments = comments;
+        next();
+    });
+};
+
+/**
+ * Create a comment
  */
 exports.create = function(req, res) {
-    var post = new Post(req.body);
-    post.save(function(err) {
-        if (err) {
-            res.jsonp(500,{ error: err.message });
-        } else {
-            res.jsonp(post);
-        }
+    var comment = new Comment(req.body);
+    comment.save(function(err) {
+        if (err) {console.log(err);
+           return res.jsonp(500,{ error: 'Cannot save the comment' });
+        } 
+        res.jsonp(200,comment);
     });
 };
 
 /**
- * Update a post
+ * Update a comment
  */
 exports.update = function(req, res) {
-    var post = req.post;
-    post = _.extend(post, req.body);
-    post.save(function(err) {
+    var comment = req.comment;
+    comment = _.extend(comment, req.body);
+    comment.save(function(err) {
         if (err) {
-             res.jsonp(500,{ error: err.message });
-        } else {
-            res.jsonp(post);
+            return res.jsonp(500,{ error: 'Cannot update the comment' });
         }
-    });
+        res.jsonp(comment);
+   });
 };
 
 /**
- * Delete a post
+ * Delete a comment
  */
 exports.destroy = function(req, res) {
-    var post = req.post;
-    post.remove(function(err) {
+    var comment = req.comment;
+    comment.remove(function(err) {
         if (err) {
-            res.jsonp(500,{ error: err.message });
-        } else {
-            res.jsonp(post);
-        }
+            return res.jsonp(500,{ error: 'Cannot remove the comment' });
+        } 
+        res.jsonp(200,comment);
     });
 };
 
 /**
- * Show an post
+ * Show a comment
  */
 exports.show = function(req, res) {
-    res.jsonp(req.post);
+    res.jsonp(req.comment);
 };
 
 /**
  * List of public posts
  */
+exports.showByPostId = function(req, res) {
+    res.jsonp(req.comments);
+};
+
+/**
+ * List of comment
+ */
 exports.all = function(req, res) {
-    Post.find().sort('-created').exec(function(err, posts) {
+    Comment.find().sort('-created').exec(function(err, comments) {
         if (err) {
-           res.jsonp(500,{ error: err.message });
-        } else {
-            res.jsonp(200,posts);
-        }
-    });
-};
-
-/**
- * List of admin posts
- */
-exports.allxadmin = function(req, res) {
-    Post.find().sort('-created').exec(function(err, posts) {
-        if (err) {
-           res.jsonp(500,{ error: err.message });
-        } else {
-            res.jsonp(200,posts);
-        }
-    });
-};
-
-/**
- * List of admin posts
- */
-exports.alltags = function(req, res) {
-    Post.find().distinct('tags').exec(function(err, tags) {
-        if (err) {
-           res.jsonp(500,{ error: err.message });
-        } else {
-            res.jsonp(200,tags);
-        }
+           return res.jsonp(500,{ error: 'Cannot list comments' });
+        } 
+        res.jsonp(200,comments);
     });
 };

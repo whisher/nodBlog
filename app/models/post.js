@@ -78,11 +78,17 @@ var PostSchema = new Schema({
  */
 
 PostSchema.path('title').validate(function(title) {
-    return title.length;
+    if(typeof title !== "undefined" && title !== null){
+        return title.length > 0
+    }
+    return false;
 }, 'Title cannot be empty');
 
 PostSchema.path('body').validate(function(body) {
-    return body.length;
+    if(typeof body !== "undefined" && body !== null){
+        return body.length > 0
+    }
+    return false;
 }, 'Body cannot be empty');
 
 PostSchema.path('status').validate(function(status) {

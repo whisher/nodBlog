@@ -46,13 +46,13 @@ var MediaSchema = new Schema({
 /**
  * Validations
  */
-/*MediaSchema.path('title').validate(function(title) {
-    return title.length;
-}, 'Title cannot be blank');
-*/
+
 MediaSchema.path('url').validate(function(url) {
-    return url.length;
-}, 'Body cannot be blank');
+    if(typeof url !== "undefined" && url !== null){
+        return title.length > 0
+    }
+    return false;
+}, 'Body cannot be empty');
 
 
 mongoose.model('Media', MediaSchema);

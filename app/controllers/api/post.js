@@ -37,7 +37,7 @@ exports.create = function(req, res) {
         if (err) {
             return res.jsonp(500,{ error: 'Cannot save the post' });
         } 
-        res.jsonp(post);
+        res.jsonp(200,post);
     });
 };
 
@@ -51,7 +51,7 @@ exports.update = function(req, res) {
         if (err) {
             return res.jsonp(500,{ error: 'Cannot update the post' });
         } 
-        res.jsonp(post);
+        res.jsonp(200,post);
     });
 };
 
@@ -144,7 +144,7 @@ exports.upload = function(req, res,next) {
                 fs.unlink(files.avatar.path, function (err) {
                     if (err) {}
                 });
-                res.jsonp(data);
+                res.jsonp(200,data);
         });
     });
 };

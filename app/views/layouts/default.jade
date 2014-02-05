@@ -23,29 +23,28 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
                     a.navbar-brand(href='#') Nodblog
                 div.collapse.navbar-collapse
                     ul.nav.navbar-nav
-                        li.active
-                            a(href='/') Home
-                        li
-                            a(href='/about') About
-                        li
-                            a(href='/contact') Contact
+                        li(ng-class="{ active: $state.includes('index') }")
+                            a(ui-sref='index') Home
+                        li(ng-class="{ active: $state.includes('about') }")
+                            a(ui-sref='about') About
+                        li(ng-class="{ active: $state.includes('contact') }")
+                            a(ui-sref='contact') Contact
+                        li(ng-class="{ active: $state.includes('blog') }")
+                            a(ui-sref='blog') Blog
         div.container
             div.row.row-offcanvas.row-offcanvas-right
-                div.col-xs-12.col-sm-9
-                    div.jumbotron
-                        h1 Hello, world!
+                div.col-xs-12.col-sm-12
                     block content
-                div#sidebar.col-xs-6.col-sm-3.sidebar-offcanvas
-                    div.list-group
-                        a.active.list-group-item(href='#') Link
             footer
                 p &copy; Company 2013
         script(type='text/javascript', src='/vendor/lodash/dist/lodash.js')
         script(type='text/javascript', src='/vendor/jquery/jquery.js')
         script(type='text/javascript', src='/vendor/angular/angular.js')
-        script(type='text/javascript', src='/vendor/angular-sanitize/angular-sanitize.js')
-        script(type='text/javascript', src='/vendor/angular-route/angular-route.js')
+        script(type='text/javascript', src='/vendor/angular-ui-router/release/angular-ui-router.js')
         script(type='text/javascript', src='/vendor/restangular/dist/restangular.js')
-        script(type='text/javascript', src='/common/api/post.js')
+        script(type='text/javascript', src='/vendor/angular-sanitize/angular-sanitize.js')
+        script(type='text/javascript', src='/common/js/services/base.js')
+        script(type='text/javascript', src='/default/js/services/post.js')
+        script(type='text/javascript', src='/default/js/services/comment.js')
         script(type='text/javascript', src='/default/js/app.js')
         

@@ -24,6 +24,9 @@ var CommentSchema = new Schema({
         type: String,
         required: true
     },
+    web:{
+        type: String
+    },
     body: {
         type: String,
         required: true,
@@ -60,8 +63,26 @@ CommentSchema.path('email').validate(function(email) {
     return emailRegex.test(email);
 }, 'The email is not a valid email');
 
+CommentSchema.path('web').validate(function(web) {
+    if(typeof web !== "undefined" && web !== null){
+        var url = web.trim();
+        if(url.length > 0){
+            var urlregex = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
+            return  urlregex.test(web);
+        }
+    }
+    return true;
+}, 'Url not valid');
+
+CommentSchema.path('status').validate(function(status) {
+    return /pending|approved/.test(status);
+}, 'Is not a valid status');
+
 CommentSchema.path('body').validate(function(body) {
-    return body.length;
+    if(typeof body !== "undefined" && body !== null){
+        return body.length > 0
+    }
+    return false;
 }, 'Body cannot be empty');
 
 mongoose.model('Comment', CommentSchema);

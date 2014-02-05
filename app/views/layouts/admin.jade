@@ -21,17 +21,17 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
             div.navbar.navbar-fixed-top.navbar-inverse
                 div.container
                     div.navbar-header
-                        a.navbar-brand(href='#') Nodblog
+                        a.navbar-brand(href='/',target='_blank') Nodblog
                     div.collapse.navbar-collapse
                         ul.nav.navbar-nav
                             li(ng-class="{ active: $state.includes('index') }")
                                 a(ui-sref='index') Home
                             li(ng-class="{ active: $state.includes('post') }")
                                 a(ui-sref='post') Post
-                            li
-                                a(href='#/media') Media
-                            li
-                                a(href='#/user') User
+                            li(ng-class="{ active: $state.includes('media') }")
+                                a(ui-sref='media') Media
+                            li(ng-class="{ active: $state.includes('user') }")
+                                a(ui-sref='user') User
                             li.dropdown(data-ng-controller='MainCtrl')
                                 a.dropdown-toggle Add
                                 ul.dropdown-menu
@@ -50,10 +50,9 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
         script(type='text/javascript', src='/vendor/angular-bootstrap/ui-bootstrap-tpls.js')
         script(type='text/javascript', src='/vendor/angular-ui/build/angular-ui.js')
         script(type='text/javascript', src='/vendor/ng-file-upload/angular-file-upload.js')
-        script(type='text/javascript', src='/common/api/base.js')
-        script(type='text/javascript', src='/common/api/posts.js')
-        script(type='text/javascript', src='/common/api/post.js')
-        script(type='text/javascript', src='/common/api/media.js')
+        script(type='text/javascript', src='/common/js/services/base.js')
+        script(type='text/javascript', src='/admin/js/services/post.js')
+        script(type='text/javascript', src='/common/js/services/media.js')
         script(type='text/javascript', src='/admin/js/app.js')
 
 

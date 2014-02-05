@@ -1,5 +1,5 @@
 //'use strict';     
-angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.posts','nodblog.api.media'])
+angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.media'])
     .config(function($stateProvider,RestangularProvider) {
         $stateProvider
             .state('index', {
@@ -11,8 +11,8 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.post
                 url: '/post',
                 templateUrl: 'admin/views/post/index.html',
                 resolve: {
-                    posts: function(Posts){
-                        return Posts.all();
+                    posts: function(Post){
+                        return Post.all();
                     }
                 },
                 controller: 'PostIndexCtrl'
@@ -77,7 +77,7 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.post
                 },
                 controller: 'MediaDeleteCtrl'
             });
-            RestangularProvider.setBaseUrl('/api');
+            RestangularProvider.setBaseUrl('/admin/api');
             RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
                 if (operation === 'put') {
                     elem._id = undefined;
@@ -87,8 +87,9 @@ angular.module('nodblog.route',['ui.router','nodblog.api.post','nodblog.api.post
             }); 
     })
     .run(function ($state,$rootScope, $log) {
-       $state.transitionTo('index');
-       $rootScope.$log = $log;
+        $rootScope.$state = $state;
+        $state.transitionTo('index');
+        $rootScope.$log = $log;
     });
 
 angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
@@ -152,7 +153,7 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
                 fileReader.onload = that.notify;
             }
             $upload.upload({
-                url :'/api/post/upload',
+                url :'/admin/api/post/upload',
 		method: 'POST',
 		headers: {'x-ng-file-upload': 'nodeblog'},
 		data :null,
@@ -231,7 +232,6 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
             );
         };
         
-        
     })
     .controller('PostEditCtrl', function ($scope,$location,$timeout,$controller,WindowUtils,PostUploader,Post,post) {
         
@@ -240,10 +240,9 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
         $scope.header =  Post.labels.frmEditHeader;
         $scope.status = Post.status;
         
-        angular.extend($scope, new $controller('PostParentCtrl', {$scope:$scope,$timeout:$timeout,PostUploader:PostUploader}) );
-        
         var original = post;
         $scope.post = Post.copy(original);
+        angular.extend($scope, new $controller('PostParentCtrl', {$scope:$scope,$timeout:$timeout,PostUploader:PostUploader}) );
         
         $timeout(function(){
             $scope.dataUrl = '/upload/'+post.avatar;
@@ -252,6 +251,7 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
         $scope.isClean = function() {
             return angular.equals(original, $scope.post);
         }
+        
         $scope.save = function() {
             $scope.post.put().then(
                 function(data) {
@@ -262,6 +262,7 @@ angular.module('nodblog',['nodblog.route','ui.bootstrap','angularFileUpload'])
                 }
             );
         };
+       
     })
     .controller('PostDeleteCtrl', function ($scope,$location,WindowUtils,post) {
         WindowUtils.setTitle('Delete post');

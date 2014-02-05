@@ -9,23 +9,39 @@ module.exports = function(app, passport,auth) {
     var indexAdminController = require('../app/controllers/admin/index');
     app.get('/admin',auth.requiresLogin ,indexAdminController.render);
     
-    /* Post */
     var postController = require('../app/controllers/api/post');
-    app.post('/api/post', postController.create);
+    /* Admin Post Api */
+    app.post('/admin/api/post',auth.apiRequiresLogin, postController.create);
+    app.get('/admin/api/post',auth.apiRequiresLogin, postController.allxadmin);
+    app.put('/admin/api/post/:postSlug',auth.apiRequiresLogin, postController.update);
+    app.del('/admin/api/post/:postSlug',auth.apiRequiresLogin, postController.destroy);
+    app.get('/admin/api/post/:postSlug',auth.apiRequiresLogin, postController.show);
+    app.post('/admin/api/post/upload',auth.apiRequiresLogin, postController.upload);
+    
+    /* Public Post Api */
     app.get('/api/post', postController.all);
-    app.put('/api/post/:postSlug', postController.update);
-    app.del('/api/post/:postSlug', postController.destroy);
     app.get('/api/post/:postSlug', postController.show);
-    app.post('/api/post/upload', postController.upload);
+    app.get('/api/tags', postController.alltags);
     
     /* Post Param */
     app.param('postSlug', postController.post);
     
-    /* List Post For Admin */
-    app.get('/api/posts', postController.allxadmin);
     
-    /* Fetch all the distinct tags */
-    app.get('/api/tags', postController.alltags);
+    var commentController = require('../app/controllers/api/comment');
+    /* Admin Comment Api */
+    app.put('/admin/api/comment/:commentId', commentController.update);
+    app.del('/admin/api/comment/:commentId', commentController.destroy);
+    
+    /* Public Comment Api */
+    app.post('/api/comment', commentController.create);
+    app.get('/api/comment/:commentId', commentController.show);
+    app.get('/api/comment/:postId', commentController.showByPostId);
+    app.get('/api/comment', commentController.all);
+    
+    
+    /* Comment Param */
+    app.param('commentId', commentController.comment);
+    app.param('postId', commentController.commentByPostId);
     
     /* Media */
     var mediaController = require('../app/controllers/api/media');
