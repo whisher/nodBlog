@@ -1,5 +1,5 @@
-npm-debug.log
-node_modules
+./server/npm-debug.log
+./server/node_modules
 public/vendor
 public/upload
 tmp
