@@ -16,6 +16,9 @@
                     },
                     copy : function(original) {
                         return Restangular.copy(original);
+                    },
+                    getElements : function() {
+                        return elements;
                     }
                 };
             };  

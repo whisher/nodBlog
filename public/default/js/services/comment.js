@@ -7,6 +7,11 @@
             });
         })
         .factory('Comment', function(Base) {
-            return Base('comment');
+            function NgComment() {
+                this.byPostId = function(id){
+                    return this.getElements().one('post',id).getList();
+                 }
+            };
+            return angular.extend(Base('comment'), new NgComment());
         });
 })(window, angular);

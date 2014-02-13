@@ -35,7 +35,7 @@ module.exports = function(app, passport,auth) {
     /* Public Comment Api */
     app.post('/api/comment', commentController.create);
     app.get('/api/comment/:commentId', commentController.show);
-    app.get('/api/comment/:postId', commentController.showByPostId);
+    app.get('/api/comment/post/:postId', commentController.showByPostId);
     app.get('/api/comment', commentController.all);
     
     

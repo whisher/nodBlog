@@ -1,7 +1,8 @@
 'use strict';
  
-angular.module('nodblog.config',['ui.router','nodblog.api.post']).config(
-    function($stateProvider,$locationProvider,RestangularProvider) {
+angular.module('nodblog.config',['ui.router','LocalStorageModule','nodblog.api.post'])
+    .constant('PREFIX_LOCAL_STORAGE','xiferpgolbdon')
+    .config(function(PREFIX_LOCAL_STORAGE,$stateProvider,$locationProvider,RestangularProvider,localStorageServiceProvider) {
         $stateProvider
             .state('index', {
                 url: '/',
@@ -40,6 +41,7 @@ angular.module('nodblog.config',['ui.router','nodblog.api.post']).config(
             });
         $locationProvider.html5Mode(true).hashPrefix('!');    
         RestangularProvider.setBaseUrl('/api');
+        localStorageServiceProvider.setPrefix(PREFIX_LOCAL_STORAGE);
     })
     .run(function ($state,$rootScope,$log) {
         $state.transitionTo('index');
@@ -63,20 +65,54 @@ angular.module('nodblog',['ngSanitize','nodblog.config','nodblog.api.comment']).
     .controller('BlogIndexCtrl', function ($scope,posts) {
         $scope.posts = posts;
     })
-    .controller('BlogDetailsCtrl', function ($scope,post,Comment) {
+    .controller('BlogDetailsCtrl', function ($scope,localStorageService,post,Comment) {
         $scope.post = post;
-        $scope.comments = Comment.all();
+        var comments = Comment.byPostId(post._id);
+        $scope.comments = comments.$object;
+        var isJustcommentted = localStorageService.get('comment_id_'+post._id);
+        $scope.isJustcommentted = isJustcommentted;
+        if(isJustcommentted!==null){
+            angular.forEach(comments, function(value, key){
+
+            });
+        }
         $scope.comment = {};
         $scope.comment.post_id = post._id;
         $scope.save = function(){
             Comment.store($scope.comment).then(
                 function(data) {
-                    console.log(data);
+                    localStorageService.add('comment_id_'+post._id,data._id);
+                    $scope.isJustcommentted = data._id;
                 }, 
                 function error(err) {
                     throw new Error(err);
                 }
             );
+        };
+        $scope.hasComments = function(){
+            return !!$scope.comments.length;
+        }
+    })
+    .directive('inputFeedback',function() {
+        return {
+            require: 'ngModel',
+            restrict: 'A',
+            link: function(scope, element, attrs,ctrl) {
+                var $parentDiv = element.parent();
+                var currentClass = $parentDiv.attr('class');
+                element.on('blur',function() {
+                    $parentDiv.removeClass();
+                    $parentDiv.addClass(currentClass);
+                    if(ctrl.$valid){
+                        $parentDiv.addClass('has-success');
+                     }
+                     else{
+                        $parentDiv.addClass('has-error'); 
+                     }
+                });
+                
+              
+            }
         };
     })
     .filter('words', function () {

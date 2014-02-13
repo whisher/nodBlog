@@ -1,4 +1,4 @@
-<article class="col-xs-12 col-md-12">
+<article class="post col-xs-12 col-md-12">
         <header>
             <img alt="{{post.title}}" title="{{post.title}}" class="img-responsive" data-ng-src="/upload/{{post.avatar}}" /> 
             <a href="#" rel="bookmark" title="post title"><h1>{{post.title | ucfirst}}</h1></a>
@@ -14,26 +14,44 @@
         </footer>
  </article>
 <div class="col-xs-6 col-md-6">
+    <p class="text-muted" data-ng-hide="hasComments()">
+        Non ci sono commenti
+    </p>
+    <article class="comment" data-ng-repeat="comment in comments">
+        <header>
+            <h1>{{comment.author}}</h1>
+            <h2>{{comment.body}}</h2>
+        </header>
+        <footer>
+            <time pubdate date="{{comment.created | date:'short'}}">
+               <em>{{comment.created | date:'short'}}</em>
+            </time>
+        </footer>
+    </article>   
     <h3 class="text-info">Lascia un Commento</h3>
     <h4 class="text-info">L'indirizzo email non verrà pubblicato. I campi obbligatori sono contrassegnati <span class="text-danger">*</span></h4>
-<form name="form" role="form" data-ng-submit="save()">
-    <input type="hidden" name="post_id" data-ng-model="comment.post_id" required />
-    <div class="form-group">
-        <label for="email">Email<span class="text-danger">*</span></label>
-        <input type="email" class="form-control" name="email" id="email" placeholder="La tua email" data-ng-model="comment.email" required="required" />
+    <form name="form" role="form" data-ng-hide="isJustcommentted" data-ng-submit="save()">
+        <input type="hidden" name="post_id" data-ng-model="comment.post_id" required />
+        <div class="form-group">
+            <label for="email">Email<span class="text-danger">*</span></label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="La tua email" data-ng-model="comment.email" data-input-feedback required="required" />
+        </div>
+        <div class="form-group">
+            <label for="author">Nome<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="author" id="author" placeholder="Il tuo nome" data-ng-model="comment.author" data-input-feedback required="required" />
+        </div>
+        <div class="form-group">
+            <label for="web">Sito web</label>
+            <input type="text" class="form-control" name="web" id="web" placeholder="Se hai un sito web" data-ng-model="comment.web">
+        </div>
+        <div class="form-group">
+            <label for="body">Commento<span class="text-danger">*</span></label>
+            <textarea name="body" id="body" rows="5" class="form-control" placeholder="Il tuo commento" data-input-feedback data-ng-model="comment.body" required="required"></textarea>
+        </div>
+      <button type="submit" class="btn btn-primary" data-ng-disabled="form.$invalid">Commenta</button>
+    </form>
+    <div class="text-success" data-ng-show="isJustcommentted">
+        <p>Grazie, per aver lasciato un commento</p>
+        <p>Il commento sarà visibile dopo moderazione</p>
     </div>
-    <div class="form-group">
-        <label for="author">Nome<span class="text-danger">*</span></label>
-        <input type="text" class="form-control" name="author" id="author" placeholder="Il tuo nome" data-ng-model="comment.author" required="required" />
-    </div>
-    <div class="form-group">
-        <label for="web">Sito web</label>
-        <input type="text" class="form-control" name="web" id="web" placeholder="Se hai un sito web" data-ng-model="comment.web">
-    </div>
-    <div class="form-group">
-        <label for="body">Commento<span class="text-danger">*</span></label>
-        <textarea name="body" id="body" rows="5" class="form-control" placeholder="Il tuo commento" data-ng-model="comment.body" required="required"></textarea>
-    </div>
-  <button type="submit" class="btn btn-primary" data-ng-disabled="form.$invalid">Commenta</button>
-</form>
 </div>

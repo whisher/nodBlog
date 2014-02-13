@@ -28,7 +28,7 @@ exports.comment = function(req, res, next, id) {
  * Find comment by post id
  */
 exports.commentByPostId = function(req, res, next, id) {
-   Comment.find({ 'post_id': id }).sort('-created').exec(function(err, comments) {
+   Comment.find({ 'post_id': id }).where('status').equals('approved').sort('-created').exec(function(err, comments) {
         if (err) {
             return next(err);
         }
