@@ -68,7 +68,8 @@ module.exports = function(app,passport,db) {
         
         //Setting the fav icon and static folder
         app.use(express.favicon());
-        app.use(express.static(config.root + '/public'));
+        //TODO
+        app.use(express.static(config.root + '/../client'));
 
         //Assume "not found" in the error msgs is a 404. this is somewhat silly, but valid, you can do whatever you like, set properties, use instanceof etc.
         app.use(function(err, req, res, next) {

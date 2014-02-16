@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
     Comment = mongoose.model('Comment'),
+    Post = mongoose.model('Post'),
     _ = require('lodash');
 
 
@@ -24,18 +25,6 @@ exports.comment = function(req, res, next, id) {
     });
 };
 
-/**
- * Find comment by post id
- */
-exports.commentByPostId = function(req, res, next, id) {
-   Comment.find({ 'post_id': id }).where('status').equals('approved').sort('-created').exec(function(err, comments) {
-        if (err) {
-            return next(err);
-        }
-        req.comments = comments;
-        next();
-    });
-};
 
 /**
  * Create a comment
@@ -43,10 +32,28 @@ exports.commentByPostId = function(req, res, next, id) {
 exports.create = function(req, res) {
     var comment = new Comment(req.body);
     comment.save(function(err) {
-        if (err) {console.log(err);
+        if (err) {
            return res.jsonp(500,{ error: 'Cannot save the comment' });
         } 
-        res.jsonp(200,comment);
+        Post.findOne({'_id': comment.post_id }, function (err, post) {
+            if (err) {
+                return res.jsonp(404,{ error: 'Failed to load post with id ' + comment.post_id });
+            }
+            if (!post) {
+                return res.jsonp(404,{ error: 'Failed to load post with id ' + comment.post_id });
+            }
+            post.meta.comments = post.meta.comments + 1;
+            post.save(function(err) {
+                if (err) {
+                    return res.jsonp(500,{ error: 'Cannot update the post' });
+                } 
+                res.jsonp(200,comment);
+            });
+            
+        
+       
+        });
+        
     });
 };
 

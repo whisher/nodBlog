@@ -1,0 +1,43 @@
+html, body {
+    height: 100%;
+}
+#wrap {
+    height: auto;
+    margin: 0 auto -60px;
+    min-height: 100%;
+    padding: 0 0 60px;
+}
+#footer {
+    background-color: #F5F5F5;
+    height: 60px;
+}
+#wrap > .container {
+    padding: 60px 15px 0;
+}
+#footer > .container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.form-control[disabled],
+    .form-control[readonly],
+        fieldset[disabled] .form-control {
+            cursor:default;
+            background-color: #eeeeee;
+}
+.drop-box {
+    border: 5px dashed #DDD;
+    height: 150px; 
+    text-align: center;
+}
+.drop-box.dragover {
+    border: 5px dashed blue;
+}
+img.post-avatar{
+  width: 50px;  
+}
+img.avatar-to-upload{
+   width: 100px;   
+}
+.media-pic{
+   width: 80px; 
+}

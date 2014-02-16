@@ -5,10 +5,7 @@
  */
 exports.requiresLogin = function(req, res, next) {
     if (!req.isAuthenticated()) {
-        return res.render('users/signin', {
-                    title: 'Signin',
-                    message: req.flash('error')
-                });
+        return res.redirect('/signup');
     }
     next();
 };
@@ -16,7 +13,7 @@ exports.requiresLogin = function(req, res, next) {
 /**
  * Generic require login routing middleware
  */
-exports.apiRequiresLogin = function(req, res, next) {
+exports.apiRequiresLogin = function(req, res,next) {
     if (!req.isAuthenticated()) {
         return res.jsonp(401,{ error:'User is not authorized'});
     }

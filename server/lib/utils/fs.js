@@ -24,7 +24,7 @@ module.exports = function(fs) {
     };
     FsWrapper.prototype.mkdirSync = function(path, mode){
         if (typeof mode == 'undefined') { 
-            mode = 0777;
+            mode = 484;
         }
         return this.fs.mkdirSync(path, mode)
     };

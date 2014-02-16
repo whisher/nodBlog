@@ -1,0 +1,29 @@
+<table class="table table-striped" data-ng-show="comments.length > 0">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Author</th>
+            <th>Site</th>
+            <th>Comment</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-ng-repeat="comment in comments">
+            <td>{{comment.email}}</td>
+            <td>{{comment.author}}</td>
+            <td>{{comment.web}}</td>
+            <td>{{comment.body}}</td>
+            <td>{{post.created | date:'short'}}</td>
+          
+            <td>
+                <a data-ng-href="#/comment/edit/{{comment._id}}" class="btn btn-warning btn-sm" title="edit comment">
+                    <span class="glyphicon glyphicon-edit"></span> Edit
+                </a>
+                <a data-ng-href="#/comment/delete/{{comment._id}}" class="btn btn-danger btn-sm" title="delete comment">
+                    <span class="glyphicon glyphicon-trash"></span> Delete
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

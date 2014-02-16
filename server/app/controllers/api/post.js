@@ -9,19 +9,25 @@ var fs = require('fs'),
     im = require('imagemagick'),
     mongoose = require('mongoose'),
     Post = mongoose.model('Post'),
+    Comment = mongoose.model('Comment'),
     _ = require('lodash');
 
+var uploadDir = path.normalize(__dirname + '/../../../../client/upload');
 
 /**
  * Find post by id
  */
-exports.post = function(req, res, next, slug) {
-   Post.findOne({'slug': slug }, function (err, post) {
+exports.post = function(req, res, next, id) {
+    // http://stackoverflow.com/questions/14940660/whats-mongoose-error-cast-to-objectid-failed-for-value-xxx-at-path-id
+    if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+        return res.jsonp(404,{ error: 'Failed to load post with id ' + id });
+    }
+    Post.findById(id).exec(function(err, post) {
         if (err) {
-            return next(err);
+           return next(err);
         }
         if (!post) {
-            return res.jsonp(404,{ error: 'Failed to load post ' + slug });
+            return res.jsonp(404,{ error: 'Failed to load post with id ' + id });
         }
         req.post = post;
         next();
@@ -35,10 +41,55 @@ exports.create = function(req, res) {
     var post = new Post(req.body);
     post.save(function(err) {
         if (err) {
-            return res.jsonp(500,{ error: 'Cannot save the post' });
+            var errs = Object.keys(err.errors);
+            if (errs.length > 0){
+               return res.json(500,{ error: err.errors[errs[0]].message }); 
+            }
+            return res.json(500,{ error: 'Cannot save the post' });
         } 
-        res.jsonp(200,post);
+        res.json(200,post);
     });
+};
+
+/**
+ * List of all posts
+ */
+exports.all = function(req, res) {
+    Post.find({status:'publish'}).sort('-created').exec(function(err, posts) {
+        if (err) {
+           return res.jsonp(500,{ error: 'Cannot get all the posts' });
+        } 
+        res.jsonp(200,posts);
+    });
+};
+
+/**
+ * List of all posts for admin
+ */
+exports.allForAdmin = function(req, res) {
+    Post.find().sort('-created').exec(function(err, posts) {
+        if (err) {
+           return res.json(500,{ error: 'Cannot get all the posts' });
+        } 
+        res.json(200,posts);
+    });
+};
+
+/**
+ * Show a post by id
+ */
+exports.show = function(req, res) {
+    if(req.post.status!=='publish'){
+        return res.jsonp(404,{ error: 'Failed to load post with id ' + req.post._id });
+    }
+    res.jsonp(200,req.post);
+};
+
+/**
+ * Show a post by id
+ */
+exports.showForAdmin = function(req, res) {
+   res.json(200,req.post);
 };
 
 /**
@@ -47,11 +98,17 @@ exports.create = function(req, res) {
 exports.update = function(req, res) {
     var post = req.post;
     post = _.extend(post, req.body);
+    //rebuild slug
+    post.slug = post.title;
     post.save(function(err) {
         if (err) {
-            return res.jsonp(500,{ error: 'Cannot update the post' });
+            var errs = Object.keys(err.errors);
+            if (errs.length > 0){
+               return res.json(500,{ error: err.errors[errs[0]].message }); 
+            }
+            return res.json(500,{ error: 'Cannot save the post' });
         } 
-        res.jsonp(200,post);
+        res.json(200,post);
     });
 };
 
@@ -62,54 +119,14 @@ exports.destroy = function(req, res) {
     var post = req.post;
     post.remove(function(err) {
         if (err) {
-            return res.jsonp(500,{ error: 'Cannot remove the post' });
+            var errs = Object.keys(err.errors);
+            if (errs.length > 0){
+               return res.json(500,{ error: err.errors[errs[0]].message }); 
+            }
+            return res.json(500,{ error: 'Cannot save the post' });
         } 
-        res.jsonp(200,post);
+        res.json(200,post);
    });
-};
-
-/**
- * Show a post by id
- */
-exports.show = function(req, res) {
-    res.jsonp(200,req.post);
-};
-
-
-/**
- * List of public posts
- */
-exports.all = function(req, res) {
-    Post.find().sort('-created').exec(function(err, posts) {
-        if (err) {
-           return res.jsonp(500,{ error: 'Cannot get all the posts' });
-        } 
-        res.jsonp(200,posts);
-    });
-};
-
-/**
- * List of admin posts
- */
-exports.allxadmin = function(req, res) {
-    Post.find().sort('-created').exec(function(err, posts) {
-        if (err) {
-           return res.jsonp(500,{ error: 'Cannot get all the posts' });
-        } 
-        res.jsonp(200,posts);
-    });
-};
-
-/**
- * List of admin posts
- */
-exports.alltags = function(req, res) {
-    Post.find().distinct('tags').exec(function(err, tags) {
-        if (err) {
-           return res.jsonp(500,{ error: 'Cannot get all the tags' });
-        } 
-        res.jsonp(200,tags);
-    });
 };
 
 /**
@@ -119,7 +136,7 @@ exports.upload = function(req, res,next) {
     var w = 200;
     var h = 75;
     var form = new formidable.IncomingForm;
-    var uploadDir = path.normalize(__dirname + '/../../../public/upload');
+    
     form.parse(req, function(err, fields, files){
         if(err){
             res.jsonp(500, err.message);
@@ -146,5 +163,32 @@ exports.upload = function(req, res,next) {
                 });
                 res.jsonp(200,data);
         });
+    });
+};
+
+/**
+ * Find comment by post id
+ */
+exports.commentsByPostId = function(req, res) {
+    var id = req.post._id;
+    console.log(id);
+    Comment.find({'post_id': id }).where('status').equals('approved').sort('-created').exec(function(err, comments) {
+        if (err) {
+           return res.json(500,{ error: 'Cannot get all the comments with post id ' + id });
+        } 
+        res.jsonp(200,comments);
+    });
+};
+
+/**
+ * Find comment by post id for admin
+ */
+exports.commentsByPostIdForAmin = function(req, res) {
+    var id = req.post._id;
+    Comment.find({ 'post_id': id }).sort('-created').exec(function(err, comments) {
+        if (err) {
+           return res.json(500,{ error: 'Cannot get all the comments with post id ' + id });
+        } 
+        res.json(200,comments);
     });
 };
