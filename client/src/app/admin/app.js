@@ -1,18 +1,26 @@
 //'use strict';     
-angular.module('nodblog.admin',['nodblog.admin.posts'])
-    .config(function($stateProvider) {
-        $stateProvider
-            .state('index', {
-                url: '/',
-                templateUrl: '/src/app/admin/index.tpl.html',
-                controller: 'IndexCtrl'
-            })
-            
-    })
-    .run(function ($state,$rootScope, $log) {
+angular.module('nodblog.admin',['nodblog.admin.index','nodblog.admin.posts'])
+    .run(function ($state,$rootScope,$log,$filter,WindowUtils) {
         $rootScope.$state = $state;
         $state.transitionTo('index');
         $rootScope.$log = $log;
+        $rootScope.$on('$locationChangeSuccess', function(evt) {
+               var stateName = $state.current.name;
+               if(stateName){
+                   var title = stateName.split('_').join(' ');
+                   title = $filter('ucfirst')(title);
+                   WindowUtils.setTitle(title);
+               }
+        });
+    })
+    .factory('WindowUtils', function($window) {
+        return {
+           setTitle:function(title){
+              var sep = ' - ';
+              var current = $window.document.title.split(sep)[0];
+              $window.document.title = current + sep + title;
+           }
+        }
     })
     .controller('MainCtrl', function ($scope,$location) {
         /* Nav add tab */
@@ -21,17 +29,13 @@ angular.module('nodblog.admin',['nodblog.admin.posts'])
             {route:'media_create',title:'Media'},
             {route:'page_create',title:'Page'},
         ];
-        
-       
-        
-        
-        
-        
     })
-    
-    
-    .controller('IndexCtrl', function ($scope) {
-      
-       
+    .filter('ucfirst', function () {
+        return function (input) {
+            if (input) {
+               return input.charAt(0).toUpperCase() + input.slice(1);
+            }
+            return input;
+        };
     });
     

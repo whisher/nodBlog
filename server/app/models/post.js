@@ -91,12 +91,6 @@ PostSchema.path('author').validate(function(author) {
     return false;
 }, 'Author cannot be empty');
 
-PostSchema.path('slug').validate(function(slug) {
-    if(typeof slug !== "undefined" && slug !== null){
-        return /^[a-z0-9-]+$/.test(slug);
-    }
-    return false;
-}, 'Slug cannot be empty');
 
 PostSchema.path('body').validate(function(body) {
     if(typeof body !== "undefined" && body !== null){

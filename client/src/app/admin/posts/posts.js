@@ -57,15 +57,6 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
                 return elem;
             }); 
     })
-    .factory('WindowUtils', function($window) {
-        return {
-           setTitle:function(title){
-              var sep = ' - ';
-              var current = $window.document.title.split(sep)[0];
-              $window.document.title = current + sep + title;
-           }
-        }
-    })
     .service('PostUploader',function($upload){
         var that = this;
         var fileReaderSupported = window.FileReader !== null;
@@ -149,16 +140,15 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
      
     })
     .controller('PostIndexCtrl', function ($scope,$state,WindowUtils,posts) {
-        WindowUtils.setTitle('Post');
         $scope.posts = posts;
         $scope.showComments = function(post){
             $state.transitionTo('postcomments',{id:post._id});
         }
         
     })
-    .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,WindowUtils,Post,PostUploader) {
+    .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader) {
         
-        WindowUtils.setTitle('Create post');
+        
        
         $scope.header = Post.labels.frmCreateHeader;
         $scope.status = Post.status;
@@ -170,8 +160,8 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
        
         $scope.save = function(){
             $scope.post.published = $filter('datetots')($scope.post.published);
-            $scope.post.tags = $filter('strcstoarray')($scope.post.tags);
             $scope.post.categories = $filter('strcstoarray')($scope.post.categories);
+            $scope.post.tags = $filter('strcstoarray')($scope.post.tags);
             Post.store($scope.post).then(
                 function(data) {
                     return $state.transitionTo('post');
@@ -183,9 +173,7 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
         };
         
     })
-    .controller('PostEditCtrl', function ($scope,$location,$timeout,$controller,WindowUtils,PostUploader,Post,post) {
-        
-        WindowUtils.setTitle('Edit post');
+    .controller('PostEditCtrl', function ($scope,$state,$timeout,$controller,$filter,PostUploader,Post,post) {
         
         $scope.header =  Post.labels.frmEditHeader;
         $scope.status = Post.status;
@@ -201,11 +189,14 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
         $scope.isClean = function() {
             return angular.equals(original, $scope.post);
         }
-        
-        $scope.save = function() {
+      
+        $scope.save = function() { 
+            $scope.post.published = $filter('datetots')($scope.post.published);
+            $scope.post.categories = angular.isArray($scope.post.categories)?$scope.post.categories:$filter('strcstoarray')($scope.post.categories);
+            $scope.post.tags = angular.isArray($scope.post.tags)?$scope.post.tags:$filter('strcstoarray')($scope.post.tags);
             $scope.post.put().then(
                 function(data) {
-                    return $location.path('/post');
+                    return $state.transitionTo('post');
                 },
                 function error(reason) {
                     throw new Error(reason);
@@ -214,15 +205,14 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
         };
        
     })
-    .controller('PostDeleteCtrl', function ($scope,$location,WindowUtils,post) {
-        WindowUtils.setTitle('Delete post');
+    .controller('PostDeleteCtrl', function ($scope,$state,post) {
         $scope.save = function() {
-            return $location.path('/post');
+            return $state.transitionTo('post');
         }
         $scope.destroy = function() {
             post.remove().then(
                 function() {
-                    return $location.path('/post');
+                    return $state.transitionTo('post');
                 },
                 function error(reason) {
                     throw new Error(reason);

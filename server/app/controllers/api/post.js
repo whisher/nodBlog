@@ -55,7 +55,7 @@ exports.create = function(req, res) {
  * List of all posts
  */
 exports.all = function(req, res) {
-    Post.find({status:'publish'}).sort('-created').exec(function(err, posts) {
+    Post.find({status:'publish',published:{$lt : Date.now()}}).sort('-created').exec(function(err, posts) {
         if (err) {
            return res.jsonp(500,{ error: 'Cannot get all the posts' });
         } 
