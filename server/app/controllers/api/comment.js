@@ -8,12 +8,14 @@ var mongoose = require('mongoose'),
     Post = mongoose.model('Post'),
     _ = require('lodash');
 
-
 /**
  * Find comment by id
  */
 exports.comment = function(req, res, next, id) {
-   Comment.findOne({ '_id': id }, function (err, comment) {
+    if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+        return res.jsonp(404,{ error: 'Failed to load post with id ' + id });
+    }
+    Comment.findById(id).exec(function (err, comment) {
         if (err) {
             return next(err);
         }
@@ -33,54 +35,25 @@ exports.create = function(req, res) {
     var comment = new Comment(req.body);
     comment.save(function(err) {
         if (err) {
-           return res.jsonp(500,{ error: 'Cannot save the comment' });
+           var errs = Object.keys(err.errors);
+            if (errs.length > 0){
+               return res.jsonp(500,{ error: err.errors[errs[0]].message }); 
+            }
+            return res.jsonp(500,{ error: 'Cannot save the comment' });
         } 
-        Post.findOne({'_id': comment.post_id }, function (err, post) {
+        Post.findByIdAndUpdate(comment.post_id, { $inc: {'meta.comments.pending' : 1} }).exec(function(err, post) {
             if (err) {
-                return res.jsonp(404,{ error: 'Failed to load post with id ' + comment.post_id });
+                var errs = Object.keys(err.errors);
+                if (errs.length > 0){
+                    return res.jsonp(500,{ error: err.errors[errs[0]].message }); 
+                }
+                return res.jsonp(500,{ error: 'Cannot update the post' });
             }
             if (!post) {
                 return res.jsonp(404,{ error: 'Failed to load post with id ' + comment.post_id });
             }
-            post.meta.comments = post.meta.comments + 1;
-            post.save(function(err) {
-                if (err) {
-                    return res.jsonp(500,{ error: 'Cannot update the post' });
-                } 
-                res.jsonp(200,comment);
-            });
-            
-        
-       
+            res.jsonp(200,comment);
         });
-        
-    });
-};
-
-/**
- * Update a comment
- */
-exports.update = function(req, res) {
-    var comment = req.comment;
-    comment = _.extend(comment, req.body);
-    comment.save(function(err) {
-        if (err) {
-            return res.jsonp(500,{ error: 'Cannot update the comment' });
-        }
-        res.jsonp(comment);
-   });
-};
-
-/**
- * Delete a comment
- */
-exports.destroy = function(req, res) {
-    var comment = req.comment;
-    comment.remove(function(err) {
-        if (err) {
-            return res.jsonp(500,{ error: 'Cannot remove the comment' });
-        } 
-        res.jsonp(200,comment);
     });
 };
 
@@ -92,20 +65,31 @@ exports.show = function(req, res) {
 };
 
 /**
- * List of public posts
+ * Update a comment
  */
-exports.showByPostId = function(req, res) {
-    res.jsonp(req.comments);
-};
-
-/**
- * List of comment
- */
-exports.all = function(req, res) {
-    Comment.find().sort('-created').exec(function(err, comments) {
+exports.update = function(req, res) {
+    var comment = req.comment;
+    comment = _.extend(comment, req.body);
+    comment.save(function(err) {
         if (err) {
-           return res.jsonp(500,{ error: 'Cannot list comments' });
-        } 
-        res.jsonp(200,comments);
-    });
+            var errs = Object.keys(err.errors);
+            if (errs.length > 0){
+               return res.json(500,{ error: err.errors[errs[0]].message }); 
+            }
+            return res.json(500,{ error: 'Cannot update the comment' });
+        }
+        Post.findByIdAndUpdate(comment.post_id, { $inc: {'meta.comments.pending' : -1,'meta.comments.approved' : 1} }).exec(function(err, post) {
+            if (err) {
+                var errs = Object.keys(err.errors);
+                if (errs.length > 0){
+                    return res.json(500,{ error: err.errors[errs[0]].message }); 
+                }
+                return res.json(500,{ error: 'Cannot update the comment' });
+            }
+            if (!post) {
+                return res.json(404,{ error: 'Failed to load post with id ' + comment.post_id });
+            }
+            res.json(200,comment);
+        });
+   });
 };

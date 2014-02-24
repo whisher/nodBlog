@@ -24,6 +24,32 @@ html, body {
             cursor:default;
             background-color: #eeeeee;
 }
+/* Post */
+#cmt-wrapper{
+  margin-top: 30px;   
+}
+.cmt-box{
+  margin-bottom: 30px;  
+}
+.cmt-email{
+    
+}
+.cmt-author{
+    
+}
+.cmt-web{
+    
+}
+.cmt-body{
+    
+}
+.cmt-create{
+    
+}
+.cmt-footer{
+    margin-top: 10px;
+}
+/* Media */
 .drop-box {
     border: 5px dashed #DDD;
     height: 150px; 
@@ -41,3 +67,4 @@ img.avatar-to-upload{
 .media-pic{
    width: 80px; 
 }
+

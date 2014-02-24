@@ -42,8 +42,8 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
                 url: '/post/comments/:id',
                 templateUrl: '/src/app/admin/posts/comments.tpl.html',
                 resolve: {
-                    comments: function(Comment,$stateParams){
-                        return Comment.byPostId($stateParams.id);
+                    comments: function(Post,$stateParams){
+                        return Post.commentsByPostId($stateParams.id);
                     }
                 },
                 controller: 'ShowCommentsCtrl'
@@ -142,7 +142,7 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
     .controller('PostIndexCtrl', function ($scope,$state,WindowUtils,posts) {
         $scope.posts = posts;
         $scope.showComments = function(post){
-            $state.transitionTo('postcomments',{id:post._id});
+            $state.transitionTo('post_comments',{id:post._id});
         }
         
     })
@@ -220,10 +220,42 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
             );
         };
     })
-    .controller('ShowCommentsCtrl',function ($scope,comments) {
-       $scope.comments = comments;
+    .controller('ShowCommentsCtrl',function ($scope,$stateParams,comments,Comment) {
+        $scope.comments = comments;
+        $scope.isCollapsed = true;
+        $scope.approved = function(id){
+            $scope.comment = Comment.specialCopy(id);
+            
+            $scope.comment.status = 'approved';
+            $scope.comment.put().then(
+                function(data) {
+                    
+                },
+                function error(reason) {
+                    throw new Error(reason);
+                }
+           );
+        };
+        var reply = {};
+        reply.post_id = $stateParams.id;
+        reply.author = 'me';
+        reply.email = 'info@ilwebdifabio.it';
+        reply.web = 'http://ilwebdifabio.it';
+        reply.status = 'approved';
+        $scope.doReply = function(id){
+            reply.parent = id;
+            reply.body = $scope.reply;
+            Comment.store(reply).then(
+                function(data) {
+                   
+                }, 
+                function error(err) {
+                    throw new Error(err);
+                }
+            );
+            //$scope.reply = '';
+        };
     })
-    
     .directive('uploader',function() {
         return {
             restrict: 'A',

@@ -13,7 +13,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
         link(rel='shortcut icon', href='favicon.ico')
         link(rel='bookmark', href='favicon.ico')
         link(rel='stylesheet', href='/vendor/bootstrap/dist/css/bootstrap.css')
-        link(rel='stylesheet', href='/default/css/default.css')
+        link(rel='stylesheet', href='/src/assets/default/css/main.css')
         | <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <![endif]-->
         | <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script> <![endif]-->
     body(data-ng-controller="MainCtrl")
@@ -47,5 +47,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
         script(type='text/javascript', src='/src/common/services/base.js')
         script(type='text/javascript', src='/src/app/default/services/post.js')
         script(type='text/javascript', src='/src/app/default/services/comment.js')
+        script(type='text/javascript', src='/src/app/default/site/site.js')
+        script(type='text/javascript', src='/src/app/default/blog/blog.js')
         script(type='text/javascript', src='/src/app/default/app.js')
         

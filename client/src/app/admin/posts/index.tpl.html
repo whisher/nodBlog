@@ -30,7 +30,9 @@
             <td>{{post.meta.votes}}</td>
             <td ng-switch="post.meta.comments">
                 <span class="badge" ng-switch-when="0">0</span>
-                <a class="badge" data-ng-click="showComments(post)" data-ng-switch-default>{{post.meta.comments}}</a>
+                <a class="badge" data-ng-click="showComments(post)" data-ng-switch-default>
+                    <span class="text-warning" title="pending">{{post.meta.comments.pending}}</span>/<span class="text-success" title="approved">{{post.meta.comments.approved}}</span>
+                </a>
             </td>
             <td><img alt="{{post.title}}" title="{{post.title}}" class="img-thumbnail post-avatar" data-ng-src="/upload/{{post.avatar}}"></td>
             <td>{{post.status}}</td>

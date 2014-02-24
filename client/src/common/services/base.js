@@ -19,6 +19,9 @@
                     },
                     getElements : function() {
                         return elements;
+                    },
+                    specialCopy : function(id) {
+                        return Restangular.one(route, id);
                     }
                 };
             };  

@@ -170,9 +170,7 @@ exports.upload = function(req, res,next) {
  * Find comment by post id
  */
 exports.commentsByPostId = function(req, res) {
-    var id = req.post._id;
-    console.log(id);
-    Comment.find({'post_id': id }).where('status').equals('approved').sort('-created').exec(function(err, comments) {
+    Comment.find({'post_id': req.post._id }).where('status').equals('approved').sort('-created').exec(function(err, comments) {
         if (err) {
            return res.json(500,{ error: 'Cannot get all the comments with post id ' + id });
         } 

@@ -30,6 +30,20 @@ module.exports = function(app, passport,auth) {
     app.param('postId', postController.post);
     
     var commentController = require('../app/controllers/api/comment');
+    
+    /* Admin Comment Api */
+    app.post('/admin/api/comment',auth.apiRequiresLogin, commentController.create);
+    app.put('/admin/api/comment/:commentId',auth.apiRequiresLogin, commentController.update);
+    
+    
+    /* Public Comment Api */
+    app.post('/api/comment', commentController.create);
+    app.get('/api/comment/:commentId', commentController.show);
+    
+    
+    /* Comment Id Param */
+    app.param('commentId', commentController.comment);
+    
    /* Users */
     var users = require('../app/controllers/users');
     app.get('/signin', users.signin);

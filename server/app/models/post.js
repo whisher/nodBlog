@@ -67,8 +67,14 @@ var PostSchema = new Schema({
             default: 0
         },
         comments: {
-            type: Number,
-            default: 0
+            approved:{
+                type: Number,
+                default: 0
+            },
+            pending:{
+                type: Number,
+                default: 0
+            }
         } 
     }
 });

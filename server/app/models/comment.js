@@ -16,6 +16,10 @@ var CommentSchema = new Schema({
         ref: 'Post',
         required: true
     },
+    parent: {
+        type: String,
+        default: null
+    },
     author:{
         type: String,
         required: true
@@ -51,16 +55,25 @@ var CommentSchema = new Schema({
  * Validations
  */
 CommentSchema.path('author').validate(function(author) {
-    return author.length;
+    if(typeof author !== "undefined" && author !== null){
+        return author.length;
+    }
+    return false;
 }, 'Author cannot be empty');
 
 CommentSchema.path('email').validate(function(email) {
-    return email.length;
+    if(typeof email !== "undefined" && email !== null){
+        return email.length;
+    }
+    return false;
 }, 'Email cannot be empty');
 
 CommentSchema.path('email').validate(function(email) {
-    var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    return emailRegex.test(email);
+    if(typeof email !== "undefined" && email !== null){
+        var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        return emailRegex.test(email);
+    }
+    return false;
 }, 'The email is not a valid email');
 
 CommentSchema.path('web').validate(function(web) {
@@ -75,7 +88,10 @@ CommentSchema.path('web').validate(function(web) {
 }, 'Url not valid');
 
 CommentSchema.path('status').validate(function(status) {
-    return /pending|approved/.test(status);
+    if(typeof status !== "undefined" && status !== null){
+        return /pending|approved/.test(status);
+    }
+    return false;
 }, 'Is not a valid status');
 
 CommentSchema.path('body').validate(function(body) {

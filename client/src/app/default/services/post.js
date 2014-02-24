@@ -3,10 +3,15 @@
     angular.module('nodblog.api.post', ['nodblog.api.base'])
         .config(function(RestangularProvider) {
             RestangularProvider.setRestangularFields({
-                id: "slug"
+                id: "_id"
             });
         })
         .factory('Post', function(Base) {
-            return Base('post');
+            function NgPost() {
+                this.commentsByPostId = function(id){
+                    return this.getElements().one('comments',id).getList();
+                 }
+            };
+            return angular.extend(Base('post'), new NgPost());
         });
 })(window, angular);
