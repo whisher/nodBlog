@@ -40,7 +40,10 @@ exports.create = function(req, res) {
                return res.jsonp(500,{ error: err.errors[errs[0]].message }); 
             }
             return res.jsonp(500,{ error: 'Cannot save the comment' });
-        } 
+        }
+        if(!!+comment.is_authoring){
+           return res.jsonp(200,comment); 
+        }
         Post.findByIdAndUpdate(comment.post_id, { $inc: {'meta.comments.pending' : 1} }).exec(function(err, post) {
             if (err) {
                 var errs = Object.keys(err.errors);

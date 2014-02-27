@@ -174,7 +174,24 @@ exports.commentsByPostId = function(req, res) {
         if (err) {
            return res.json(500,{ error: 'Cannot get all the comments with post id ' + id });
         } 
-        res.jsonp(200,comments);
+        var idToNodeMap = {}; 
+        var len = comments.length;
+        for(var i = 0; i < len; i++) {
+            var comment = comments[i];
+            // the node is a root
+            if(comment.parent === null){
+                idToNodeMap[comment._id] = comment;
+                idToNodeMap[comment._id].children = [];
+            }
+            else{
+                idToNodeMap[comment.parent].children.push(comment); 
+            }
+        }   
+        var data = [];
+        _.forIn(idToNodeMap, function(value, key) {
+            data.push(idToNodeMap[key]);
+        });
+        res.jsonp(200,data);
     });
 };
 
@@ -183,10 +200,27 @@ exports.commentsByPostId = function(req, res) {
  */
 exports.commentsByPostIdForAmin = function(req, res) {
     var id = req.post._id;
-    Comment.find({ 'post_id': id }).sort('-created').exec(function(err, comments) {
+    Comment.find({ 'post_id': id }).lean().sort('created').exec(function(err, comments) {
         if (err) {
            return res.json(500,{ error: 'Cannot get all the comments with post id ' + id });
-        } 
-        res.json(200,comments);
+        }
+        var idToNodeMap = {}; 
+        var len = comments.length;
+        for(var i = 0; i < len; i++) {
+            var comment = comments[i];
+            // the node is a root
+            if(comment.parent === null){
+                idToNodeMap[comment._id] = comment;
+                idToNodeMap[comment._id].children = [];
+            }
+            else{
+                idToNodeMap[comment.parent].children.push(comment); 
+            }
+        }   
+        var data = [];
+        _.forIn(idToNodeMap, function(value, key) {
+            data.push(idToNodeMap[key]);
+        });
+        res.json(200,data);
     });
 };

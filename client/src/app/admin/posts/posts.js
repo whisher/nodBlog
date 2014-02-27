@@ -220,9 +220,11 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
             );
         };
     })
-    .controller('ShowCommentsCtrl',function ($scope,$stateParams,comments,Comment) {
+    .controller('ShowCommentsCtrl',function ($scope,comments) {
         $scope.comments = comments;
-        $scope.isCollapsed = true;
+    })
+    .controller('ShowCommentsInnerCtrl',function ($scope,$stateParams,Comment) {
+       $scope.isCollapsed = true;
         $scope.approved = function(id){
             $scope.comment = Comment.specialCopy(id);
             
@@ -236,12 +238,14 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
                 }
            );
         };
+        
         var reply = {};
         reply.post_id = $stateParams.id;
         reply.author = 'me';
         reply.email = 'info@ilwebdifabio.it';
         reply.web = 'http://ilwebdifabio.it';
         reply.status = 'approved';
+        reply.is_authoring = 1;
         $scope.doReply = function(id){
             reply.parent = id;
             reply.body = $scope.reply;
@@ -253,8 +257,9 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
                     throw new Error(err);
                 }
             );
-            //$scope.reply = '';
-        };
+            $scope.isCollapsed = true;
+            $scope.reply = '';
+        }; 
     })
     .directive('uploader',function() {
         return {

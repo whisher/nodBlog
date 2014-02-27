@@ -18,7 +18,8 @@ var CommentSchema = new Schema({
     },
     parent: {
         type: String,
-        default: null
+        index : true,
+        default: null,
     },
     author:{
         type: String,
@@ -48,6 +49,11 @@ var CommentSchema = new Schema({
     },
     meta: {
         votes: Number
+    },
+    is_authoring: {
+        type: Number,
+        required: true,
+        default: 0
     }
 });
 
@@ -87,6 +93,13 @@ CommentSchema.path('web').validate(function(web) {
     return true;
 }, 'Url not valid');
 
+CommentSchema.path('body').validate(function(body) {
+    if(typeof body !== "undefined" && body !== null){
+        return body.length > 0
+    }
+    return false;
+}, 'Body cannot be empty');
+
 CommentSchema.path('status').validate(function(status) {
     if(typeof status !== "undefined" && status !== null){
         return /pending|approved/.test(status);
@@ -94,11 +107,12 @@ CommentSchema.path('status').validate(function(status) {
     return false;
 }, 'Is not a valid status');
 
-CommentSchema.path('body').validate(function(body) {
-    if(typeof body !== "undefined" && body !== null){
-        return body.length > 0
+CommentSchema.path('is_authoring').validate(function(val) {
+    if(typeof val !== "undefined" && val !== null){
+        return /[0-1]/.test(val);
     }
     return false;
-}, 'Body cannot be empty');
+    
+}, 'Is not a valid status');
 
 mongoose.model('Comment', CommentSchema);
