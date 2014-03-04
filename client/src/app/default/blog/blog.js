@@ -19,6 +19,9 @@
                 resolve: {
                     post: function(Post,$stateParams){
                         return Post.one($stateParams.id);
+                    },
+                    comments: function(Post,$stateParams){
+                        return Post.commentsByPostId($stateParams.id);
                     }
                 },
                 controller: 'BlogDetailsCtrl'
@@ -29,18 +32,17 @@
     .controller('BlogIndexCtrl', function ($scope,posts) {
         $scope.posts = posts;
     })
-    .controller('BlogDetailsCtrl', function ($scope,localStorageService,post,Post,Comment) {
+    .controller('BlogDetailsCtrl', function ($scope,localStorageService,post,comments,Comment) {
         $scope.post = post;
-        var comments = Post.commentsByPostId(post._id);
-        $scope.comments = comments.$object;
-        var isJustcommentted = localStorageService.get('comment_id_'+post._id);
-        $scope.isJustcommentted = isJustcommentted;
-        localStorageService.remove('comment_id_'+post._id);
-        if(isJustcommentted!==null){
+        $scope.comments = comments;
+        var commentHasStorage = localStorageService.get('comment_id_'+post._id);
+        $scope.commentHasStorage = commentHasStorage;
+        if(commentHasStorage!==null){
             angular.forEach(comments, function(value, key){
-                console.log(value);
-                console.log(key);
-                localStorageService.remove('comment_id_'+post._id);
+                if(value._id===commentHasStorage){
+                   localStorageService.remove('comment_id_'+post._id); 
+                    $scope.commentHasStorage = null;
+                }
             });
         }
         $scope.comment = {};
@@ -49,7 +51,7 @@
             Comment.store($scope.comment).then(
                 function(data) {
                     localStorageService.add('comment_id_'+post._id,data._id);
-                    $scope.isJustcommentted = data._id;
+                    $scope.commentHasStorage = data._id;
                 }, 
                 function error(err) {
                     throw new Error(err);

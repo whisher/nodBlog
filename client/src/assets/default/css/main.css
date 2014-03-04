@@ -49,3 +49,10 @@ footer {
     width: 50%; /* 6 columns */
   }
 }
+
+
+/* Blog */
+.comment-box{}
+.comment-box > article{
+    padding-left: 5px;
+}

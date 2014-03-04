@@ -47,7 +47,6 @@ module.exports = function(app, passport,auth) {
    /* Users */
     var users = require('../app/controllers/users');
     app.get('/signin', users.signin);
-    app.get('/signup', users.signup);
     app.get('/signout', users.signout);
     app.get('/users/me', users.me);
     app.post('/users', users.create);

@@ -39,7 +39,8 @@
     "forever": "latest",
     "monguurl": "~0.1.0",
     "mime": "~1.2.11",
-    "imagemagick": "~0.1.3"
+    "imagemagick": "~0.1.3",
+    "node-mandrill": "~1.0.1"
   },
   "devDependencies": {
     "supertest": "latest",

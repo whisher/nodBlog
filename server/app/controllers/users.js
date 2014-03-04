@@ -17,21 +17,12 @@ exports.authCallback = function(req, res) {
  * Show login form
  */
 exports.signin = function(req, res) {
-    res.render('users/signin', {
-        title: 'Signin',
+    res.render('layouts/login', {
+        title: 'Nodblog » Signin',
         message: req.flash('error')
     });
 };
 
-/**
- * Show sign up form
- */
-exports.signup = function(req, res) {
-    res.render('users/signup', {
-        title: 'Sign up',
-        user: new User()
-    });
-};
 
 /**
  * Logout

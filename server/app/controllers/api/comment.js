@@ -6,7 +6,8 @@
 var mongoose = require('mongoose'),
     Comment = mongoose.model('Comment'),
     Post = mongoose.model('Post'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    mail = require('../../services/mail');
 
 /**
  * Find comment by id
@@ -33,6 +34,11 @@ exports.comment = function(req, res, next, id) {
  */
 exports.create = function(req, res) {
     var comment = new Comment(req.body);
+    var xsrfCookie = req.cookies['XSRF-TOKEN'];
+    var xsrfHeader = req.header('X-XSRF-TOKEN');
+    if((typeof xsrfCookie === 'undefined') || (typeof xsrfHeader === 'undefined') || (xsrfCookie!==xsrfHeader)){
+        return res.jsonp(404,{ error: 'Not found'});
+    }
     comment.save(function(err) {
         if (err) {
            var errs = Object.keys(err.errors);
@@ -55,6 +61,7 @@ exports.create = function(req, res) {
             if (!post) {
                 return res.jsonp(404,{ error: 'Failed to load post with id ' + comment.post_id });
             }
+            mail.addCommentNotice(comment.email,comment.post_id,comment.body);
             res.jsonp(200,comment);
         });
     });

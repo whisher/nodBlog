@@ -1,5 +1,6 @@
-//'use strict';     
-angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpload','nodblog.api.post','nodblog.api.comment'])
+//'use strict';
+
+angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','ngGrid','angularFileUpload','nodblog.api.post','nodblog.api.comment'])
     .config(function($stateProvider,RestangularProvider) {
         $stateProvider
             .state('post', {
@@ -56,6 +57,29 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
                 }
                 return elem;
             }); 
+    })
+    .factory('PreparedPosts',function($filter){
+        return {
+            get:function(posts){
+                var data = [];
+                angular.forEach(posts, function(value, key){
+                    this.push({
+                        title:value.title,
+                        slug:value.slug,
+                        author:value.author,
+                        categories:$filter('arraytostrcs')(value.categories),
+                        tags:$filter('arraytostrcs')(value.tags),
+                        created:$filter('date')(value.created,'short'),
+                        published:$filter('date')(value.published,'short'),
+                        comments:value.meta.comments,
+                        votes:value.meta.votes,
+                        avatar:value.avatar,
+                        status:value.status
+                    });
+                }, data);
+                return data;
+            }
+        }   
     })
     .service('PostUploader',function($upload){
         var that = this;
@@ -139,11 +163,86 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
         }); 
      
     })
-    .controller('PostIndexCtrl', function ($scope,$state,WindowUtils,posts) {
-        $scope.posts = posts;
+    .controller('PostIndexCtrl', function ($scope,$state,WindowUtils,posts,PreparedPosts) {
+        
+        var preparedPosts = PreparedPosts.get(posts);
         $scope.showComments = function(post){
             $state.transitionTo('post_comments',{id:post._id});
         }
+        
+        $scope.filterOptions = {
+            filterText: "",
+            useExternalFilter: true
+        }; 
+        $scope.totalServerItems = 0;
+        $scope.pagingOptions = {
+            pageSizes: [6, 9, 12],
+            pageSize: 3,
+            currentPage: 1
+        };	
+        $scope.setPagingData = function(data, page, pageSize){	
+            var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+            $scope.posts = pagedData;
+            $scope.totalServerItems = data.length;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+        };
+    $scope.getPagedDataAsync = function (pageSize, page, searchText) {
+        setTimeout(function () {
+            
+            $scope.setPagingData(preparedPosts,page,pageSize);
+                
+           
+        }, 100);
+    };
+	
+    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+	
+    $scope.$watch('pagingOptions', function (newVal, oldVal) {
+        if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+          $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+        }
+    }, true);
+    $scope.$watch('filterOptions', function (newVal, oldVal) {
+        if (newVal !== oldVal) {
+          $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+        }
+    }, true);
+	
+    $scope.gridOptions = {
+            data: 'posts',
+            headerRowHeight: 30,
+            rowHeight: 80,
+            enablePaging: true,
+            showFooter: true,
+            enablePinning: true,
+            totalServerItems:'totalServerItems',
+            pagingOptions: $scope.pagingOptions,
+            filterOptions: $scope.filterOptions,
+            showSelectionCheckbox: false,
+            multiSelect: false,
+            columnDefs: [
+                    {field: 'title', displayName: 'Title'}, 
+                    {field:'slug', displayName:'Slug'}, 
+                    {field: 'author', displayName:'Author'},
+                    {field: 'categories', displayName:'Categories'},
+                    {field: 'tags', displayName:'Tags'},
+                    {field: 'created', displayName:'Created'},
+                    {field: 'published', displayName:'Published'},
+                    {field: 'comments',
+                        headerCellTemplate: '<span class="glyphicon glyphicon-thumbs-up" title="Votes">',
+                        cellTemplate:'<span class="text-warning" title="pending">{{row.getProperty(\'comments\').pending}}</span>/<span class="text-success" title="approved">{{row.getProperty(\'comments\').approved}}</span>'
+                    },
+                    {field: 'votes',
+                        headerCellTemplate: '<span class="glyphicon glyphicon-comment" title="Comments"></span>'
+                    },
+                    {field: 'avatar', 
+                        displayName:'Avatar',
+                        cellTemplate:'<img alt="{{row.getProperty(\'title\')}}" title="{{row.getProperty(\'title\')}}" class="img-thumbnail post-avatar" data-ng-src="/upload/{{row.getProperty(\'avatar\')}}">'},
+                    {field: 'status', displayName:'Status'}
+            ] 
+         };
         
     })
     .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader) {
@@ -226,10 +325,9 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
     .controller('ShowCommentsInnerCtrl',function ($scope,$stateParams,Comment) {
        $scope.isCollapsed = true;
         $scope.approved = function(id){
-            $scope.comment = Comment.specialCopy(id);
-            
-            $scope.comment.status = 'approved';
-            $scope.comment.put().then(
+            var comment = Comment.specialCopy(id);
+            comment.status = 'approved';
+            comment.put().then(
                 function(data) {
                     
                 },
