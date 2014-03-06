@@ -10,12 +10,12 @@ var mongoose = require('mongoose'),
 module.exports = function(passport) {
     //Serialize sessions
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, {id:user.id,username:user.username});
     });
 
-    passport.deserializeUser(function(id, done) {
+    passport.deserializeUser(function(user, done) {
         User.findOne({
-            _id: id
+            _id: user.id
         }, '-salt -hashed_password', function(err, user) {
             done(err, user);
         });

@@ -24,7 +24,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog.adm
                     div.navbar-header
                         a.navbar-brand(href='/',target='_blank') Nodblog
                     div.collapse.navbar-collapse
-                        ul.nav.navbar-nav
+                        ul.nav.navbar-nav.navbar-left
                             li(ng-class="{ active: $state.includes('index') }")
                                 a(data-ui-sref='index') Home
                             li(ng-class="{ active: $state.includes('post') }")
@@ -38,6 +38,16 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog.adm
                                 ul.dropdown-menu
                                     li(data-ng-repeat='choice in items')
                                         a(data-ui-sref='{{choice.route}}') {{choice.title}}
+                        ul.nav.navbar-nav.navbar-right
+                            li.dropdown
+                                a.dropdown-toggle(data-toggle='dropdown',href='#') 
+                                    span.glyphicon.glyphicon-user
+                                    span= user
+                                ul.dropdown-menu
+                                    li
+                                        a(href='#') Profile
+                                    li
+                                        a(href='/signout') Logout
             div.container
                 block content
         footer
