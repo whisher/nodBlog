@@ -18,8 +18,8 @@ html(lang="it")
         div.container
             form.form-signin(role='form',action='/users/session', method='post')   
                 h2.form-signin-heading Please sign in
-                input.form-control(type='email',placeholder='Email address',required='required',autofocus='autofocus')
-                input.form-control(type='password',placeholder='Password',required='required')
+                input.form-control(type='text',name='email',placeholder='Email address',required='required',autofocus='autofocus')
+                input.form-control(type='password',name='password',placeholder='Password',required='required')
                 label.checkbox
                     input(type='checkbox',value='remember-me') 
                     | Remember me

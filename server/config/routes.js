@@ -59,5 +59,7 @@ module.exports = function(app, passport,auth) {
         failureRedirect: '/signin',
         failureFlash: true
     }), users.session);
+    
+
    
 }

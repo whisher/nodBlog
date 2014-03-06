@@ -10,6 +10,6 @@
     })
     .controller('MainCtrl', function ($scope) {
         
-    })
+    });
 
 
