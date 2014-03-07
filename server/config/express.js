@@ -7,6 +7,8 @@ var express = require('express'),
     mongoStore = require('connect-mongo')(express),
     flash = require('connect-flash'),
     helpers = require('view-helpers'),
+    protectJson = require('./protectJson'),
+    xsrf = require('./xsrf'),
     config = require('./config');
 
 module.exports = function(app,passport,db) {
@@ -15,6 +17,9 @@ module.exports = function(app,passport,db) {
     //Prettify HTML
     app.locals.pretty = true;
 
+    //Json vulnerability protection
+    app.use(protectJson);
+    
     //Should be placed before express.static
     app.use(express.compress({
         filter: function(req, res) {
@@ -46,10 +51,10 @@ module.exports = function(app,passport,db) {
 
         //express/mongo session storage
         app.use(express.session({
-            secret: 'MEAN',
+            secret: config.sessionSecret,
             store: new mongoStore({
                 db: db.connection.db,
-                collection: 'sessions'
+                collection: config.sessionCollection
             })
         }));
 
@@ -63,6 +68,9 @@ module.exports = function(app,passport,db) {
        app.use(passport.initialize());
        app.use(passport.session());
 
+        //xsrf vulnerability protection
+        app.use(xsrf); 
+        
         //routes should be at the last
         app.use(app.router);
         
@@ -72,7 +80,8 @@ module.exports = function(app,passport,db) {
 
         app.use(express.static(config.root + '/../client'));
 
-
+        
+        
         //Assume "not found" in the error msgs is a 404. this is somewhat silly, but valid, you can do whatever you like, set properties, use instanceof etc.
         app.use(function(err, req, res, next) {
             //Treat as 404

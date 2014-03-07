@@ -34,38 +34,43 @@ exports.comment = function(req, res, next, id) {
  */
 exports.create = function(req, res) {
     var comment = new Comment(req.body);
-    var xsrfCookie = req.cookies['XSRF-TOKEN'];
-    var xsrfHeader = req.header('X-XSRF-TOKEN');
-    if((typeof xsrfCookie === 'undefined') || (typeof xsrfHeader === 'undefined') || (xsrfCookie!==xsrfHeader)){
-        return res.jsonp(404,{ error: 'Not found'});
-    }
-    comment.save(function(err) {
+    Post.count({ _id: comment.post_id }, function (err, count) {
         if (err) {
-           var errs = Object.keys(err.errors);
-            if (errs.length > 0){
-               return res.jsonp(500,{ error: err.errors[errs[0]].message }); 
-            }
-            return res.jsonp(500,{ error: 'Cannot save the comment' });
+            return res.jsonp(500,{ error: 'Cannot count post' });  
         }
-        if(!!+comment.is_authoring){
-           return res.jsonp(200,comment); 
-        }
-        Post.findByIdAndUpdate(comment.post_id, { $inc: {'meta.comments.pending' : 1} }).exec(function(err, post) {
-            if (err) {
-                var errs = Object.keys(err.errors);
-                if (errs.length > 0){
-                    return res.jsonp(500,{ error: err.errors[errs[0]].message }); 
+        if(count > 0){
+            comment.save(function(err) {
+                if (err) {
+                    var errs = Object.keys(err.errors);
+                    if (errs.length > 0){
+                        return res.jsonp(500,{ error: err.errors[errs[0]].message }); 
+                    }
+                    return res.jsonp(500,{ error: 'Cannot save the comment' });
                 }
-                return res.jsonp(500,{ error: 'Cannot update the post' });
-            }
-            if (!post) {
-                return res.jsonp(404,{ error: 'Failed to load post with id ' + comment.post_id });
-            }
-            mail.addCommentNotice(comment.email,comment.post_id,comment.body);
-            res.jsonp(200,comment);
-        });
+                if(!!+comment.is_authoring){
+                    return res.jsonp(200,comment); 
+                }
+                Post.findByIdAndUpdate(comment.post_id, { $inc: {'meta.comments.pending' : 1} }).exec(function(err, post) {
+                    if (err) {
+                        var errs = Object.keys(err.errors);
+                        if (errs.length > 0){
+                            return res.jsonp(500,{ error: err.errors[errs[0]].message }); 
+                        }
+                        return res.jsonp(500,{ error: 'Cannot update the post' });
+                    }
+                    if (!post) {
+                        return res.jsonp(404,{ error: 'Failed to load post with id ' + comment.post_id });
+                    }
+                    mail.addCommentNotice(comment.email,comment.post_id,comment.body);
+                    res.jsonp(200,comment);
+                });
+            }); 
+        }
+        else{
+            return res.jsonp(404,{ error: 'Post with id ' + comment.post_id + 'not found'});
+        }
     });
-};
+ };
 
 /**
  * Show a comment

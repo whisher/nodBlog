@@ -9,9 +9,9 @@ var mongoose = require('mongoose'),
 /**
  * Auth callback
  */
-exports.authCallback = function(req, res) {
+/*exports.authCallback = function(req, res) {
     res.redirect('/');
-};
+};*/
 
 /**
  * Show login form
@@ -36,7 +36,7 @@ exports.signout = function(req, res) {
  * Session
  */
 exports.session = function(req, res) {
-    res.redirect('/');
+    res.redirect('/admin');
 };
 
 /**
