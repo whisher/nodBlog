@@ -29,7 +29,7 @@ module.exports = function(req, res, next) {
         default:
             // Check the token in the request against the one stored in the session
             if ( requestToken !== token ) {
-              return res.jsonp(401,{ error: 'Unauthorized'});
+              return res.jsonp(403,{ error: 'Unauthorized'});
             }
     }
     // All is OK, continue as you were.

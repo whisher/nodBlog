@@ -50,7 +50,9 @@ footer {
   }
 }
 
-
+#warning{
+    text-align: center;
+}
 /* Blog */
 .comment-box{}
 .comment-box > article{

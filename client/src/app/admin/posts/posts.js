@@ -1,6 +1,6 @@
 //'use strict';
 
-angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','ngGrid','angularFileUpload','nodblog.api.post','nodblog.api.comment'])
+angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpload','nodblog.api.post','nodblog.api.comment','nodblog.ui.paginator'])
     .config(function($stateProvider,RestangularProvider) {
         $stateProvider
             .state('post', {
@@ -163,89 +163,12 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','ngGrid','angul
         }); 
      
     })
-    .controller('PostIndexCtrl', function ($scope,$state,$timeout,posts,PreparedPosts) {
-        
+    .controller('PostIndexCtrl', function ($scope,$state,$timeout,posts,PreparedPosts,Paginator) {
         var preparedPosts = PreparedPosts.get(posts);
+        $scope.paginator =  Paginator(2,5,preparedPosts);
         $scope.showComments = function(post){
             $state.transitionTo('post_comments',{id:post._id});
         }
-        
-        $scope.filterOptions = {
-            filterText: "",
-            useExternalFilter: true
-        };
-        
-        $scope.totalServerItems = 0;
-        
-        $scope.pagingOptions = {
-            pageSizes: [3, 6, 9],
-            pageSize: 3,
-            currentPage: 1
-        };	
-	
-        $scope.setPagingData = function(data, page, pageSize){	
-            var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-            $scope.posts = pagedData;
-            $scope.totalServerItems = data.length;
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
-        };
-        
-        $scope.getPagedDataAsync = function (pageSize, page) {
-            $timeout(function () {
-                $scope.setPagingData(preparedPosts,page,pageSize);
-            },100);
-        };
-	
-        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
-	
-        $scope.$watch('pagingOptions', function (newVal, oldVal) {
-            if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
-              $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-            }
-        }, true);
-        
-        $scope.$watch('filterOptions', function (newVal, oldVal) {
-            if (newVal !== oldVal) {
-              $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-            }
-        }, true);
-	
-        $scope.gridOptions = {
-                data: 'posts',
-                headerRowHeight: 30,
-                rowHeight: 80,
-                enablePaging: true,
-                showFooter: true,
-                enablePinning: true,
-                totalServerItems:'totalServerItems',
-                pagingOptions: $scope.pagingOptions,
-                filterOptions: $scope.filterOptions,
-                showSelectionCheckbox: false,
-                multiSelect: false,
-                columnDefs: [
-                        {field: 'title', displayName: 'Title'}, 
-                        {field:'slug', displayName:'Slug'}, 
-                        {field: 'author', displayName:'Author'},
-                        {field: 'categories', displayName:'Categories'},
-                        {field: 'tags', displayName:'Tags'},
-                        {field: 'created', displayName:'Created'},
-                        {field: 'published', displayName:'Published'},
-                        {field: 'comments',
-                            headerCellTemplate: '<span class="glyphicon glyphicon-comment" title="Comments">',
-                            cellTemplate:'<span class="text-warning" title="pending">{{row.getProperty(\'comments\').pending}}</span>/<span class="text-success" title="approved">{{row.getProperty(\'comments\').approved}}</span>'
-                        },
-                        {field: 'votes',
-                            headerCellTemplate: '<span class="glyphicon glyphicon-thumbs-up" title="Votes"></span>'
-                        },
-                        {field: 'avatar', 
-                            displayName:'Avatar',
-                            cellTemplate:'<img alt="{{row.getProperty(\'title\')}}" title="{{row.getProperty(\'title\')}}" class="img-thumbnail post-avatar" data-ng-src="/upload/{{row.getProperty(\'avatar\')}}">'},
-                        {field: 'status', displayName:'Status'}
-                ] 
-             };
-        
     })
     .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader) {
         

@@ -1,9 +1,30 @@
 'use strict';
 
 module.exports = function(app, passport,auth) {
+    
     /* Default Index */
     var indexDefaultController = require('../app/controllers/default/index');
     app.get('/', indexDefaultController.render);
+    
+    /* Login Index */
+    var loginController = require('../app/controllers/login/index');
+    app.get('/signin',loginController.render);
+    
+    app.post('/user/auth', function(req, res, next) {
+        passport.authenticate('local', function(err, user, info) {
+            if (err) { return next(err); }
+                if (!user) { 
+                    return res.send(403); 
+                }
+                req.logIn(user, function(err) {
+                    if (err) { 
+                            return next(err); 
+                    }
+                    return res.json(200,{data:user.email}); 
+                });
+        })(req, res, next);
+    });
+    app.get('/signout', loginController.signout);
     
     /* Admin Index */
     var indexAdminController = require('../app/controllers/admin/index');
@@ -44,22 +65,5 @@ module.exports = function(app, passport,auth) {
     /* Comment Id Param */
     app.param('commentId', commentController.comment);
     
-   /* Users */
-    var users = require('../app/controllers/users');
-    app.get('/signin', users.signin);
-    app.get('/signout', users.signout);
-    app.get('/users/me', users.me);
-    app.post('/users', users.create);
-    
-    /* Users Param */
-    app.param('userId', users.user);
-
-    //Setting the local strategy route
-    app.post('/users/session', passport.authenticate('local', {
-        failureRedirect: '/signin',
-        failureFlash: true
-    }), users.session);
-    
-
    
 }
