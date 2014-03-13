@@ -1,6 +1,6 @@
 //'use strict';
-//Dependencies ui.router nodblog.ui.paginators.elastic
-angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload','nodblog.api.post','nodblog.api.comment'])
+//Dependencies ui.router nodblog.api.base nodblog.ui.paginators.elastic
+angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
     .config(function($stateProvider,RestangularProvider) {
         $stateProvider
             .state('post', {
@@ -50,6 +50,9 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload','nodblog
                 controller: 'ShowCommentsCtrl'
             })
             RestangularProvider.setBaseUrl('/admin/api');
+            RestangularProvider.setRestangularFields({
+                id: "_id"
+            });
             RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
                 if (operation === 'put') {
                     elem._id = undefined;
@@ -81,6 +84,22 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload','nodblog
           }
         };
      })
+     .factory('Post', function(Base) {
+        function NgPost() {
+            this.status = ['publish','draft'];
+            this.labels = {
+                frmCreateHeader:'Add New Post',
+                frmEditHeader:'Edit Post'
+            }; 
+            this.commentsByPostId = function(id){
+                return this.getElements().one('comments',id).getList();
+            }
+        }
+        return angular.extend(Base('post'), new NgPost());
+    })
+    .factory('Comment', function(Base) {
+        return Base('comment');
+    })
     .factory('PreparedPosts',function($filter){
         return {
             get:function(posts){
@@ -234,6 +253,7 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload','nodblog
         
         var original = post;
         $scope.post = Post.copy(original);
+        console.log($scope.post);
         angular.extend($scope, new $controller('PostParentCtrl', {$scope:$scope,$timeout:$timeout,PostUploader:PostUploader}) );
         
         $timeout(function(){

@@ -1,6 +1,6 @@
 'use strict'; 
-//Dependencies ui.router nodblog.ui.paginators.elastic
-angular.module('nodblog.admin.user',['nodblog.api.user'])
+//Dependencies ui.router nodblog.api.base nodblog.ui.paginators.elastic
+angular.module('nodblog.admin.user',[])
     .config(function($stateProvider,RestangularProvider) {
         $stateProvider
             .state('user', {
@@ -44,6 +44,9 @@ angular.module('nodblog.admin.user',['nodblog.api.user'])
                 controller: 'UserDeleteCtrl'
             })
             RestangularProvider.setBaseUrl('/admin/api');
+            RestangularProvider.setRestangularFields({
+                id: "_id"
+            });
             RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
                 if (operation === 'put') {
                     elem._id = undefined;
@@ -51,6 +54,15 @@ angular.module('nodblog.admin.user',['nodblog.api.user'])
                 }
                 return elem;
             });      
+    })
+    .factory('User', function(Base) {
+        function NgUser() {
+            this.labels = {
+                frmCreateHeader:'Add New User',
+                frmEditHeader:'Edit User'
+            }; 
+        }
+        return angular.extend(Base('user'), new NgUser());
     })
     .controller('UserIndexCtrl', function ($scope,$state,users,Paginator) {
         $scope.paginator =  Paginator(2,5,users);
