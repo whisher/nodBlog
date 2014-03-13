@@ -1,6 +1,6 @@
 (function(window, angular, undefined) {
     'use strict';
-    angular.module('nodblog.ui.paginator', [])
+    angular.module('nodblog.ui.paginators.elastic', [])
         .factory('Paginator', function() {
             return function(pageSize,navRange,data) {
                     var cache =[];

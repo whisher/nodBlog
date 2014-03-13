@@ -14,6 +14,7 @@ var fs = require('fs'),
 
 var uploadDir = path.normalize(__dirname + '/../../../../client/upload');
 
+
 /**
  * Find post by id
  */
@@ -106,7 +107,7 @@ exports.update = function(req, res) {
             if (errs.length > 0){
                return res.json(500,{ error: err.errors[errs[0]].message }); 
             }
-            return res.json(500,{ error: 'Cannot save the post' });
+            return res.json(500,{ error: 'Cannot update the post' });
         } 
         res.json(200,post);
     });
@@ -123,7 +124,7 @@ exports.destroy = function(req, res) {
             if (errs.length > 0){
                return res.json(500,{ error: err.errors[errs[0]].message }); 
             }
-            return res.json(500,{ error: 'Cannot save the post' });
+            return res.json(500,{ error: 'Cannot delete the post' });
         } 
         res.json(200,post);
    });
@@ -132,40 +133,46 @@ exports.destroy = function(req, res) {
 /**
  * Upload post avatar
  */
-exports.upload = function(req, res,next) {
-    var w = 200;
-    var h = 75;
-    var form = new formidable.IncomingForm;
-    
-    form.parse(req, function(err, fields, files){
-        if(err){
-            res.jsonp(500, err.message);
-        } 
-        var ext = path.extname(files.avatar.name);
-        var type = files.avatar.type;
-        var tmp = path.basename(files.avatar.path) + ext;
-        var filename = uploadDir + '/' + tmp;
-        var data = {url:tmp};
-        im.crop({
-                srcPath:  files.avatar.path,
-                dstPath: filename,
-                width: w,
-                height: h,
-                quality: 1,
-                gravity: "North"
-            }, 
-            function(err, stdout, stderr){
-                if (err){
-                    return res.jsonp(500, {error:'Cannot crop file'});
-                } 
-                fs.unlink(files.avatar.path, function (err) {
-                    if (err) {}
-                });
-                res.jsonp(200,data);
+exports.upload = function(io) {
+  return function(req, res,next) {
+        var w = 200;
+        var h = 75;
+        var form = new formidable.IncomingForm;
+        form.on('progress', function(bytesReceived, bytesExpected){
+            var percent = Math.floor(bytesReceived / bytesExpected * 100);
+            
+            // here is where you can relay the uploaded percentage using Socket.IO
+            io.sockets.emit('avatarUploadProgress', { percent: percent });
         });
-    });
+        form.parse(req, function(err, fields, files){
+            if(err){
+                res.jsonp(500, err.message);
+            } 
+            var ext = path.extname(files.avatar.name);
+            var type = files.avatar.type;
+            var tmp = path.basename(files.avatar.path) + ext;
+            var filename = uploadDir + '/' + tmp;
+            var data = {url:tmp};
+            im.crop({
+                    srcPath:  files.avatar.path,
+                    dstPath: filename,
+                    width: w,
+                    height: h,
+                    quality: 1,
+                    gravity: "North"
+                }, 
+                function(err, stdout, stderr){
+                    if (err){
+                        return res.jsonp(500, {error:'Cannot crop file'});
+                    } 
+                    fs.unlink(files.avatar.path, function (err) {
+                        if (err) {}
+                    });
+                    res.jsonp(200,data);
+            });
+        });
+    };
 };
-
 /**
  * Find comment by post id
  */
@@ -225,3 +232,4 @@ exports.commentsByPostIdForAmin = function(req, res) {
         res.json(200,data);
     });
 };
+

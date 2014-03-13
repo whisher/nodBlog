@@ -1,14 +1,14 @@
 <div class="row">
-    <article class="prologue col-6 col-sm-6 col-lg-4" data-ng-repeat="post in posts">
+    <article class="prologue col-6 col-sm-6 col-lg-4" data-ng-repeat="post in posts" data-ng-controller="BlogInnerCtrl">
         <header>
             <img alt="{{post.title}}" title="{{post.title}}" class="img-responsive" data-ng-src="/upload/{{post.avatar}}" /> 
-            <h1>{{post.title | ucfirst}}</h1>
-            <h2 data-ng-bind-html="post.body | words:20"></h2>
+            <h1>{{post.title}}</h1>
+            <h2 data-ng-bind-html="post.body | :20"></h2>
         </header>
         <footer>
-            <time pubdate date="{{post.created | date:'short'}}">
-               <em>{{post.created | date:'short'}}</em>
-            </time>, 
+            <time pubdate date="{{post.published}}">
+               <em>{{post.published}}</em>
+            </time> 
             <span class="btn btn-default btn-xs">
                 <span class="glyphicon glyphicon-comment"></span> {{post.meta.comments.approved}}
             </span>

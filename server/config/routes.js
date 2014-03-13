@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(app, passport,auth) {
+module.exports = function(app, passport,auth,io) {
     
     /* Default Index */
     var indexDefaultController = require('../app/controllers/default/index');
@@ -10,36 +10,21 @@ module.exports = function(app, passport,auth) {
     var loginController = require('../app/controllers/login/index');
     app.get('/signin',loginController.render);
     
-    app.post('/user/auth', function(req, res, next) {
-        passport.authenticate('local', function(err, user, info) {
-            if (err) { return next(err); }
-                if (!user) { 
-                    return res.send(403); 
-                }
-                req.logIn(user, function(err) {
-                    if (err) { 
-                            return next(err); 
-                    }
-                    return res.json(200,{data:user.email}); 
-                });
-        })(req, res, next);
-    });
+    app.post('/user/auth', loginController.auth(passport));
     app.get('/signout', loginController.signout);
     
     /* Admin Index */
     var indexAdminController = require('../app/controllers/admin/index');
     app.get('/admin',auth.requiresLogin ,indexAdminController.render);
     
-    var postController = require('../app/controllers/api/post');
-   
-    
     /* Admin Post Api */
+    var postController = require('../app/controllers/api/post');
     app.post('/admin/api/post',auth.apiRequiresLogin, postController.create);
     app.get('/admin/api/post',auth.apiRequiresLogin, postController.allForAdmin);
     app.get('/admin/api/post/:postId',auth.apiRequiresLogin, postController.showForAdmin);
     app.put('/admin/api/post/:postId',auth.apiRequiresLogin, postController.update);
     app.del('/admin/api/post/:postId',auth.apiRequiresLogin, postController.destroy);
-    app.post('/admin/api/post/upload',auth.apiRequiresLogin, postController.upload);
+    app.post('/admin/api/post/upload',auth.apiRequiresLogin, postController.upload(io));
     app.get('/admin/api/post/comments/:postId',auth.apiRequiresLogin, postController.commentsByPostIdForAmin);
     
     /* Public Post Api */
@@ -50,9 +35,9 @@ module.exports = function(app, passport,auth) {
     /* Post Id Param */
     app.param('postId', postController.post);
     
-    var commentController = require('../app/controllers/api/comment');
-    
+   
     /* Admin Comment Api */
+    var commentController = require('../app/controllers/api/comment');
     app.post('/admin/api/comment',auth.apiRequiresLogin, commentController.create);
     app.put('/admin/api/comment/:commentId',auth.apiRequiresLogin, commentController.update);
     
@@ -64,6 +49,17 @@ module.exports = function(app, passport,auth) {
     
     /* Comment Id Param */
     app.param('commentId', commentController.comment);
+    
+    /* Admin User Api */
+    var userController = require('../app/controllers/api/user');
+    app.post('/admin/api/user',auth.apiRequiresLogin, userController.create);
+    app.get('/admin/api/user',auth.apiRequiresLogin, userController.all);
+    app.get('/admin/api/user/:userId',auth.apiRequiresLogin, userController.show);
+    app.put('/admin/api/user/:userId',auth.apiRequiresLogin, userController.update);
+    app.del('/admin/api/user/:userId',auth.apiRequiresLogin, userController.destroy);
+    
+    /* User Id Param */
+    app.param('userId', userController.user);
     
    
 }

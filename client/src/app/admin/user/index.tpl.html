@@ -1,0 +1,48 @@
+<div class="well">
+    <a class="btn btn-primary" data-ui-sref="user_create">New</a>
+</div>
+<table class="table table-striped" data-ng-show="paginator.items.length > 0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-ng-repeat="user in paginator.items">
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.username}}</td>
+            <td>
+                <a data-ui-sref="user_edit({ id: user._id })" class="btn btn-warning btn-sm" title="edit user">
+                    <span class="glyphicon glyphicon-edit"></span> Edit
+                </a>
+                <a data-ui-sref="user_delete({ id: user._id })" class="btn btn-danger btn-sm" title="delete user">
+                    <span class="glyphicon glyphicon-trash"></span> Delete
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="text-center">
+    <ul class="pagination">
+        <li data-ng-class="{disabled: !paginator.hasPrevious()}">
+            <a href data-ng-click="paginator.previous()">&laquo; </a>
+        </li>
+        <li data-ng-class="{disabled: !paginator.hasFirst()}">
+            <a href data-ng-click="paginator.first()">&lsaquo;</a>
+        </li>
+        <li data-ng-repeat="n in [] | pagination:paginator.getStart():paginator.getEnd()" data-ng-class="{active: n == paginator.getCurrentPage()}">
+            <a  href data-ng-click="paginator.toPageId(n)">{{n}}</a>
+        </li>
+        <li data-ng-class="{disabled: !paginator.hasLast()}">
+            <a href data-ng-click="paginator.last()">&rsaquo; </a>
+        </li>
+        <li data-ng-class="{disabled: !paginator.hasNext()}">
+            <a href data-ng-click="paginator.next()">&raquo;</a>
+        </li>
+    </ul>
+</div>
+

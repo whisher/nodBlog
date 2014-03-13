@@ -55,17 +55,28 @@ walk(modelsPath);
 //bootstrap passport config
 require('./config/passport')(passport);
 
-var app = express();
+var app = express()
+    , http = require('http')
+    , server = http.createServer(app)
+    , io = require('socket.io').listen(server);
 
 //express settings
 require('./config/express')(app,passport,db);
 
 //Bootstrap routes
-require('./config/routes')(app,passport,auth);
+require('./config/routes')(app,passport,auth,io);
 
 //Start the app by listening on <port>
 var port = process.env.PORT || config.port;
-app.listen(port);
+server.listen(port);
+
+io.sockets.on('connection', function (socket){
+    
+    socket.on('addPost', function (data) {
+        socket.broadcast.emit('addedPost', data);
+    });
+});
+
 console.log('Express app started on port ' + port);
 
 //Initializing logger

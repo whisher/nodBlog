@@ -1,5 +1,5 @@
 //'use strict';     
-angular.module('nodblog.admin',['nodblog.admin.index','nodblog.admin.posts'])
+angular.module('nodblog.admin',['ui.router','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
     .run(function ($state,$rootScope,$log,$filter,WindowUtils) {
         $rootScope.$state = $state;
         $state.transitionTo('index');

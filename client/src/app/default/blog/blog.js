@@ -32,6 +32,11 @@
     .controller('BlogIndexCtrl', function ($scope,posts) {
         $scope.posts = posts;
     })
+    .controller('BlogInnerCtrl', function ($scope,$filter) {
+        $scope.post.title =  $filter('ucfirst')($scope.post.title);
+        $scope.post.published =  $filter('date')($scope.post.published,'short');
+        $scope.post.body =  $filter('words')($scope.post.body,20);
+    })
     .controller('BlogDetailsCtrl', function ($scope,localStorageService,post,comments,Comment) {
         $scope.post = post;
         $scope.comments = comments;

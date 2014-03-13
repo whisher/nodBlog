@@ -43,6 +43,13 @@
                         </span> 
                     </div>
                 </div>
+                <div class="form-group" data-ng-if="uploadPercent > 0">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="{{uploadPercent}}" aria-valuemin="0" aria-valuemax="100" data-ng-style="{width:uploadPercent+'%'}">
+                            {{uploadPercent}}
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <alert data-ng-show="showAlert" type="'danger'" close="closeAlert()">
                         Only images are allowed !  

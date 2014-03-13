@@ -19,6 +19,16 @@ var UserSchema = new Schema({
         type: String,
         unique: true
     },
+    role: {
+        type: String,
+        required: true,
+        default: 'authoring'
+    },
+    created: {
+        type: Date,
+        required: true,
+        default: Date.now
+    },
     hashed_password: String,
     provider: String,
     salt: String,
@@ -64,6 +74,10 @@ UserSchema.path('username').validate(function(username) {
     if (authTypes.indexOf(this.provider) !== -1) return true;
     return username.length;
 }, 'Username cannot be blank');
+
+UserSchema.path('role').validate(function(role) {
+    return /admin|authoring/.test(role);
+}, 'Is not a valid role');
 
 UserSchema.path('hashed_password').validate(function(hashed_password) {
     // if you are authenticating by any of the oauth strategies, don't validate

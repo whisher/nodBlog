@@ -53,6 +53,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog.adm
                 block content
         footer
                     p &copy; Company 2013
+        script(type='text/javascript', src='/socket.io/socket.io.js')
         script(type='text/javascript', src='/vendor/jquery/jquery.js')
         script(type='text/javascript', src='/vendor/lodash/dist/lodash.js')
         script(type='text/javascript', src='/vendor/ng-file-upload/angular-file-upload-html5-shim.js')
@@ -62,12 +63,15 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog.adm
         script(type='text/javascript', src='/vendor/angular-bootstrap/ui-bootstrap-tpls.js')
         script(type='text/javascript', src='/vendor/ng-file-upload/angular-file-upload.js')
         script(type='text/javascript', src='/src/common/services/base.js')
-        script(type='text/javascript', src='/src/app/admin/ui/paginator.js')
+        script(type='text/javascript', src='/src/common/ui/paginators/elastic.js')
         script(type='text/javascript', src='/src/app/admin/services/post.js')
         script(type='text/javascript', src='/src/app/admin/services/comment.js')
         script(type='text/javascript', src='/src/app/admin/services/media.js')
+        script(type='text/javascript', src='/src/app/admin/services/user.js')
         script(type='text/javascript', src='/src/app/admin/index/index.js')
-        script(type='text/javascript', src='/src/app/admin/posts/posts.js')
+        script(type='text/javascript', src='/src/app/admin/post/post.js')
+        script(type='text/javascript', src='/src/app/admin/media/media.js')
+        script(type='text/javascript', src='/src/app/admin/user/user.js')
         script(type='text/javascript', src='/src/app/admin/app.js')
 
 

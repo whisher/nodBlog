@@ -16,7 +16,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog.log
         | <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script> <![endif]-->
     body
         div.container(data-ng-controller='MainCtrl')
-            form.form-signin(role='form',name='form',data-ng-submit='getAuth()')   
+            form.form-signin(role='form',name='form',data-auth='',data-ng-submit='getAuth()')   
                 h2.form-signin-heading Please sign in
                 input.form-control(type='text',name='email',placeholder='Email address',required='required',autofocus='autofocus',data-ng-model='user.email')
                 input.form-control(type='password',name='password',placeholder='Password',required='required',data-ng-model='user.password')
@@ -24,5 +24,6 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog.log
                     input(type='checkbox',value='remember-me') 
                     | Remember me
                 input.btn.btn-lg.btn-primary.btn-block(type='submit',value='Sign in',data-ng-disabled="form.$invalid")
+        script(type='text/javascript', src='/vendor/jquery/jquery.js')
         script(type='text/javascript', src='/vendor/angular/angular.js')
         script(type='text/javascript', src='/src/app/login/app.js')

@@ -1,11 +1,11 @@
 //'use strict';
-
-angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpload','nodblog.api.post','nodblog.api.comment','nodblog.ui.paginator'])
+//Dependencies ui.router nodblog.ui.paginators.elastic
+angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload','nodblog.api.post','nodblog.api.comment'])
     .config(function($stateProvider,RestangularProvider) {
         $stateProvider
             .state('post', {
                 url: '/post',
-                templateUrl: '/src/app/admin/posts/index.tpl.html',
+                templateUrl: '/src/app/admin/post/index.tpl.html',
                 resolve: {
                     posts: function(Post){
                         return Post.all();
@@ -16,12 +16,12 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
             .state('post_create', {
                 url: '/post/create',
                 name: 'create post',
-                templateUrl: '/src/app/admin/posts/form.tpl.html',
+                templateUrl: '/src/app/admin/post/form.tpl.html',
                 controller: 'PostCreateCtrl'
             })
             .state('post_edit', {
                 url: '/post/edit/:id',
-                templateUrl: '/src/app/admin/posts/form.tpl.html',
+                templateUrl: '/src/app/admin/post/form.tpl.html',
                 resolve: {
                     post: function(Post, $stateParams){
                         return Post.one($stateParams.id);
@@ -31,7 +31,7 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
             })
             .state('post_delete', {
                 url: '/post/delete/:id',
-                templateUrl: '/src/app/admin/posts/delete.tpl.html',
+                templateUrl: '/src/app/admin/post/delete.tpl.html',
                 resolve: {
                     post: function(Post,$stateParams){
                         return Post.one($stateParams.id);
@@ -41,7 +41,7 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
             })
             .state('post_comments', {
                 url: '/post/comments/:id',
-                templateUrl: '/src/app/admin/posts/comments.tpl.html',
+                templateUrl: '/src/app/admin/post/comments.tpl.html',
                 resolve: {
                     comments: function(Post,$stateParams){
                         return Post.commentsByPostId($stateParams.id);
@@ -58,6 +58,29 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
                 return elem;
             }); 
     })
+    .factory('socket', function ($rootScope) {
+        var socket = io.connect();
+        return {
+          on: function (eventName, callback) {
+            socket.on(eventName, function () {  
+              var args = arguments;
+              $rootScope.$apply(function () {
+                callback.apply(socket, args);
+              });
+            });
+          },
+          emit: function (eventName, data, callback) {
+            socket.emit(eventName, data, function () {
+              var args = arguments;
+              $rootScope.$apply(function () {
+                if (callback) {
+                  callback.apply(socket, args);
+                }
+              });
+            })
+          }
+        };
+     })
     .factory('PreparedPosts',function($filter){
         return {
             get:function(posts){
@@ -84,6 +107,7 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
     .service('PostUploader',function($upload){
         var that = this;
         var fileReaderSupported = window.FileReader !== null;
+        this.percent = 0;
         this.notify = null;
         this.success = null;
         this.showAlert = false;
@@ -122,9 +146,11 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
         };
         this.closeAlert = function() {
             this.showAlert = false;
-        };
+        }; 
+        
+        
     })
-    .controller('PostParentCtrl', function ($scope,$timeout,PostUploader) {
+    .controller('PostParentCtrl', function ($scope,$timeout,PostUploader,socket) {
          
         /* Datepicker config */
         $scope.showWeeks = true;
@@ -160,7 +186,10 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
         $scope.$watch('showAlert',function(newVal, oldVal){
             $scope.showAlert = newVal;
             $scope.dataUrl = null;
-        }); 
+        });
+        socket.on('avatarUploadProgress', function (data) {
+            $scope.uploadPercent = data.percent;
+        });
      
     })
     .controller('PostIndexCtrl', function ($scope,$state,$timeout,posts,PreparedPosts,Paginator) {
@@ -170,7 +199,7 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
             $state.transitionTo('post_comments',{id:post._id});
         }
     })
-    .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader) {
+    .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader,socket) {
         
         
        
@@ -188,6 +217,7 @@ angular.module('nodblog.admin.posts',['ui.router','ui.bootstrap','angularFileUpl
             $scope.post.tags = $filter('strcstoarray')($scope.post.tags);
             Post.store($scope.post).then(
                 function(data) {
+                    socket.emit('addPost',data)
                     return $state.transitionTo('post');
                 }, 
                 function error(err) {
