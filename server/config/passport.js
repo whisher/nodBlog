@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
 module.exports = function(passport) {
     //Serialize sessions
     passport.serializeUser(function(user, done) {
-        done(null, {id:user.id,username:user.username,role:user.role});
+        done(null, {id:user.id,name:user.name,username:user.username,role:user.role});
     });
 
     passport.deserializeUser(function(user, done) {

@@ -19,8 +19,7 @@ var PostSchema = new Schema({
     },
     author:{
         type: String,
-        required: true,
-        default: 'whisher'
+        required: true
     },
     slug: {
         type: String,

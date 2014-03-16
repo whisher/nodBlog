@@ -1,6 +1,7 @@
-'use strict'; 
-//Dependencies nodblog.ui.paginators.elastic
-angular.module('nodblog.admin.media',['ui.router'])
+(function(window, angular, undefined){
+'use strict';
+//Dependencies ui.router nodblog.api.base nodblog.ui.paginators.elastic
+angular.module('nodblog.admin.media',[])
     .config(function($stateProvider,RestangularProvider) {
         $stateProvider
             .state('media', {
@@ -12,8 +13,11 @@ angular.module('nodblog.admin.media',['ui.router'])
                     }
                 },
                 controller:'MediaIndexCtrl'
-            })
+            });
             RestangularProvider.setBaseUrl('/admin/api');
+            RestangularProvider.setRestangularFields({
+                id: "_id"
+            });
             RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
                 if (operation === 'put') {
                     elem._id = undefined;
@@ -22,7 +26,12 @@ angular.module('nodblog.admin.media',['ui.router'])
                 return elem;
             });      
     })
-    .controller('UserIndexCtrl', function ($scope,$state,medias,Paginator) {
+    .factory('Media', function(Base) {
+        function NgMedia() {}
+        return angular.extend(Base('media'), new NgMedia());
+    })
+    .controller('MediaIndexCtrl', function ($scope,$state,medias,Paginator) {
         $scope.paginator =  Paginator(2,5,medias);
     });
-    
+})(window, angular);    
+

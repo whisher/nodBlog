@@ -1,3 +1,4 @@
+(function(window, angular, undefined){
 'use strict'; 
 //Dependencies ui.router nodblog.api.base nodblog.ui.paginators.elastic
 angular.module('nodblog.admin.user',[])
@@ -5,7 +6,7 @@ angular.module('nodblog.admin.user',[])
         $stateProvider
             .state('user', {
                 url: '/user',
-                templateUrl: '/src/app/admin/user/index.tpl.html',
+                templateUrl: '/src/app/admin/user/user.tpl.html',
                 resolve: {
                     users: function(User){
                         return User.all();
@@ -42,7 +43,7 @@ angular.module('nodblog.admin.user',[])
                     }
                 },
                 controller: 'UserDeleteCtrl'
-            })
+            });
             RestangularProvider.setBaseUrl('/admin/api');
             RestangularProvider.setRestangularFields({
                 id: "_id"
@@ -80,6 +81,17 @@ angular.module('nodblog.admin.user',[])
                 }
             );
         };
+        $scope.fullName = function () {
+           
+            return $scope.user.name + ' ' + $scope.user.email;
+        };
+        $scope.$watch(function(scope) {
+            
+            return scope.user.name + ' ' + scope.user.email;
+            }, function (newFullName) { console.log(newFullName);
+            $scope.fullName = newFullName;
+        });
+        
     })
     .controller('UserEditCtrl', function ($scope,$state,user,User) {
         $scope.header =  User.labels.frmEditHeader;
@@ -87,7 +99,7 @@ angular.module('nodblog.admin.user',[])
         $scope.user = User.copy(original);
         $scope.isClean = function() {
             return angular.equals(original, $scope.post);
-        }
+        };
         $scope.save = function() { 
             $scope.user.put().then(
                 function(data) {
@@ -102,7 +114,7 @@ angular.module('nodblog.admin.user',[])
     .controller('UserDeleteCtrl', function ($scope,$state,user) {
         $scope.save = function() {
             return $state.transitionTo('user');
-        }
+        };
         $scope.destroy = function() {
             user.remove().then(
                 function() {
@@ -114,3 +126,4 @@ angular.module('nodblog.admin.user',[])
             );
         };
     });
+})(window, angular);     

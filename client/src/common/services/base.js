@@ -1,6 +1,6 @@
 (function(window, angular, undefined) {
     'use strict';
-    angular.module('nodblog.api.base', ['restangular'])
+    angular.module('nodblog.services.base', ['restangular'])
         .factory('Base', function(Restangular) {
             return function(route){
                 var elements = Restangular.all(route); 

@@ -1,3 +1,5 @@
+(function(window, angular, undefined) {
+'use strict';
 angular.module('nodblog.site',['ui.router'])
     .config(function($stateProvider) {
         $stateProvider
@@ -15,7 +17,7 @@ angular.module('nodblog.site',['ui.router'])
                 url: '/contact',
                 templateUrl: '/src/app/default/site/contact.tpl.html',
                 controller: 'ContactCtrl'
-            })
+            });
     })
     .controller('IndexCtrl', function ($scope) {
         
@@ -26,7 +28,7 @@ angular.module('nodblog.site',['ui.router'])
     .controller('ContactCtrl', function ($scope) {
         $scope.test = 'contact';
     });
-    
+ })(window, angular);        
     
     
     

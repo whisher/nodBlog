@@ -78,7 +78,7 @@ module.exports = function(app,passport,db) {
         app.use(express.favicon());
         //TODO
 
-        app.use(express.static(config.root + '/../client'));
+        app.use(express.static(config.distFolder));
 
         
         

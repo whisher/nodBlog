@@ -1,35 +1,34 @@
-<div class="row">
-    <div id="cmt-wrapper" class="col-md-6" data-ng-show="comments.length > 0">
-        <div class="cmt-box" data-ng-repeat="comment in comments" data-ng-controller="ShowCommentsInnerCtrl">
-            <div class="cmt-email bg-info">{{comment.email}}</div>
-            <div class="cmt-author">{{comment.author}}</div>
-            <div class="cmt-web" data-ng-if="comment.web"><a href="{{comment.web}}" target="_blank">{{comment.web}}</a></div>
-            <div class="cmt-body">{{comment.body}}</div>
-            <div class="cmt-create">{{comment.created | date:'short'}}</div>
-            <div class="cmt-children" data-ng-if="comment.children.length > 0" data-ng-repeat="children in comment.children">
-                <p class="text-info">{{children.body}}</p>
-            </div>
-            <form class="clearfix" name="form" role="form" collapse="isCollapsed" data-ng-submit="doReply(comment._id)">
-                <div class="form-group">
-                    <textarea name="body" id="body" rows="5" class="form-control" placeholder="Write a reply" data-ng-model="reply" required="required"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary pull-right btn-xs" data-ng-disabled="form.$invalid">Reply</button>
-            </form>
-            <div class="cmt-footer">
-                    <a data-ng-click="approved(comment._id)" class="btn btn-success btn-xs" title="approve comment">
-                        <span class="glyphicon glyphicon-ok"></span> Approve
-                    </a>
-                    <a data-ng-click="isCollapsed = !isCollapsed" class="btn btn-info btn-xs" title="reply comment">
-                        <span class="glyphicon glyphicon-share-alt"></span> Reply
-                    </a>
-                    <a data-ng-href="#/comment/edit/{{comment._id}}" class="btn btn-warning btn-xs" title="edit comment">
-                        <span class="glyphicon glyphicon-edit"></span> Edit
-                    </a>
-                    <a data-ng-href="#/comment/delete/{{comment._id}}" class="btn btn-danger btn-xs" title="delete comment">
-                        <span class="glyphicon glyphicon-trash"></span> Delete
-                    </a>
-            </div>
+<div id="cmt-wrapper" class="col-md-6" data-ng-show="comments.length > 0">
+    <div class="cmt-box" data-ng-repeat="comment in comments" data-ng-controller="ShowCommentsInnerCtrl">
+        <div class="cmt-email bg-info">{{comment.email}}</div>
+        <div class="cmt-author">{{comment.author}}</div>
+        <div class="cmt-web" data-ng-if="comment.web"><a href="{{comment.web}}" target="_blank">{{comment.web}}</a></div>
+        <div class="cmt-body">{{comment.body}}</div>
+        <div class="cmt-create">{{comment.created | date:'short'}}</div>
+        <div class="cmt-children" data-ng-if="comment.children.length > 0" data-ng-repeat="children in comment.children">
+            <p class="text-info">{{children.body}}</p>
         </div>
-    </div>  
-</div>
+        <form class="clearfix" name="form" role="form" collapse="isCollapsed" data-ng-submit="doReply(comment._id)">
+            <div class="form-group">
+                <textarea name="body" id="body" rows="5" class="form-control" placeholder="Write a reply" data-ng-model="reply" required="required"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary pull-right btn-xs" data-ng-disabled="form.$invalid">Reply</button>
+        </form>
+        <div class="cmt-footer">
+            <a data-ng-click="approved(comment._id)" class="btn btn-success btn-xs" title="approve comment">
+                <span class="glyphicon glyphicon-ok"></span> Approve
+            </a>
+            <a data-ng-click="isCollapsed = !isCollapsed" class="btn btn-info btn-xs" title="reply comment">
+                <span class="glyphicon glyphicon-share-alt"></span> Reply
+            </a>
+            <a data-ng-href="#/comment/edit/{{comment._id}}" class="btn btn-warning btn-xs" title="edit comment">
+                <span class="glyphicon glyphicon-edit"></span> Edit
+            </a>
+            <a data-ng-href="#/comment/delete/{{comment._id}}" class="btn btn-danger btn-xs" title="delete comment">
+                <span class="glyphicon glyphicon-trash"></span> Delete
+            </a>
+        </div>
+    </div>
+</div>  
+
 

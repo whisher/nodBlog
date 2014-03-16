@@ -1,5 +1,6 @@
+(function(window, angular, undefined) {
 'use strict';
- angular.module('nodblog.blog',['ui.router','ngSanitize','LocalStorageModule','nodblog.api.post','nodblog.api.comment'])
+angular.module('nodblog.blog',['ui.router','ngSanitize','LocalStorageModule'])
     .constant('PREFIX_LOCAL_STORAGE','xiferpgolbdon')
     .config(function(PREFIX_LOCAL_STORAGE,$stateProvider,RestangularProvider,localStorageServiceProvider) {
         $stateProvider
@@ -26,8 +27,23 @@
                 },
                 controller: 'BlogDetailsCtrl'
             });
-        RestangularProvider.setBaseUrl('/api');
-        localStorageServiceProvider.setPrefix(PREFIX_LOCAL_STORAGE);
+            RestangularProvider.setBaseUrl('/api');
+            RestangularProvider.setRestangularFields({
+                id: "_id"
+            });
+            localStorageServiceProvider.setPrefix(PREFIX_LOCAL_STORAGE);
+    })
+    .factory('Post', function(Base) {
+        function NgPost() {
+            this.commentsByPostId = function(id){
+                return this.getElements().one('comments',id).getList();
+            };
+        }
+        return angular.extend(Base('post'), new NgPost());
+    })
+    .factory('Comment', function(Base) {
+        function NgComment() {}
+        return angular.extend(Base('comment'), new NgComment());
     })
     .controller('BlogIndexCtrl', function ($scope,posts) {
         $scope.posts = posts;
@@ -65,7 +81,7 @@
         };
         $scope.hasComments = function(){
             return !!$scope.comments.length;
-        }
+        };
     })
     .directive('inputFeedback',function() {
         return {
@@ -110,6 +126,6 @@
             return input;
         };
     });
-    
+ })(window, angular);         
     
     

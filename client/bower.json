@@ -1,6 +1,12 @@
 {
+  "author": "Fabio Bedini aka whisher",
   "name": "nodBlog",
+  "homepage": "https://github.com/whisher/nodBlog",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whisher/nodBlog.git"
+  },
   "dependencies": {
     "angular": "1.2.7",
     "jquery": "1.10.2",
@@ -9,7 +15,6 @@
     "angular-bootstrap": "~0.10.0",
     "angular-ui-router": "0.2.8-bowratic-tedium",
     "ng-file-upload": "~1.2.4",
-    "angular-route": "~1.2.10",
     "angular-sanitize": "~1.2.10",
     "angular-local-storage": "git://github.com/grevory/angular-local-storage.git"
   }

@@ -102,7 +102,7 @@
                     };
                     load();
                     return paginator;
-                 }
+                 };
         })
         .filter('pagination', function() {
             return function(input,start,end) {
@@ -112,6 +112,6 @@
                     input.push(i);
                 }
                 return input;
-            }
+            };
         });
 })(window, angular);

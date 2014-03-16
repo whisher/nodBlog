@@ -1,6 +1,8 @@
 server/npm-debug.log
 server/node_modules
+server/tmp
+client/dist
+client/node_modules
 client/vendor
 client/upload
-server/tmp
 

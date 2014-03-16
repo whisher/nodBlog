@@ -19,10 +19,16 @@ module.exports = function(req, res, next) {
     var requestToken = req.header('X-XSRF-TOKEN');
     // Add it to the cookie
     res.cookie('XSRF-TOKEN', token, { maxAge: 900000, httpOnly: false});
-
+    var url = req.url;
     // Ignore if it is just a read-only request
     switch(req.method) {
         case 'GET':
+            if(url.indexOf('.tpl.') !== -1){
+                if ( requestToken !== token ) {
+                    return res.jsonp(403,{ error: 'Unauthorized'});
+                }
+            }
+        break;
         case 'HEAD':
         case 'OPTIONS':
         break;

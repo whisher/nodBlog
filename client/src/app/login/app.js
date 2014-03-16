@@ -1,3 +1,4 @@
+(function(window, angular, undefined) {
 'use strict';
  angular.module('nodblog.login',[])
      .factory('Auth', function($http,$q,$window) {
@@ -23,7 +24,7 @@
                     callBackOnError
                 );
            }
-        }
+        };
     })
     .controller('MainCtrl', function ($scope) {
         $scope.user = {};
@@ -44,3 +45,4 @@
             }
         };
     });
+})(window, angular);           
