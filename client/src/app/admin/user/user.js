@@ -2,11 +2,11 @@
 'use strict'; 
 //Dependencies ui.router nodblog.api.base nodblog.ui.paginators.elastic
 angular.module('nodblog.admin.user',[])
-    .config(function($stateProvider,RestangularProvider) {
+    .config(function($stateProvider,RestangularProvider,pathView) {
         $stateProvider
             .state('user', {
                 url: '/user',
-                templateUrl: '/src/app/admin/user/user.tpl.html',
+                templateUrl: pathView+'user/user.tpl.html',
                 resolve: {
                     users: function(User){
                         return User.all();
@@ -16,7 +16,7 @@ angular.module('nodblog.admin.user',[])
             })
             .state('user_create', {
                 url: '/user/create',
-                templateUrl: '/src/app/admin/user/form.tpl.html',
+                templateUrl: pathView+'user/form.tpl.html',
                 resolve: {
                     users: function(User){
                         return User.all();
@@ -26,7 +26,7 @@ angular.module('nodblog.admin.user',[])
             })
             .state('user_edit', {
                 url: '/user/edit/:id',
-                templateUrl: '/src/app/admin/user/form.tpl.html',
+                templateUrl:pathView+'user/form.tpl.html',
                 resolve: {
                     user: function(User, $stateParams){
                         return User.one($stateParams.id);
@@ -36,7 +36,7 @@ angular.module('nodblog.admin.user',[])
             })
             .state('user_delete', {
                 url: '/user/delete/:id',
-                templateUrl: '/src/app/admin/user/delete.tpl.html',
+                templateUrl: pathView+'user/delete.tpl.html',
                 resolve: {
                     user: function(User,$stateParams){
                         return User.one($stateParams.id);

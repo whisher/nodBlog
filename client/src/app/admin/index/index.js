@@ -1,11 +1,11 @@
 (function(window, angular, undefined) {
 'use strict';
 angular.module('nodblog.admin.index',['ui.router'])
-    .config(function($stateProvider) {
+    .config(function($stateProvider,pathView) {
         $stateProvider
         .state('index', {
             url: '/',
-            templateUrl: '/src/app/admin/index/index.tpl.html',
+            templateUrl: pathView+ 'index/index.tpl.html',
             controller: 'IndexCtrl'
         });
     })

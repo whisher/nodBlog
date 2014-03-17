@@ -2,6 +2,7 @@
    'use strict';
     angular.module('nodblog.admin',['ui.router','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
         .value('currentUser',nB.user)
+        .value('pathView','/src/app/admin/')
         .run(function ($state,$rootScope,$log,$filter,WindowUtils,$templateCache) {
             $rootScope.$state = $state;
             $state.transitionTo('index');
@@ -14,8 +15,7 @@
                        WindowUtils.setTitle(title);
                    }
             });
-            $templateCache.put('post.tpl.html', $templateCache.get('post.tpl.html'));
-            $templateCache.put('user.tpl.html', $templateCache.get('user.tpl.html'));
+            
         })
         .factory('WindowUtils', function($window) {
             return {

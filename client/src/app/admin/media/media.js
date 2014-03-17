@@ -2,11 +2,11 @@
 'use strict';
 //Dependencies ui.router nodblog.api.base nodblog.ui.paginators.elastic
 angular.module('nodblog.admin.media',[])
-    .config(function($stateProvider,RestangularProvider) {
+    .config(function($stateProvider,RestangularProvider,pathView) {
         $stateProvider
             .state('media', {
                 url: '/media',
-                templateUrl: '/src/app/admin/media/index.tpl.html',
+                templateUrl: pathView+'media/index.tpl.html',
                 resolve: {
                     medias: function(Media){
                         return Media.all();

@@ -2,11 +2,11 @@
 'use strict';
 //Dependencies ui.router nodblog.api.base nodblog.services.socket nodblog.ui.paginators.elastic
 angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
-    .config(function($stateProvider,RestangularProvider) {
+    .config(function($stateProvider,RestangularProvider,pathView) {
         $stateProvider
             .state('post', {
                 url: '/post',
-                templateUrl: '/src/app/admin/post/post.tpl.html',
+                templateUrl: pathView+'post/post.tpl.html',
                 resolve: {
                     posts: function(Post){
                         return Post.all();
@@ -17,12 +17,12 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
             .state('post_create', {
                 url: '/post/create',
                 name: 'create post',
-                templateUrl: '/src/app/admin/post/form.tpl.html',
+                templateUrl: pathView+'post/form.tpl.html',
                 controller: 'PostCreateCtrl'
             })
             .state('post_edit', {
                 url: '/post/edit/:id',
-                templateUrl: '/src/app/admin/post/form.tpl.html',
+                templateUrl:pathView+'post/form.tpl.html',
                 resolve: {
                     post: function(Post, $stateParams){
                         return Post.one($stateParams.id);
@@ -32,7 +32,7 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
             })
             .state('post_delete', {
                 url: '/post/delete/:id',
-                templateUrl: '/src/app/admin/post/delete.tpl.html',
+                templateUrl: pathView+'post/delete.tpl.html',
                 resolve: {
                     post: function(Post,$stateParams){
                         return Post.one($stateParams.id);
@@ -42,7 +42,7 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
             })
             .state('post_comments', {
                 url: '/post/comments/:id',
-                templateUrl: '/src/app/admin/post/comments.tpl.html',
+                templateUrl: pathView+'post/comments.tpl.html',
                 resolve: {
                     comments: function(Post,$stateParams){
                         return Post.commentsByPostId($stateParams.id);

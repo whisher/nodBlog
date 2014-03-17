@@ -29,35 +29,32 @@ module.exports = function(grunt) {
             options: { useStrict: true },
             app: {
                 options: {
-                    //base: 'src/app/default'
-                    process: function(src, filepath) {
-          console.log(src, filepath);
-        }
+                    base: 'src/app/default'
                 },
                 src: ['<%= src.tpl.app %>'],
                 dest: '<%= distdir %>/templates/app.js',
                 module: 'templates.app'
             },
             login: {
-                /*options: {
+                options: {
                     base: 'src/app/login'
-                },*/
+                },
                 src: ['<%= src.tpl.login %>'],
                 dest: '<%= distdir %>/templates/login.js',
                 module: 'templates.login'
             },
             admin: {
-                /*options: {
+                options: {
                     base: 'src/app/admin'
-                },*/
+                },
                 src: ['<%= src.tpl.admin %>'],
                 dest: '<%= distdir %>/templates/admin.js',
                 module: 'templates.admin'
             },
             common: {
-                /*options: {
+                options: {
                     base: 'src/common'
-                },*/
+                },
                 src: ['<%= src.tpl.common %>'],
                 dest: '<%= distdir %>/templates/common.js',
                 module: 'templates.common'
