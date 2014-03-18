@@ -1,6 +1,6 @@
 (function(window, angular, undefined){
 'use strict'; 
-//Dependencies ui.router nodblog.api.base nodblog.ui.paginators.elastic
+//Dependencies ui.router nodblog.services.base nodblog.ui.paginators.elastic
 angular.module('nodblog.admin.user',[])
     .config(function($stateProvider,RestangularProvider) {
         $stateProvider
@@ -126,4 +126,4 @@ angular.module('nodblog.admin.user',[])
             );
         };
     });
-})(window, angular);     
+})(window, angular);

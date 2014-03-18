@@ -1,9 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
+var path = require('path'),
+ _ = require('lodash');
 
 // Load app configuration
-
-module.exports = _.extend(
-    require(__dirname + '/../config/env/all.js'),
-    require(__dirname + '/../config/env/' + process.env.NODE_ENV + '.js') || {});
+var all = require(__dirname + '/../config/env/all.js'),
+    env = require(__dirname + '/../config/env/' + process.env.NODE_ENV + '.js');
+    env.distFolder = path.resolve(all.root, env.distFolder);  
+module.exports = _.extend(all,env || {});

@@ -1,8 +1,8 @@
 (function(window, angular, undefined) {
    'use strict';
-    angular.module('nodblog.admin',['ui.router','restangular','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
+    angular.module('nodblog.admin',['templates.admin','ui.router','restangular','ngCookies','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
         .value('currentUser',nB.user)
-        .run(function ($state,$rootScope,$log,$filter,WindowUtils,$templateCache) {
+        .run(function ($state,$rootScope,$log,$filter,$cookieStore,WindowUtils) {
             $rootScope.$state = $state;
             $state.transitionTo('index');
             $rootScope.$log = $log;
@@ -14,6 +14,8 @@
                        WindowUtils.setTitle(title);
                    }
             });
+            $cookieStore.put('titles', nB.user);
+            console.log($cookieStore.get('USER'));
         })
         .factory('WindowUtils', function($window) {
             return {
@@ -41,13 +43,3 @@
             };
         });
 })(window, angular);     
-angular.module("src/app/admin/index/index.tpl.html", []).run(["$templateCache", function($templateCache) {
-  "use strict";
-  $templateCache.put("src/app/admin/index/index.tpl.html",
-    "<div class=\"col-6 col-sm-6 col-lg-4\">\n" +
-    "    <h2>Index admin </h2>\n" +
-    "    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo</p>\n" +
-    "    <h3>{{test}}</h3>\n" +
-    "</div>\n" +
-    "");
-}]);

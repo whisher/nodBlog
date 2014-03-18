@@ -3,7 +3,7 @@
         <header>
             <img alt="{{post.title}}" title="{{post.title}}" class="img-responsive" data-ng-src="/upload/{{post.avatar}}" /> 
             <h1>{{post.title}}</h1>
-            <h2 data-ng-bind-html="post.body | :20"></h2>
+            <h2 data-ng-bind-html="post.body"></h2>
         </header>
         <footer>
             <time pubdate date="{{post.published}}">

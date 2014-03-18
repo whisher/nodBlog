@@ -1,8 +1,16 @@
 'use strict';
 
-exports.render = function(req, res) {
-    var isDist = (process.env.NODE_ENV==='development')?0:1;
-    var currentSession = req.session.passport;
-    var user = currentSession.user;
-    res.render('layouts/admin', {appTitle:'nodBlog Admin',user:user,isDist:isDist});
+exports.render = function(config) {
+    return function(req, res) {
+        var currentSession = req.session.passport;
+        var user = currentSession.user;
+        res.cookie('USER',JSON.stringify(user) , { maxAge: 900000, httpOnly: false});
+        var isProd = (process.env.NODE_ENV==='production');
+        if(isProd){
+           return res.sendfile('admin.html', { root: config.distFolder });
+        }
+        
+        res.render('layouts/admin', {appTitle:'nodBlog Admin',user:user});
+    }
 };
+

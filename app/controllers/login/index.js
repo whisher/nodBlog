@@ -1,13 +1,15 @@
 'use strict';
-
-exports.render = function(req, res) {
-    if (req.isAuthenticated()) {
-        return res.redirect('/admin');
+exports.render = function(config) {
+    return function(req, res) {
+        if (req.isAuthenticated()) {
+            return res.redirect('/admin');
+        }
+        var isProd = (process.env.NODE_ENV==='production');
+        if(isProd){
+           return res.sendfile('login.html', { root: config.distFolder });
+        }
+        res.render('layouts/login', {appTitle:'nodBlog » Signin'});
     }
-    res.render('layouts/login', {
-        title: 'Nodblog » Signin',
-        message: req.flash('error')
-    });
 };
 
 exports.auth = function(passport) {

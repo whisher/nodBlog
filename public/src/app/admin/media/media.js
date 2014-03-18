@@ -1,6 +1,6 @@
 (function(window, angular, undefined){
 'use strict';
-//Dependencies ui.router nodblog.api.base nodblog.ui.paginators.elastic
+//Dependencies ui.router nodblog.services.base nodblog.ui.paginators.elastic
 angular.module('nodblog.admin.media',[])
     .config(function($stateProvider,RestangularProvider) {
         $stateProvider
@@ -33,5 +33,4 @@ angular.module('nodblog.admin.media',[])
     .controller('MediaIndexCtrl', function ($scope,$state,medias,Paginator) {
         $scope.paginator =  Paginator(2,5,medias);
     });
-})(window, angular);    
-
+})(window, angular);

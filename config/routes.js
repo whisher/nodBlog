@@ -1,21 +1,23 @@
 'use strict';
 
+var config = require('./config');
+
 module.exports = function(app, passport,auth,io) {
     
     /* Default Index */
     var indexDefaultController = require('../app/controllers/default/index');
-    app.get('/', indexDefaultController.render);
+    app.get('/', indexDefaultController.render(config));
     
     /* Login Index */
     var loginController = require('../app/controllers/login/index');
-    app.get('/signin',loginController.render);
+    app.get('/signin',loginController.render(config));
     
     app.post('/user/auth', loginController.auth(passport));
     app.get('/signout', loginController.signout);
     
     /* Admin Index */
     var indexAdminController = require('../app/controllers/admin/index');
-    app.get('/admin',auth.requiresLogin ,indexAdminController.render);
+    app.get('/admin',auth.requiresLogin ,indexAdminController.render(config));
     
     /* Admin Post Api */
     var postController = require('../app/controllers/api/post');

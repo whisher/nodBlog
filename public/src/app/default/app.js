@@ -1,6 +1,6 @@
 (function(window, angular, undefined) {
 'use strict';
- angular.module('nodblog',['nodblog.services.socket','nodblog.site','nodblog.blog'])
+ angular.module('nodblog',['templates.app','ui.router','restangular','nodblog.services.base','nodblog.services.socket','nodblog.site','nodblog.blog'])
     .config(function($locationProvider) {
         $locationProvider.html5Mode(true).hashPrefix('!');    
      })
@@ -23,7 +23,4 @@
           messages  = [];
       };
     });
-})(window, angular);        
-  
-
-
+})(window, angular);

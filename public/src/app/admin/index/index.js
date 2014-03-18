@@ -12,4 +12,4 @@ angular.module('nodblog.admin.index',[])
     })
     .controller('IndexCtrl', function ($scope) {
     });
-})(window, angular);  
+})(window, angular);

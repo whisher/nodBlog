@@ -1,6 +1,6 @@
 (function(window, angular, undefined){
 'use strict';
-//Dependencies ui.router nodblog.api.base nodblog.services.socket nodblog.ui.paginators.elastic
+//Dependencies ui.router nodblog.services.base nodblog.services.socket nodblog.ui.paginators.elastic
 angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
     .config(function($stateProvider,RestangularProvider) {
         $stateProvider
@@ -348,4 +348,4 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
             return input.join(',');
         };
     });
-})(window, angular);  
+})(window, angular);

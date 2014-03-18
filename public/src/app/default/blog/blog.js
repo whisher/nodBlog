@@ -1,12 +1,13 @@
 (function(window, angular, undefined) {
 'use strict';
-angular.module('nodblog.blog',['ui.router','restangular','ngSanitize','LocalStorageModule'])
+//Dependencies ui.router restangular nodblog.services.base
+angular.module('nodblog.blog',['ngSanitize','LocalStorageModule'])
     .constant('PREFIX_LOCAL_STORAGE','xiferpgolbdon')
     .config(function(PREFIX_LOCAL_STORAGE,$stateProvider,RestangularProvider,localStorageServiceProvider) {
         $stateProvider
             .state('blog', {
                 url: '/blog',
-                templateUrl: '/src/app/default/blog/index.tpl.html',
+                templateUrl: 'src/app/default/blog/index.tpl.html',
                 resolve: {
                     posts: function(Post){
                         return Post.all();
@@ -16,7 +17,7 @@ angular.module('nodblog.blog',['ui.router','restangular','ngSanitize','LocalStor
             })
             .state('post', {
                 url: '/blog/:id/:slug',
-                templateUrl: '/src/app/default/blog/details.tpl.html',
+                templateUrl: 'src/app/default/blog/details.tpl.html',
                 resolve: {
                     post: function(Post,$stateParams){
                         return Post.one($stateParams.id);

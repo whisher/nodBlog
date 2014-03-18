@@ -84,7 +84,7 @@ angular.module("src/app/default/blog/index.tpl.html", []).run(["$templateCache",
     "        <header>\n" +
     "            <img alt=\"{{post.title}}\" title=\"{{post.title}}\" class=\"img-responsive\" data-ng-src=\"/upload/{{post.avatar}}\" /> \n" +
     "            <h1>{{post.title}}</h1>\n" +
-    "            <h2 data-ng-bind-html=\"post.body | :20\"></h2>\n" +
+    "            <h2 data-ng-bind-html=\"post.body\"></h2>\n" +
     "        </header>\n" +
     "        <footer>\n" +
     "            <time pubdate date=\"{{post.published}}\">\n" +
