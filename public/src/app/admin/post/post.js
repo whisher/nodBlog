@@ -147,9 +147,9 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
         
         
     })
-    .controller('PostParentCtrl', function ($scope,$timeout,currentUser,PostUploader,socket) {
+    .controller('PostParentCtrl', function ($scope,$timeout,PostUploader,socket) {
         $scope.post = {}; 
-        $scope.post.author = currentUser.name;
+        
         /* Datepicker config */
         $scope.showWeeks = true;
         $scope.minDate = new Date();
@@ -213,8 +213,9 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
         
         $scope.post.status = $scope.status[0];
         $scope.post.published = new Date();
-        
+         
         $scope.save = function(){
+            $scope.post.author = $scope.currentUser.name;
             $scope.post.published = $filter('datetots')($scope.post.published);
             $scope.post.categories = $filter('strcstoarray')($scope.post.categories);
             $scope.post.tags = $filter('strcstoarray')($scope.post.tags);
@@ -237,7 +238,7 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
         $scope.status = Post.status;
         var original = post;
         $scope.post = Post.copy(original);
-        console.log($scope.post);
+        
        
         
         $timeout(function(){
@@ -249,6 +250,7 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
         };
       
         $scope.save = function() { 
+            $scope.post.author = $scope.currentUser.name;
             $scope.post.published = $filter('datetots')($scope.post.published);
             $scope.post.categories = angular.isArray($scope.post.categories)?$scope.post.categories:$filter('strcstoarray')($scope.post.categories);
             $scope.post.tags = angular.isArray($scope.post.tags)?$scope.post.tags:$filter('strcstoarray')($scope.post.tags);

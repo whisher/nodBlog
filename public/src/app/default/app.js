@@ -1,6 +1,6 @@
 (function(window, angular, undefined) {
 'use strict';
- angular.module('nodblog',['templates.app','ui.router','restangular','nodblog.services.base','nodblog.services.socket','nodblog.site','nodblog.blog'])
+ angular.module('nodblog',[/*'templates.app'*/,'ui.router','ngAnimate','restangular','nodblog.services.base','nodblog.services.socket','nodblog.site','nodblog.blog'])
     .config(function($locationProvider) {
         $locationProvider.html5Mode(true).hashPrefix('!');    
      })

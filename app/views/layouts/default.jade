@@ -32,11 +32,9 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
                         li(data-ng-class="{ active: $state.includes('blog') }")
                             a(data-ui-sref='blog') Blog 
                                 span.label(data-ng-class="isVisited()?'label-danger':'label-default'",data-ng-click='update()') {{num}}
-
-                            
         div.container
             div.row.row-offcanvas.row-offcanvas-right
-                div.col-xs-12.col-sm-12
+                div.col-xs-12.col-sm-12.view-container
                     h1.text-center.text-danger Sito in costruzione 
                     div(data-ui-view)
             footer
@@ -46,6 +44,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog')
         script(type='text/javascript', src='/vendor/jquery/jquery.js')
         script(type='text/javascript', src='/vendor/angular/angular.js')
         script(type='text/javascript', src='/vendor/angular-ui-router/release/angular-ui-router.js')
+        script(type='text/javascript', src='/vendor/angular-animate/angular-animate.js')
         script(type='text/javascript', src='/vendor/restangular/dist/restangular.js')
         script(type='text/javascript', src='/vendor/angular-sanitize/angular-sanitize.js')
         script(type='text/javascript', src='/vendor/angular-local-storage/angular-local-storage.js')

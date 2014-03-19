@@ -1,7 +1,6 @@
 (function(window, angular, undefined) {
    'use strict';
-    angular.module('nodblog.admin',['templates.admin','ui.router','restangular','ngCookies','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
-        .value('currentUser',nB.user)
+    angular.module('nodblog.admin',[/*'templates.admin'*/,'ui.router','restangular','ngCookies','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
         .run(function ($state,$rootScope,$log,$filter,$cookieStore,WindowUtils) {
             $rootScope.$state = $state;
             $state.transitionTo('index');
@@ -14,8 +13,7 @@
                        WindowUtils.setTitle(title);
                    }
             });
-            $cookieStore.put('titles', nB.user);
-            console.log($cookieStore.get('USER'));
+            $rootScope.currentUser = $cookieStore.get('USER');
         })
         .factory('WindowUtils', function($window) {
             return {
