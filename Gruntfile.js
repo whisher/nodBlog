@@ -135,7 +135,7 @@ module.exports = function(grunt) {
                 module: 'templates.common'
             }
         },
-        clean: ['<%= distdir %>/*','<%= src.src %>/assets/default/css'],
+        clean: ['<%= distdir %>/*','<%= src.src %>/assets/default/css','<%= src.src %>/assets/default/fonts','<%= src.src %>/assets/admin/css','<%= src.src %>/assets/admin/fonts'],
         concat:{
             targetDefault: {
                 src: ['<%= src.src %>/default.html'],

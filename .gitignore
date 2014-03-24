@@ -6,4 +6,8 @@ tmp/
 public/dist
 public/vendor
 public/upload
+public/src/assets/admin/css
+public/src/assets/admin/fonts
+public/src/assets/default/css
+public/src/assets/default/fonts
 
