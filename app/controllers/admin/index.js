@@ -2,8 +2,7 @@
 
 exports.render = function(config) {
     return function(req, res) {
-        var currentSession = req.session.passport;
-        var user = currentSession.user;
+        var user = {id:req.user.id,name:req.user.name,role:req.user.role};
         res.cookie('USER',JSON.stringify(user) , { maxAge: 900000, httpOnly: false});
         var isProd = (process.env.NODE_ENV==='production');
         if(isProd){

@@ -8,16 +8,6 @@ angular.module('nodblog.site',[])
                 templateUrl: 'src/app/default/site/index.tpl.html',
                 controller: 'IndexCtrl'
             })
-            .state('about', {
-                url: '/about',
-                templateUrl: 'src/app/default/site/about.tpl.html',
-                controller: 'AboutCtrl'
-            })
-            .state('contact', {
-                url: '/contact',
-                templateUrl: 'src/app/default/site/contact.tpl.html',
-                controller: 'ContactCtrl'
-            });
     })
     .controller('IndexCtrl', function ($scope) {
         

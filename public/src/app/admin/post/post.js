@@ -84,9 +84,11 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
                 var data = [];
                 angular.forEach(posts, function(value, key){
                     this.push({
+                        id:value._id,
                         title:value.title,
                         slug:value.slug,
-                        author:value.author,
+                        author:value.user.name,
+                        author_id:value.user._id,
                         categories:$filter('arraytostrcs')(value.categories),
                         tags:$filter('arraytostrcs')(value.tags),
                         created:$filter('date')(value.created,'short'),
@@ -196,13 +198,15 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
      
     })
     .controller('PostIndexCtrl', function ($scope,$state,$timeout,posts,PreparedPosts,Paginator) {
+        
         var preparedPosts = PreparedPosts.get(posts);
         
         $scope.paginator =  Paginator(2,5,preparedPosts);
-        
+        $scope.paginator
         $scope.showComments = function(post){
             $state.transitionTo('post_comments',{id:post._id});
         };
+        
     })
     .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader,socket) {
         
@@ -215,7 +219,7 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
         $scope.post.published = new Date();
          
         $scope.save = function(){
-            $scope.post.author = $scope.currentUser.name;
+           
             $scope.post.published = $filter('datetots')($scope.post.published);
             $scope.post.categories = $filter('strcstoarray')($scope.post.categories);
             $scope.post.tags = $filter('strcstoarray')($scope.post.tags);
@@ -270,7 +274,7 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
         $scope.save = function() {
             return $state.transitionTo('post');
         };
-        
+        console.log(post);
         $scope.destroy = function() {
             post.remove().then(
                 function() {

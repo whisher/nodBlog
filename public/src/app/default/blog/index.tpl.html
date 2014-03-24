@@ -1,5 +1,5 @@
 <div class="row">
-    <article class="prologue col-6 col-sm-6 col-lg-4" data-ng-repeat="post in posts" data-ng-controller="BlogInnerCtrl">
+    <article class="prologue col-xs-12 col-sm-12 col-md-12 col-lg-12" data-ng-repeat="post in posts" data-ng-controller="BlogInnerCtrl">
         <header>
             <img alt="{{post.title}}" title="{{post.title}}" class="img-responsive" data-ng-src="/upload/{{post.avatar}}" /> 
             <h1>{{post.title}}</h1>
@@ -12,7 +12,7 @@
             <span class="btn btn-default btn-xs">
                 <span class="glyphicon glyphicon-comment"></span> {{post.meta.comments.approved}}
             </span>
-            <p><a role="button" data-ng-href="/blog/{{post._id}}/{{post.slug}}" class="btn btn-default">Leggi »</a></p>
+            <p><a role="button" data-ui-sref="blog_details({ id: post._id,slug: post.slug })" class="btn btn-default">Leggi »</a></p>
         </footer>
     </article>
 </div>

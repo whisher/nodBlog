@@ -2,7 +2,7 @@
   "name": "nodBlog",
   "version": "0.0.1",
   "dependencies": {
-    "bootstrap": "3.0.3",
+    "bootstrap": "#master",
     "jquery": "1.10.2",
     "angular": "latest",
     "angular-bootstrap": "~0.10.0",

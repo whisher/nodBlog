@@ -49,6 +49,12 @@ module.exports = function(grunt) {
                 options: {
                     livereload: true
                 }
+            },
+            less: {
+                files: ['public/src/less/**/*.less'],
+                options: {
+                    livereload: true
+                }
             }
         },
         nodemon: {
@@ -113,46 +119,46 @@ module.exports = function(grunt) {
                 module: 'templates.common'
             }
         },
-        clean: ['<%= distdir %>/*'],
+        clean: ['<%= distdir %>/*','<%= src.src %>/assets/default/css'],
         concat:{
             targetDefault: {
                 src: ['<%= src.src %>/default.html'],
                 dest: '<%= distdir %>/default.html',
                 options: {
-                  process: true
+                    process: true
                 }
             },
             targetLogin: {
                 src: ['<%= src.src %>/login.html'],
                 dest: '<%= distdir %>/login.html',
                 options: {
-                  process: true
+                    process: true
                 }
             },
             targetAdmin: {
                 src: ['<%= src.src %>/admin.html'],
                 dest: '<%= distdir %>/admin.html',
                 options: {
-                  process: true
+                    process: true
                 }
             },
             app:{
                 options: {
-                    banner: "<%= banner %>"
+                    banner: '<%= banner %>'
                 },
                 src:['<%= src.jsModules.app %>','<%= src.jsModules.common %>','<%= distdir %>/templates/app.js','<%= distdir %>/templates/common.js'],
                 dest:'<%= distdir %>/default/<%= pkg.name %>.js'
             },
             admin:{
                 options: {
-                    banner: "<%= banner %>"
+                    banner: '<%= banner %>'
                 },
                 src:['<%= src.jsModules.admin %>','<%= src.jsModules.common %>','<%= distdir %>/templates/admin.js','<%= distdir %>/templates/common.js'],
                 dest:'<%= distdir %>/admin/<%= pkg.name %>.js'
             },
             login:{
                 options: {
-                    banner: "<%= banner %>"
+                    banner: '<%= banner %>'
                 },
                 src:['<%= src.jsModules.login %>','<%= src.jsModules.common %>','<%= distdir %>/templates/login.js','<%= distdir %>/templates/common.js'],
                 dest:'<%= distdir %>/login/<%= pkg.name %>.js'
@@ -172,7 +178,7 @@ module.exports = function(grunt) {
                     '<%= src.vendor %>/restangular/dist/restangular.min.js',
                     '<%= src.vendor %>/angular-local-storage/angular-local-storage.min.js',
                     '<%= src.vendor %>/angular-sanitize/angular-sanitize.min.js'
-                    ],
+                ],
                 dest: '<%= distdir %>/angular.js'
             },
             bootstrap: {
@@ -219,21 +225,50 @@ module.exports = function(grunt) {
                 dest: '<%= distdir %>/admin/assets',
                 expand: true
             },
+            fonts: {
+                expand: true,
+                src: '<%= src.vendor %>/bootstrap/fonts/*',
+                dest: '<%= distdir %>/'
+            }
+            /*,
             bootstrap: {
                 cwd: '<%= src.vendor %>/bootstrap/dist/',
                 src: '**',
                 dest: '<%= distdir %>/vendor/bootstrap',
                 expand: true
-            }
+            }*/
         },
         jshint: {
             all: {
                 src: ['gruntfile.js', '<%= src.jshint.client %>'],
                 options:{
-                    newcap:false,
-                    globals: {
-                        jQuery: false
-                    }
+                    jshintrc: true
+                }
+            }
+        },
+        less: {
+           bootstrap: {
+                options: {
+                    strictMath: true,
+                    sourceMap: true,
+                    outputSourceFiles: true,
+                    sourceMapURL: '<%= pkg.name %>.css.map',
+                    sourceMapFilename: '<%= distdir %>/css/<%= pkg.name %>.css.map'
+                },
+                files: {
+                    '<%= distdir %>/css/<%= pkg.name %>.css': '<%= src.src %>/less/bootstrap.less'
+                }
+            },
+            compileTheme: {
+                options: {
+                  strictMath: true,
+                  sourceMap: true,
+                  outputSourceFiles: true,
+                  sourceMapURL: '<%= pkg.name %>-theme.css.map',
+                  sourceMapFilename: '<%= distdir %>/css/<%= pkg.name %>-theme.css.map'
+                },
+                files: {
+                  '<%= distdir %>/css/<%= pkg.name %>-theme.css': '<%= src.src %>/less/theme.less'
                 }
             }
         }
@@ -249,6 +284,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-html2js');
     grunt.loadNpmTasks('grunt-ngmin');
+    grunt.loadNpmTasks('grunt-contrib-less');
     
     //Making grunt default to force in order not to break the project.
     grunt.option('force', true);
@@ -260,6 +296,7 @@ module.exports = function(grunt) {
     //Default task(s).
     grunt.registerTask('default', ['jshint', 'concurrent']);
     grunt.registerTask('build', ['clean','html2js','concat','copy'/*,'ngmin'*/]);
+    grunt.registerTask('my', ['clean','less']);
 
     //Test task.
     grunt.registerTask('production', ['build','concurrent','env:production']);

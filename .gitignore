@@ -1,10 +1,9 @@
 .bower-*/
 npm-debug.log
 nbproject/
-dist/
 node_modules/
 tmp/
-client/dist
-client/vendor
-client/upload
+public/dist
+public/vendor
+public/upload
 

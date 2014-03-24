@@ -15,7 +15,7 @@ angular.module('nodblog.blog',['ngSanitize','LocalStorageModule'])
                 },
                 controller: 'BlogIndexCtrl'
             })
-            .state('post', {
+            .state('blog_details', {
                 url: '/blog/:id/:slug',
                 templateUrl: 'src/app/default/blog/details.tpl.html',
                 resolve: {

@@ -1,7 +1,7 @@
 <div class="well">
     <a data-ui-sref="post_create" class="btn btn-primary">New</a>
 </div>
-<table class="table table-striped" data-ng-show="paginator.items.length > 0">
+<table class="table table-striped" data-ng-if="paginator.items.length > 0">
     <thead>
         <tr>
             <th>Title</th>
@@ -37,17 +37,17 @@
             <td><img alt="{{post.title}}" title="{{post.title}}" class="img-thumbnail post-avatar" data-ng-src="/upload/{{post.avatar}}"></td>
             <td>{{post.status}}</td>
             <td>
-                <a data-ui-sref="post_edit({ id: post._id })" class="btn btn-warning btn-sm" title="edit post">
+                <a data-ng-disabled="currentUser.isActionDisabled(post)" data-ui-sref="post_edit({ id: post.id })" class="btn btn-warning btn-sm" title="edit post">
                     <span class="glyphicon glyphicon-edit"></span> Edit
                 </a>
-                <a data-ui-sref="post_delete({ id: post._id })" class="btn btn-danger btn-sm" title="delete post">
+                <a data-ng-disabled="currentUser.isActionDisabled(post)" data-ui-if="isDisable()"data-ui-sref="post_delete({ id: post.id })" class="btn btn-danger btn-sm" title="delete post">
                     <span class="glyphicon glyphicon-trash"></span> Delete
                 </a>
             </td>
         </tr>
     </tbody>
 </table>
-<div class="text-center">
+<div class="text-center" data-ng-if="paginator.items.length > 0">
     <ul class="pagination">
         <li data-ng-class="{disabled: !paginator.hasPrevious()}">
             <a href data-ng-click="paginator.previous()">&laquo; </a>

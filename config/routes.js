@@ -23,9 +23,9 @@ module.exports = function(app, passport,auth,io) {
     var postController = require('../app/controllers/api/post');
     app.post('/admin/api/post',auth.apiRequiresLogin, postController.create);
     app.get('/admin/api/post',auth.apiRequiresLogin, postController.allForAdmin);
-    app.get('/admin/api/post/:postId',auth.apiRequiresLogin, postController.showForAdmin);
-    app.put('/admin/api/post/:postId',auth.apiRequiresLogin, postController.update);
-    app.del('/admin/api/post/:postId',auth.apiRequiresLogin, postController.destroy);
+    app.get('/admin/api/post/:postId',auth.apiRequiresLogin,auth.requireSameAuthor, postController.showForAdmin);
+    app.put('/admin/api/post/:postId',auth.apiRequiresLogin,auth.requireSameAuthor, postController.update);
+    app.del('/admin/api/post/:postId',auth.apiRequiresLogin,auth.requireSameAuthor, postController.destroy);
     app.post('/admin/api/post/upload',auth.apiRequiresLogin, postController.upload(io));
     app.get('/admin/api/post/comments/:postId',auth.apiRequiresLogin, postController.commentsByPostIdForAmin);
     
@@ -54,11 +54,11 @@ module.exports = function(app, passport,auth,io) {
     
     /* Admin User Api */
     var userController = require('../app/controllers/api/user');
-    app.post('/admin/api/user',auth.apiRequiresLogin, userController.create);
-    app.get('/admin/api/user',auth.apiRequiresLogin, userController.all);
-    app.get('/admin/api/user/:userId',auth.apiRequiresLogin, userController.show);
-    app.put('/admin/api/user/:userId',auth.apiRequiresLogin, userController.update);
-    app.del('/admin/api/user/:userId',auth.apiRequiresLogin, userController.destroy);
+    app.post('/admin/api/user',auth.apiRequiresLogin,auth.isAdmin ,userController.create);
+    app.get('/admin/api/user',auth.apiRequiresLogin,auth.isAdmin, userController.all);
+    app.get('/admin/api/user/:userId',auth.apiRequiresLogin,auth.isOwnerProfile, userController.show);
+    app.put('/admin/api/user/:userId',auth.apiRequiresLogin,auth.isOwnerProfile, userController.update);
+    app.del('/admin/api/user/:userId',auth.apiRequiresLogin,auth.isAdmin, userController.destroy);
     
     /* User Id Param */
     app.param('userId', userController.user);

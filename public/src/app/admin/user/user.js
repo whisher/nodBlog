@@ -43,6 +43,16 @@ angular.module('nodblog.admin.user',[])
                     }
                 },
                 controller: 'UserDeleteCtrl'
+            })
+            .state('user_profile', {
+                url: '/user/profile/:id',
+                templateUrl: 'src/app/admin/user/profile.tpl.html',
+                resolve: {
+                    user: function(User,$stateParams){
+                        return User.one($stateParams.id);
+                    }
+                },
+                controller: 'UserProfileCtrl'
             });
             RestangularProvider.setBaseUrl('/admin/api');
             RestangularProvider.setRestangularFields({
@@ -94,6 +104,24 @@ angular.module('nodblog.admin.user',[])
         
     })
     .controller('UserEditCtrl', function ($scope,$state,user,User) {
+        $scope.header =  User.labels.frmEditHeader;
+        var original = user;
+        $scope.user = User.copy(original);
+        $scope.isClean = function() {
+            return angular.equals(original, $scope.post);
+        };
+        $scope.save = function() { 
+            $scope.user.put().then(
+                function(data) {
+                    return $state.transitionTo('user');
+                },
+                function error(reason) {
+                    throw new Error(reason);
+                }
+            );
+        };
+    })
+    .controller('UserProfileCtrl', function ($scope,$state,user,User) {
         $scope.header =  User.labels.frmEditHeader;
         var original = user;
         $scope.user = User.copy(original);

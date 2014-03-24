@@ -50,7 +50,7 @@ exports.create = function(req, res) {
                 if(!!+comment.is_authoring){
                     return res.jsonp(200,comment); 
                 }
-                Post.findByIdAndUpdate(comment.post_id, { $inc: {'meta.comments.pending' : 1} }).exec(function(err, post) {
+                Post.findByIdAndUpdate(comment.post_id, { $inc: {'meta.comments.pending' : 1}}).exec(function(err, post) {
                     if (err) {
                         var errs = Object.keys(err.errors);
                         if (errs.length > 0){
@@ -62,6 +62,7 @@ exports.create = function(req, res) {
                         return res.jsonp(404,{ error: 'Failed to load post with id ' + comment.post_id });
                     }
                     mail.addCommentNotice(comment.email,comment.post_id,comment.body);
+                    
                     res.jsonp(200,comment);
                 });
             }); 

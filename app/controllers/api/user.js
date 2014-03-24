@@ -17,7 +17,7 @@ exports.user = function(req, res, next, id) {
         .exec(function(err, user) {
             if (err) return next(err);
             if (!user) return next(new Error('Failed to load User ' + id));
-            req.user = user;
+            req.profile = user;
             next();
         });
 };
@@ -79,7 +79,14 @@ exports.all = function(req, res) {
  * One user
  */
 exports.show = function(req, res) {
-    res.json(200,req.user);
+    res.json(200,req.profile);
+};
+
+/**
+ * Send User
+ */
+exports.me = function(req, res) {
+    res.json(req.user || null);
 };
 
 /**

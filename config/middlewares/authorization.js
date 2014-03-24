@@ -20,26 +20,28 @@ exports.apiRequiresLogin = function(req, res,next) {
     next();
 };
 
-/**
- * User authorizations routing middleware
- */
-exports.user = {
-    hasAuthorization: function(req, res, next) {
-        if (req.profile.id != req.user.id) {
+// Profile authorization helpers
+exports.isOwnerProfile = function(req, res, next) {console.log(req.user.role);
+    if (req.user.role !== 'admin') {
+        if (req.profile.id !== req.user.id) {
             return res.send(401, 'User is not authorized');
         }
-        next();
     }
+    next();
 };
 
-/**
- * Article authorizations routing middleware
- */
-exports.article = {
-    hasAuthorization: function(req, res, next) {
-        if (req.article.user.id != req.user.id) {
-            return res.send(401, 'User is not authorized');
-        }
-        next();
+// User admin authorization helpers
+exports.isAdmin = function(req, res, next) {
+    if (req.user.role !== 'admin') {
+        return res.send(401, 'User is not authorized');
     }
+    next();
+};
+
+// Article authorization helpers
+exports.requireSameAuthor = function(req, res, next) {
+    if (req.post.user.id !== req.user.id) {
+        return res.send(401, 'User is not authorized');
+    }
+    next();
 };

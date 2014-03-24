@@ -17,9 +17,9 @@ var PostSchema = new Schema({
         required: true,
         trim: true
     },
-    author:{
-        type: String,
-        required: true
+    user: {
+        type: Schema.ObjectId,
+        ref: 'User'
     },
     slug: {
         type: String,
@@ -56,10 +56,6 @@ var PostSchema = new Schema({
         required: true,
         index: true
     },
-    comment: {
-        type: Schema.Types.ObjectId, 
-        ref: 'CommentSchema'
-    },
     meta: {
         votes: {
             type: Number,
@@ -88,14 +84,6 @@ PostSchema.path('title').validate(function(title) {
     }
     return false;
 }, 'Title cannot be empty');
-
-PostSchema.path('author').validate(function(author) {
-    if(typeof author !== "undefined" && author !== null){
-        return author.length > 0
-    }
-    return false;
-}, 'Author cannot be empty');
-
 
 PostSchema.path('body').validate(function(body) {
     if(typeof body !== "undefined" && body !== null){
@@ -126,6 +114,14 @@ PostSchema.path('tags').validate(function(tags) {
     return false;
 }, 'Tags cannot be empty');
 
+/**
+ * Statics
+ */
+PostSchema.statics.load = function(id, cb) {
+    this.findOne({
+        _id: id
+    }).populate('user', '_id name username role').exec(cb);
+};
 PostSchema.plugin(monguurl({
   source: 'title',
   target: 'slug',

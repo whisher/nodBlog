@@ -20,17 +20,12 @@ var uploadDir = path.normalize(__dirname + '/../../../public/upload');
  * Find post by id
  */
 exports.post = function(req, res, next, id) {
-    // http://stackoverflow.com/questions/14940660/whats-mongoose-error-cast-to-objectid-failed-for-value-xxx-at-path-id
     if (!/^[0-9a-fA-F]{24}$/.test(id)) {
         return res.jsonp(404,{ error: 'Failed to load post with id ' + id });
     }
-    Post.findById(id).exec(function(err, post) {
-        if (err) {
-           return next(err);
-        }
-        if (!post) {
-            return res.jsonp(404,{ error: 'Failed to load post with id ' + id });
-        }
+    Post.load(id, function(err, post) {
+        if (err) return next(err);
+        if (!post) return res.jsonp(404,{ error: 'Failed to load post with id ' + id });
         req.post = post;
         next();
     });
@@ -41,6 +36,7 @@ exports.post = function(req, res, next, id) {
  */
 exports.create = function(req, res) {
     var post = new Post(req.body);
+    post.user = req.user;
     post.save(function(err) {
         if (err) {
             var errs = Object.keys(err.errors);
@@ -54,11 +50,17 @@ exports.create = function(req, res) {
 };
 
 /**
- * List of all posts
+ * List of all public posts
  */
 exports.all = function(req, res) {
-    Post.find({status:'publish',published:{$lt : Date.now()}}).sort('-created').exec(function(err, posts) {
+    Post.find({status:'publish',published:{$lt : Date.now()}}).sort('-created').populate('user', '_id name username role').exec(function(err, posts) {
         if (err) {
+            var errs = Object.keys(err.errors);
+            if (errs.length > 0){
+                return res.jsonp(500,{
+                    error: err.errors[errs[0]].message
+                }); 
+            }
            return res.jsonp(500,{ error: 'Cannot get all the posts' });
         } 
         res.jsonp(200,posts);
@@ -69,9 +71,15 @@ exports.all = function(req, res) {
  * List of all posts for admin
  */
 exports.allForAdmin = function(req, res) {
-    Post.find().sort('-created').exec(function(err, posts) {
+    Post.find().sort('-created').populate('user', '_id name username role').exec(function(err, posts) {
         if (err) {
-           return res.json(500,{ error: 'Cannot get all the posts' });
+            var errs = Object.keys(err.errors);
+            if (errs.length > 0){
+                return res.json(500,{
+                    error: err.errors[errs[0]].message
+                }); 
+            }
+            return res.json(500,{ error: 'Cannot get all the posts' });
         } 
         res.json(200,posts);
     });
@@ -141,7 +149,6 @@ exports.upload = function(io) {
         var form = new formidable.IncomingForm;
         form.on('progress', function(bytesReceived, bytesExpected){
             var percent = Math.floor(bytesReceived / bytesExpected * 100);
-            
             // here is where you can relay the uploaded percentage using Socket.IO
             io.sockets.emit('avatarUploadProgress', { percent: percent });
         });
@@ -199,7 +206,6 @@ exports.commentsByPostId = function(req, res) {
         _.forIn(idToNodeMap, function(value, key) {
             data.push(idToNodeMap[key]);
         });
-        console.log(data);
         res.jsonp(200,data);
     });
 };

@@ -1,40 +1,45 @@
 {
   "name": "bootstrap",
-  "version": "3.0.3",
+  "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+  "keywords": [
+    "css",
+    "js",
+    "less",
+    "mobile-first",
+    "responsive",
+    "front-end",
+    "framework",
+    "web"
+  ],
   "main": [
-    "./dist/js/bootstrap.js",
-    "./dist/css/bootstrap.css",
-    "./dist/fonts/glyphicons-halflings-regular.eot",
-    "./dist/fonts/glyphicons-halflings-regular.svg",
-    "./dist/fonts/glyphicons-halflings-regular.ttf",
-    "./dist/fonts/glyphicons-halflings-regular.woff"
+    "dist/css/bootstrap.css",
+    "dist/js/bootstrap.js",
+    "dist/fonts/glyphicons-halflings-regular.eot",
+    "dist/fonts/glyphicons-halflings-regular.svg",
+    "dist/fonts/glyphicons-halflings-regular.ttf",
+    "dist/fonts/glyphicons-halflings-regular.woff"
   ],
   "ignore": [
-    "**/.*",
-    "_*",
-    "docs-assets",
-    "examples",
-    "/fonts",
-    "js/tests",
+    ".*",
+    "_config.yml",
     "CNAME",
-    "CONTRIBUTING.md",
-    "Gruntfile.js",
-    "browserstack.json",
     "composer.json",
-    "package.json",
-    "*.html"
+    "CONTRIBUTING.md",
+    "docs",
+    "js/tests",
+    "test-infra"
   ],
   "dependencies": {
     "jquery": ">= 1.9.0"
   },
   "homepage": "https://github.com/twbs/bootstrap",
-  "_release": "3.0.3",
+  "_release": "d96beffac3",
   "_resolution": {
-    "type": "version",
-    "tag": "v3.0.3",
-    "commit": "6d03173a1aad98e75f7d33e65b411c519176c59a"
+    "type": "branch",
+    "branch": "master",
+    "commit": "d96beffac38ff8e8d201c0e6b088a81387066a17"
   },
   "_source": "git://github.com/twbs/bootstrap.git",
-  "_target": "3.0.3",
+  "_target": "master",
   "_originalSource": "bootstrap"
 }

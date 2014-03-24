@@ -1,0 +1,173 @@
+//
+// Load core variables and mixins
+// --------------------------------------------------
+@import "variables.less";
+@import "../../../vendor/bootstrap/less/mixins.less";
+@import "flatly/bootswatch.less";
+
+// Navbar nav links
+//
+// Builds on top of the `.nav` components with its own modifier class to make
+// the nav the full height of the horizontal nav (above 768px).
+
+.navbar-left {
+    height:97px;
+    padding: 0;
+    margin: 0;
+    > li {
+        float: left;
+        min-width: 90px;
+        height: 97px;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        list-style: none;
+        border-left: 1px solid #4A4A4A;
+        border-right: 1px solid #292929;
+    }
+    > li > a {
+        display: block;
+        padding:    0 15px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #636363;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    }
+    > li > a > i {
+        position: relative;
+        top: 2px;
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-top: 6px;
+        margin-bottom: 3px;
+        font-size: 24px;
+    }
+     > li > a > span {
+        display: block;
+        padding-bottom: 2px;
+    }
+    @media (max-width: @grid-float-breakpoint-max) {
+      // Dropdowns get custom display when collapsed
+      .open .dropdown-menu {
+        position: static;
+        float: none;
+        width: auto;
+        margin-top: 0;
+        background-color: transparent;
+        border: 0;
+        box-shadow: none;
+        > li > a,
+        .dropdown-header {
+          padding: 5px 15px 5px 25px;
+        }
+        > li > a {
+          line-height: @line-height-computed;
+          &:hover,
+          &:focus {
+            background-image: none;
+          }
+        }
+      }
+    }
+
+    // Uncollapse the nav
+    @media (min-width: @grid-float-breakpoint) {
+      float: left;
+      margin: 0;
+
+      > li {
+        float: left;
+        > a {
+          padding-top:    @navbar-padding-vertical;
+          padding-bottom: @navbar-padding-vertical;
+        }
+      }
+
+      &.navbar-right:last-child {
+        margin-right: -@navbar-padding-horizontal;
+      }
+    }
+}
+
+
+html, body {
+    height: 100%;
+}
+#wrap {
+    height: auto;
+    margin: 0 auto -70px;
+    min-height: 100%;
+    padding: 0 0 70px;
+}
+#footer {
+    background-color: #F5F5F5;
+    height: 70px;
+}
+#footer p {
+   padding-top:10px;
+}
+#wrap > .container {
+    padding: 60px 15px 0;
+}
+
+.form-control[disabled],
+    .form-control[readonly],
+        fieldset[disabled] .form-control {
+            cursor:default;
+            background-color: #eeeeee;
+}
+/* Post */
+#cmt-wrapper{
+  margin-top: 30px;   
+}
+.cmt-box{
+  margin-bottom: 30px;  
+}
+.cmt-email{
+    
+}
+.cmt-author{
+    
+}
+.cmt-web{
+    
+}
+.cmt-body{
+    
+}
+.cmt-create{
+    
+}
+.cmt-footer{
+    margin-top: 10px;
+}
+/* Media */
+.drop-box {
+    border: 5px dashed #DDD;
+    height: 150px; 
+    text-align: center;
+}
+.drop-box.dragover {
+    border: 5px dashed blue;
+}
+img.post-avatar{
+  width: 50px;  
+}
+img.avatar-to-upload{
+   width: 100px;   
+}
+.media-pic{
+   width: 80px; 
+}
+/* navigation overlay 
+div#overlay {
+    position: absolute;
+    margin-top: -100px;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(57,173,227,0.5);
+}//$('body').append('<div id="overlay"></div>');
+*/
