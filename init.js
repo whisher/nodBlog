@@ -15,12 +15,13 @@ var fs = require('fs'),
 utilsFs.mkdirSync(upload,484);
 utilsFs.mkdirSync(tmp,484);
 
-var userData = { "name" : "User Admin", "email" : "admin@nodblog", "username" : "admin","role" : "admin","password":"admin"};
+var userData = { "name" : "User Admin", "email" : "admin@nodblog.me", "username" : "admin","role" : "admin","password":"admin"};
 var user = new User(userData);
 user.provider = 'local';
 user.save(function(err) {  
     if (err) {
         console.log(err);
+        process.exit();
         return;
     }
     console.log(user); 

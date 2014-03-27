@@ -14,7 +14,11 @@ var mongoose = require('mongoose'),
  */
 var UserSchema = new Schema({
     name: String,
-    email: String,
+    email: {
+        type: String,
+        index: { unique: true },
+        required: true
+    },
     username: {
         type: String,
         unique: true
@@ -68,6 +72,14 @@ UserSchema.path('email').validate(function(email) {
     if (authTypes.indexOf(this.provider) !== -1) return true;
     return email.length;
 }, 'Email cannot be blank');
+
+UserSchema.path('email').validate(function(email) {
+    if(typeof email !== "undefined" && email !== null){
+        var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        return emailRegex.test(email);
+    }
+    return false;
+}, 'The email is not a valid email');
 
 UserSchema.path('username').validate(function(username) {
     // if you are authenticating by any of the oauth strategies, don't validate

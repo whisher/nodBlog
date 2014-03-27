@@ -70,8 +70,12 @@ angular.module('nodblog.admin.user',[])
         function NgUser() {
             this.labels = {
                 frmCreateHeader:'Add New User',
-                frmEditHeader:'Edit User'
+                frmEditHeader:'Edit User',
+                frmEditProfile:'Edit My Profile'
             }; 
+            this.isUniqueEmail = function(email){
+                return this.getElements().one('email',email).get();
+            };
         }
         return angular.extend(Base('user'), new NgUser());
     })
@@ -79,7 +83,7 @@ angular.module('nodblog.admin.user',[])
         $scope.paginator =  Paginator(2,5,users);
     })
     .controller('UserCreateCtrl', function ($scope,$state,User) {
-        $scope.header =  User.labels.frmEditHeader;
+        $scope.header =  User.labels.frmCreateHeader;
         $scope.user = {};
         $scope.save = function(){
             User.store($scope.user).then(
@@ -91,16 +95,7 @@ angular.module('nodblog.admin.user',[])
                 }
             );
         };
-        $scope.fullName = function () {
-           
-            return $scope.user.name + ' ' + $scope.user.email;
-        };
-        $scope.$watch(function(scope) {
-            
-            return scope.user.name + ' ' + scope.user.email;
-            }, function (newFullName) { console.log(newFullName);
-            $scope.fullName = newFullName;
-        });
+        
         
     })
     .controller('UserEditCtrl', function ($scope,$state,user,User) {
@@ -111,6 +106,12 @@ angular.module('nodblog.admin.user',[])
             return angular.equals(original, $scope.post);
         };
         $scope.save = function() { 
+            if($scope.user.username===original.username){
+               delete $scope.user.username; 
+            }
+            if($scope.user.email===original.email){
+               delete $scope.user.email;
+            }
             $scope.user.put().then(
                 function(data) {
                     return $state.transitionTo('user');
@@ -122,16 +123,22 @@ angular.module('nodblog.admin.user',[])
         };
     })
     .controller('UserProfileCtrl', function ($scope,$state,user,User) {
-        $scope.header =  User.labels.frmEditHeader;
+        $scope.header =  User.labels.frmEditProfile;
         var original = user;
         $scope.user = User.copy(original);
         $scope.isClean = function() {
             return angular.equals(original, $scope.post);
         };
         $scope.save = function() { 
+            if($scope.user.username===original.username){
+               delete $scope.user.username; 
+            }
+            if($scope.user.email===original.email){
+               delete $scope.user.email;
+            }
             $scope.user.put().then(
                 function(data) {
-                    return $state.transitionTo('user');
+                    return $state.transitionTo('index');
                 },
                 function error(reason) {
                     throw new Error(reason);

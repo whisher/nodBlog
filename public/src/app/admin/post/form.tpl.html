@@ -2,16 +2,26 @@
 <form name="form" class="form-horizontal" role="form" data-ng-submit="save()" uploader>
     <div class="col-md-8">
         <div class="form-group">
-            <input type="text" name="title" id="title" class="form-control" placeholder="Enter title here" data-ng-model="post.title" required />
+            <input type="text" name="title" id="title" class="form-control" placeholder="Enter title here" required="required" data-ng-model="post.title" />
         </div>
         <div class="form-group">
-            <textarea name="body" id="body" rows="8" class="form-control" placeholder="Enter body here" data-ng-model="post.body" required></textarea>
+            <ul class="nav nav-tabs" id="showAsTab" data-nb-tabs>
+                <li class="active"><a data-toggle="tab" href="#show-as-text">Text</a></li>
+                <li class=""><a data-toggle="tab" href="#show-as-html">Visual</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="show-as-text" class="tab-pane active">
+                    <textarea name="body" id="body" rows="8" class="form-control" placeholder="Enter body here" required="required" data-ng-model="post.body" wordcount='.counter'></textarea>
+                </div>
+                <div id="show-as-html" class="tab-pane"></div>
+                <p class="text-muted">Word count: <span class="counter"></span></p>
+            </div>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="categories" id="categories" placeholder="Enter categories here (at least one)" data-ng-model="post.categories" ng-pattern="/^\w(\s*,?\s*\w)*$/" required />
+            <input type="text" class="form-control" name="categories" id="categories" placeholder="Enter categories here (at least one)" required="required" data-ng-model="post.categories" ng-pattern="/^\w(\s*,?\s*\w)*$/" />
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="tags" id="tags" placeholder="Enter tags here (at least one)" data-ng-model="post.tags" ng-pattern="/^\w(\s*,?\s*\w)*$/" required />
+            <input type="text" class="form-control" name="tags" id="tags" placeholder="Enter tags here (at least one)" required="required" data-ng-model="post.tags" ng-pattern="/^\w(\s*,?\s*\w)*$/" />
         </div>
     </div>
     <div class="col-md-3 col-md-offset-1">
@@ -35,7 +45,7 @@
         </div>
         <div class="form-group">
             <div class="input-group">
-                <input type="text" style="display:none;" data-ng-model="post.avatar" required />
+                <input type="text" style="display:none;"  required="required" data-ng-model="post.avatar" />
                 <input type="text" readonly="readonly" class="form-control" id="fileholder" title="click to upload an avatar" data-ng-model="avatar" />
                 <span class="input-group-btn">
                     <button class="btn btn-default" data-ng-disabled="true"><i class="glyphicon glyphicon-floppy-open"></i></button>

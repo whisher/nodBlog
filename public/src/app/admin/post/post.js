@@ -197,16 +197,15 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
         });
      
     })
-    .controller('PostIndexCtrl', function ($scope,$state,$timeout,posts,PreparedPosts,Paginator) {
-        
-        var preparedPosts = PreparedPosts.get(posts);
-        
+    .controller('PostIndexCtrl', function ($scope,$state,posts,PreparedPosts,Paginator) {
+        var preparedPosts = [];
+        if(posts.length > 0){
+            preparedPosts = PreparedPosts.get(posts);
+        }
         $scope.paginator =  Paginator(2,5,preparedPosts);
-        $scope.paginator
         $scope.showComments = function(post){
             $state.transitionTo('post_comments',{id:post._id});
         };
-        
     })
     .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader,socket) {
         
@@ -274,7 +273,7 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
         $scope.save = function() {
             return $state.transitionTo('post');
         };
-        console.log(post);
+        
         $scope.destroy = function() {
             post.remove().then(
                 function() {
@@ -325,33 +324,5 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
             $scope.isCollapsed = true;
             $scope.reply = '';
         }; 
-    })
-    .directive('uploader',function() {
-        return {
-            restrict: 'A',
-            link: function(scope, elem, attrs, ctrl) {
-                elem.find('#fileholder').click(function() {
-                    elem.find('#file').click();
-                }); 
-            }
-        };
-    })
-    .filter('datetots', function() {
-        return function(input) {
-            //Number(new Date(79,5,24))var date = new Date(("26-January-2014").replace(/-/g, " "));
-            return Date.parse(input);
-        };
-    })
-    .filter('strcstoarray', function() {
-        return function(input) {
-            return _.map(input.split(','), function(s){
-                return s.trim();  
-            });
-        };
-    })
-    .filter('arraytostrcs', function() {
-        return function(input) {
-            return input.join(',');
-        };
     });
 })(window, angular);

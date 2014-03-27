@@ -21,7 +21,7 @@ exports.apiRequiresLogin = function(req, res,next) {
 };
 
 // Profile authorization helpers
-exports.isOwnerProfile = function(req, res, next) {console.log(req.user.role);
+exports.isOwnerProfile = function(req, res, next) {
     if (req.user.role !== 'admin') {
         if (req.profile.id !== req.user.id) {
             return res.send(401, 'User is not authorized');

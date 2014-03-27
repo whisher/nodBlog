@@ -2,7 +2,7 @@
     'use strict';
     angular.module('nodblog.admin',[/*'templates.admin'*/,'ui.router','restangular','ngCookies','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
     .config(function($urlRouterProvider) {
-        $urlRouterProvider.otherwise('index');
+        $urlRouterProvider.otherwise('/');
     })
     .run(function ($state,$rootScope,$log,$filter,Global,WindowUtils) {
         $rootScope.$state = $state;
@@ -17,7 +17,6 @@
             }
         });
         $rootScope.currentUser = Global;
-        
     })
     .factory('Global', function($cookieStore) {
         var user = $cookieStore.get('USER');
@@ -63,12 +62,165 @@
             route:'media_create',
             title:'Media'
         },
-
         {
             route:'page_create',
             title:'Page'
         }
         ];
+        if($scope.currentUser.isAdmin()){
+            $scope.items.push({
+                route:'user_create',
+                title:'User'
+            })
+        }
+    })
+    .directive('nbTabs',function() {
+        return {
+            restrict: 'A',
+            link: function(scope,element) {
+                var tabs = element.find('a'),
+                    $body = $('#body'),
+                    $visual = $('#show-as-html');
+                tabs.click(function (e) {
+                    e.preventDefault();
+                    var $this = $(this);
+                    if($this.attr('href') === '#show-as-html'){
+                        $visual.height($body.height());
+                        $visual.html($body.val()); 
+                    }
+                    $this.tab('show');
+                });
+            }
+        };
+    })
+    .directive('inputFeedback',function() {
+        return {
+            require: 'ngModel',
+            restrict: 'A',
+            link: function(scope, element, attrs,ctrl) {
+                var $parentDiv = element.parent();
+                var currentClass = $parentDiv.attr('class');
+                element.on('blur',function() {
+                    $parentDiv.removeClass();
+                    $parentDiv.addClass(currentClass);
+                    if(ctrl.$valid){
+                        $parentDiv.addClass('has-success');
+                     }
+                     else{
+                        $parentDiv.addClass('has-error'); 
+                     }
+                });
+                
+              
+            }
+        };
+    })
+    .directive('uniqueEmail',function (User) {
+        return {
+            require:'ngModel',
+            restrict:'A',
+            priority:0,
+            controller:function ($scope) {
+                var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                $scope.isEmail = function(value){
+                    return emailRegex.test(value);
+                }
+            },
+            link:function (scope, element, attrs, ngModelCtrl) {
+                var original;
+                // If the model changes, store this since we assume it is the current value of the user's email
+                // and we don't want to check the server if the user re-enters their original email
+                ngModelCtrl.$formatters.unshift(function(modelValue) {
+                    original = modelValue;
+                    return modelValue;
+                })
+                // using push() here to run it as the last parser, after we are sure that other validators were run
+                ngModelCtrl.$parsers.push(function (viewValue) {
+                    if (viewValue && viewValue !== original ) {
+                        if(scope.isEmail(viewValue)){
+                            User.isUniqueEmail(viewValue).then(function(data){
+                                ngModelCtrl.$setValidity('uniqueEmail', !data.email); 
+                            });
+                        }
+                        return viewValue;
+                    }
+                });
+                
+            }
+        };
+    })
+    .directive('uploader',function() {
+        return {
+            restrict: 'A',
+            link: function(scope, elem, attrs, ctrl) {
+                elem.find('#fileholder').click(function() {
+                    elem.find('#file').click();
+                }); 
+            }
+        };
+    })
+    .directive('validateEquals', function() {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, element, attrs, ngModelCtrl) {
+                function validateEqual(myValue) {
+                    var valid = (myValue === scope.$eval(attrs.validateEquals));
+                    ngModelCtrl.$setValidity('equal', valid);
+                    return valid ? myValue : undefined;
+                }
+                ngModelCtrl.$parsers.push(validateEqual);
+                ngModelCtrl.$formatters.push(validateEqual);
+                scope.$watch(attrs.validateEquals, function() {
+                    ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
+                });
+            }
+        };
+    })
+    .directive('wordcount',function($timeout){
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+                var $counter = $(attrs.wordcount);
+                $counter.text(0);
+                function stripTags() {
+                    var content = element.val().trim();
+                    return content.replace(/(<([^>]+)>)/ig,"");
+                }
+                function countWord(){
+                    var count = stripTags().split(/\s+/).length;
+                    $counter.text(count);
+                }
+                element.bind('keyup', function(e){
+                    if (e.keyCode == 32 || e.keyCode == 13 || e.keyCode == 8) { // if space or enter pressed
+                        countWord();
+                    }
+                });
+                element.bind('paste', function(e){
+                    $timeout(function () {
+                        countWord();
+                    }, 100);
+                });
+            }
+        }
+    })
+    .filter('arraytostrcs', function() {
+        return function(input) {
+            return input.join(',');
+        };
+    })
+    .filter('datetots', function() {
+        return function(input) {
+            //Number(new Date(79,5,24))var date = new Date(("26-January-2014").replace(/-/g, " "));
+            return Date.parse(input);
+        };
+    })
+    .filter('strcstoarray', function() {
+        return function(input) {
+            return _.map(input.split(','), function(s){
+                return s.trim();  
+            });
+        };
     })
     .filter('ucfirst', function () {
         return function (input) {

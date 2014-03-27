@@ -5,6 +5,8 @@
 @import "../../../vendor/bootstrap/less/mixins.less";
 @import "flatly/bootswatch.less";
 
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600");
+
 // Navbar nav links
 //
 // Builds on top of the `.nav` components with its own modifier class to make
@@ -99,7 +101,19 @@ html, body {
             cursor:default;
             background-color: #eeeeee;
 }
+/* Common */
+.add-new-box{
+    padding-top:50px;
+}
 /* Post */
+#show-as-html{
+    border-style: solid;
+    border-width: 2px;
+    border-color: @input-border;
+    border-radius: @input-border-radius;
+    .box-shadow(none);
+    padding: @padding-base-vertical @padding-base-horizontal;
+}
 #cmt-wrapper{
   margin-top: 30px;   
 }

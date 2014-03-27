@@ -59,9 +59,10 @@ module.exports = function(app, passport,auth,io) {
     app.get('/admin/api/user/:userId',auth.apiRequiresLogin,auth.isOwnerProfile, userController.show);
     app.put('/admin/api/user/:userId',auth.apiRequiresLogin,auth.isOwnerProfile, userController.update);
     app.del('/admin/api/user/:userId',auth.apiRequiresLogin,auth.isAdmin, userController.destroy);
+    app.get('/admin/api/user/email/:userEmail',auth.apiRequiresLogin,userController.showUserByEmail);
     
     /* User Id Param */
     app.param('userId', userController.user);
-    
+    app.param('userEmail', userController.userByEmail);
    
 }

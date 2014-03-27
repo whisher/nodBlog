@@ -1,5 +1,5 @@
 doctype html
-html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog.admin')
+html#ng-app(xmlns:ng='http://angularjs.org',lang='en')
     head
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1, user-scalable=no')
@@ -58,11 +58,12 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog.adm
                         ul.nav.navbar-nav.navbar-right
                             li.dropdown
                                 a.dropdown-toggle(href='#',data-toggle='dropdown')
-                                    i.glyphicon.glyphicon-user {{currentUser.user.name}}
+                                    i.glyphicon.glyphicon-user 
+                                    span(ng-bind="currentUser.user.name")
                                     b.caret
                                 ul.dropdown-menu
                                     li
-                                        a(data-ui-sref='user_profile({ id: currentUser.id })') My Profile
+                                        a(data-ui-sref='user_profile({ id: currentUser.user.id })') My Profile
                                     li.divider
                                     li
                                         a(href='/signout') Logout
@@ -91,6 +92,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it', data-ng-app='nodblog.adm
         script(type='text/javascript', src='/src/app/admin/media/media.js')
         script(type='text/javascript', src='/src/app/admin/user/user.js')
         script(type='text/javascript', src='/src/app/admin/app.js')
+        script(type='text/javascript', src='/src/app/admin/init.js')
         - var env = process.env.NODE_ENV
         case env
             when 'development'
