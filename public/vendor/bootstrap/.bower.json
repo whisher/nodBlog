@@ -11,6 +11,7 @@
     "framework",
     "web"
   ],
+  "homepage": "http://getbootstrap.com",
   "main": [
     "dist/css/bootstrap.css",
     "dist/js/bootstrap.js",
@@ -32,12 +33,11 @@
   "dependencies": {
     "jquery": ">= 1.9.0"
   },
-  "homepage": "https://github.com/twbs/bootstrap",
-  "_release": "d96beffac3",
+  "_release": "e9982cad66",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "d96beffac38ff8e8d201c0e6b088a81387066a17"
+    "commit": "e9982cad66839f82515079912f207ee1b9708f9d"
   },
   "_source": "git://github.com/twbs/bootstrap.git",
   "_target": "master",
