@@ -1,8 +1,8 @@
 (function(window, angular, undefined){
 'use strict';
-//Dependencies ui.router nodblog.services.base nodblog.services.socket nodblog.ui.paginators.elastic
-angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
-    .config(function($stateProvider,RestangularProvider) {
+//Dependencies ui.router angularFileUpload nodblog.services.base nodblog.services.socket nodblog.ui.paginators.elastic
+angular.module('nodblog.admin.post',['ui.bootstrap'])
+    .config(function($stateProvider,RestangularProvider,$provide) {
         $stateProvider
             .state('post', {
                 url: '/post',
@@ -16,7 +16,6 @@ angular.module('nodblog.admin.post',['ui.bootstrap','angularFileUpload'])
             })
             .state('post_create', {
                 url: '/post/create',
-                name: 'create post',
                 templateUrl: 'src/app/admin/post/form.tpl.html',
                 controller: 'PostCreateCtrl'
             })

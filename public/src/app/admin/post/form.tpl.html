@@ -1,76 +1,82 @@
-<h2>{{header}}</h2>
-<form name="form" class="form-horizontal" role="form" data-ng-submit="save()" uploader>
-    <div class="col-md-8">
-        <div class="form-group">
-            <input type="text" name="title" id="title" class="form-control" placeholder="Enter title here" required="required" data-ng-model="post.title" />
-        </div>
-        <div class="form-group">
-            <ul class="nav nav-tabs" id="showAsTab" data-nb-tabs>
-                <li class="active"><a data-toggle="tab" href="#show-as-text">Text</a></li>
-                <li class=""><a data-toggle="tab" href="#show-as-html">Visual</a></li>
-            </ul>
-            <div class="tab-content">
-                <div id="show-as-text" class="tab-pane active">
-                    <textarea name="body" id="body" rows="8" class="form-control" placeholder="Enter body here" required="required" data-ng-model="post.body" wordcount='.counter'></textarea>
+<div class="row">
+    <h2>{{header}}</h2>
+    <form name="form" class="form-horizontal" role="form" data-ng-submit="save()" uploader>
+        <div class="col-md-8">
+            <div class="form-group">
+                <input type="text" name="title" id="title" class="form-control" placeholder="Enter title here" required="required" data-ng-model="post.title" />
+            </div>
+            <div class="form-group">
+                <a href="#" class="btn btn-default btn-sm" title="pick media" nb-pic-media="#body">
+                 <span class="glyphicon glyphicon-picture"></span> Add media
+                </a>
+            </div>
+            <div class="form-group">
+                <ul class="nav nav-tabs" id="showAsTab" data-nb-tabs>
+                    <li class="active"><a data-toggle="tab" href="#show-as-text">Text</a></li>
+                    <li class=""><a data-toggle="tab" href="#show-as-html">Visual</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="show-as-text" class="tab-pane active">
+                        <textarea name="body" id="body" rows="8" class="form-control" placeholder="Enter body here" required="required" data-ng-model="post.body" wordcount=".counter" nb-get-memory></textarea>
+                    </div>
+                    <div id="show-as-html" class="tab-pane"></div>
+                    <p class="text-muted">Word count: <span class="counter"></span></p>
                 </div>
-                <div id="show-as-html" class="tab-pane"></div>
-                <p class="text-muted">Word count: <span class="counter"></span></p>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="categories" id="categories" placeholder="Enter categories here (at least one)" required="required" data-ng-model="post.categories" ng-pattern="/^\w(\s*,?\s*\w)*$/" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="tags" id="tags" placeholder="Enter tags here (at least one)" required="required" data-ng-model="post.tags" ng-pattern="/^\w(\s*,?\s*\w)*$/" />
             </div>
         </div>
-        <div class="form-group">
-            <input type="text" class="form-control" name="categories" id="categories" placeholder="Enter categories here (at least one)" required="required" data-ng-model="post.categories" ng-pattern="/^\w(\s*,?\s*\w)*$/" />
-        </div>
-        <div class="form-group">
-            <input type="text" class="form-control" name="tags" id="tags" placeholder="Enter tags here (at least one)" required="required" data-ng-model="post.tags" ng-pattern="/^\w(\s*,?\s*\w)*$/" />
-        </div>
-    </div>
-    <div class="col-md-3 col-md-offset-1">
-        <div class="form-group">
-            <div class="input-group">
-                <div class="btn-toolbar">
-                    <button type="button" class="btn btn-primary" data-ng-model="post.status" data-ng-repeat="s in status" btn-radio="s">{{s}}</button> 
-                </div>
+        <div class="col-md-3 col-md-offset-1">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="btn-toolbar">
+                        <button type="button" class="btn btn-primary" data-ng-model="post.status" data-ng-repeat="s in status" btn-radio="s">{{s}}</button> 
+                    </div>
+                </div> 
             </div> 
-        </div> 
-        <div class="form-group">
-            <div class="input-group">
-                <input type="text" class="form-control" id="datepicker" data-ng-readonly="true" datepicker-popup="{{format}}" data-ng-model="post.published" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" data-ng-required="true" close-text="Close" />
-                <span class="input-group-btn">
-                    <button class="btn btn-default" data-ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                </span>  
-            </div> 
-        </div>
-        <div class="form-group" style="display:none;">
-            <input type="file" class="form-control" id="file" data-ng-file-select="onFileSelect($files)">
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <input type="text" style="display:none;"  required="required" data-ng-model="post.avatar" />
-                <input type="text" readonly="readonly" class="form-control" id="fileholder" title="click to upload an avatar" data-ng-model="avatar" />
-                <span class="input-group-btn">
-                    <button class="btn btn-default" data-ng-disabled="true"><i class="glyphicon glyphicon-floppy-open"></i></button>
-                </span> 
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="datepicker" data-ng-readonly="true" datepicker-popup="{{format}}" data-ng-model="post.published" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" data-ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" data-ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>  
+                </div> 
             </div>
-        </div>
-        <div class="form-group" data-ng-if="uploadPercent > 0">
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="{{uploadPercent}}" aria-valuemin="0" aria-valuemax="100" data-ng-style="{width:uploadPercent+'%'}">
-                    {{uploadPercent}}
+            <div class="form-group" style="display:none;">
+                <input type="file" class="form-control" id="file" data-ng-file-select="onFileSelect($files)">
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" style="display:none;"  required="required" data-ng-model="post.avatar" />
+                    <input type="text" readonly="readonly" class="form-control" id="fileholder" title="click to upload an avatar" data-ng-model="avatar" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" data-ng-disabled="true"><i class="glyphicon glyphicon-floppy-open"></i></button>
+                    </span> 
                 </div>
             </div>
+            <div class="form-group" data-ng-if="uploadPercent > 0">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{uploadPercent}}" aria-valuemin="0" aria-valuemax="100" data-ng-style="{width:uploadPercent+'%'}">
+                        {{uploadPercent}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <alert data-ng-show="showAlert" type="'danger'" close="closeAlert()">
+                    Only images are allowed !  
+                </alert>
+                <img class="avatar-to-upload" data-ng-show="dataUrl" data-ng-src="{{dataUrl}}">
+            </div>
         </div>
-        <div class="form-group">
-            <alert data-ng-show="showAlert" type="'danger'" close="closeAlert()">
-                Only images are allowed !  
-            </alert>
-            <img class="avatar-to-upload" data-ng-show="dataUrl" data-ng-src="{{dataUrl}}">
-        </div>
-    </div>
-    <div class="col-md-8">
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Save" data-ng-disabled="isClean() || form.$invalid" />
-        </div>
-    </div>    
-</form>
-
+        <div class="col-md-8">
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Save" data-ng-disabled="isClean() || form.$invalid" />
+            </div>
+        </div>    
+    </form>
+</div>
 

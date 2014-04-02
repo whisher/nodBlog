@@ -70,7 +70,8 @@ var PostSchema = new Schema({
                 type: Number,
                 default: 0
             }
-        } 
+        },
+        medias:[Schema.Types.ObjectId]
     }
 });
 
@@ -122,6 +123,7 @@ PostSchema.statics.load = function(id, cb) {
         _id: id
     }).populate('user', '_id name username role').exec(cb);
 };
+
 PostSchema.plugin(monguurl({
   source: 'title',
   target: 'slug',

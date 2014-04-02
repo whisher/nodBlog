@@ -21,10 +21,9 @@ var MediaSchema = new Schema({
         default: '',
         trim: true
     },
-    author:{
-        type: String,
-        required: true,
-        default: 'whisher'
+    user: {
+        type: Schema.ObjectId,
+        ref: 'User'
     },
     type: {
         type: String,
@@ -49,10 +48,20 @@ var MediaSchema = new Schema({
 
 MediaSchema.path('url').validate(function(url) {
     if(typeof url !== "undefined" && url !== null){
-        return title.length > 0
+        return url.length > 0
     }
     return false;
-}, 'Body cannot be empty');
+}, 'Url cannot be empty');
 
+
+
+/**
+ * Statics
+ */
+MediaSchema.statics.load = function(id, cb) {
+    this.findOne({
+        _id: id
+    }).populate('user', '_id name username role').exec(cb);
+};
 
 mongoose.model('Media', MediaSchema);

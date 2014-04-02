@@ -143,7 +143,7 @@ exports.destroy = function(req, res) {
  * Upload post avatar
  */
 exports.upload = function(io) {
-  return function(req, res,next) {
+  return function(req,res,next) {
         var w = 200;
         var h = 75;
         var form = new formidable.IncomingForm;
@@ -154,7 +154,7 @@ exports.upload = function(io) {
         });
         form.parse(req, function(err, fields, files){
             if(err){
-                res.jsonp(500, err.message);
+                return res.json(500, err.message);
             } 
             var ext = path.extname(files.avatar.name);
             var type = files.avatar.type;

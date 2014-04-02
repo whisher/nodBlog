@@ -1,6 +1,6 @@
 (function(window, angular, undefined) {
     'use strict';
-    angular.module('nodblog.admin',[/*'templates.admin'*/,'ui.router','restangular','ngCookies','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
+    angular.module('nodblog.admin',[/*'templates.admin'*/,'ui.router','restangular','ngCookies','angularFileUpload','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
     .config(function($urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
     })
@@ -49,6 +49,20 @@
             }
         };
     })
+    .factory('Memory', function() {
+        var data = '';
+        return {
+           get:function(){
+               return data;
+           },
+           set:function(val){
+              data = val; 
+           },
+           add:function(val){
+              data += val; 
+           }
+        }
+    })
     .controller('MainCtrl', function ($scope,$location) {
             
         /* Nav add tab */
@@ -74,6 +88,45 @@
             })
         }
     })
+    .directive('nbAddMemory',function($state,Memory) {
+        return {
+            restrict: 'A',
+            scope:{
+              media:'='  
+            },
+            link: function(scope,element) {
+                element.click(function(e){
+                    var $this = $(this);
+                    if($this.is(':checked')){
+                        var img = ' <img alt="'+scope.media.title+'" title="'+scope.media.title+'" src="/upload/'+scope.media.url+'" />';
+                        Memory.add(img)
+                        return $state.transitionTo('post_create'); 
+                    }
+                })
+            }
+        };
+    })
+    .directive('nbPicMedia',function($state,Memory) {
+        return {
+            restrict: 'A',
+            link: function(scope,element,attrs) {
+                var $textarea = $(attrs.nbPicMedia);
+                element.click(function(e){
+                   e.preventDefault();
+                   Memory.set($textarea.val());
+                   return $state.transitionTo('media'); 
+                })
+            }
+        };
+    })
+    .directive('nbGetMemory',function($state,Memory) {
+        return {
+            restrict: 'A',
+            link: function(scope,element) {
+                scope.post.body = Memory.get();
+            }
+        };
+    })
     .directive('nbTabs',function() {
         return {
             restrict: 'A',
@@ -88,6 +141,19 @@
                         $visual.height($body.height());
                         $visual.html($body.val()); 
                     }
+                    $this.tab('show');
+                });
+            }
+        };
+    })
+    .directive('nbTabsMedia',function() {
+        return {
+            restrict: 'A',
+            link: function(scope,element) {
+                var tabs = element.find('a');
+                tabs.click(function (e) {
+                    e.preventDefault();
+                    var $this = $(this);
                     $this.tab('show');
                 });
             }

@@ -2,7 +2,7 @@
 'use strict';
  angular.module('nodblog',[/*'templates.app'*/,'ui.router','ngAnimate','restangular','nodblog.services.base','nodblog.services.socket','nodblog.site','nodblog.blog'])
     .config(function($locationProvider,$urlRouterProvider) {
-        $urlRouterProvider.otherwise("index");
+        $urlRouterProvider.otherwise('/');
         $locationProvider.html5Mode(true).hashPrefix('!');    
     })
     .constant('BODY_PADDING_TOP',70)

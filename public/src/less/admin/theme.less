@@ -11,7 +11,9 @@
 //
 // Builds on top of the `.nav` components with its own modifier class to make
 // the nav the full height of the horizontal nav (above 768px).
-
+.row{
+    margin-top:50px;
+}
 .navbar-left {
     margin:0;
     padding:0;
@@ -103,7 +105,22 @@ html, body {
 }
 /* Common */
 .add-new-box{
-    padding-top:50px;
+    
+}
+.center {
+  float: none;
+  .center-block();
+}
+.file-upload-input{
+    position:absolute;
+    z-index:2;
+    top:0;
+    left:0;
+    filter: alpha(opacity=0);
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    opacity:0;
+    background-color:transparent;
+    color:transparent;
 }
 /* Post */
 #show-as-html{
@@ -113,6 +130,15 @@ html, body {
     border-radius: @input-border-radius;
     .box-shadow(none);
     padding: @padding-base-vertical @padding-base-horizontal;
+}
+#show-as-html img {
+    width:100px;
+}
+img.post-avatar{
+  width: 50px;  
+}
+img.avatar-to-upload{
+   width: 100px;   
 }
 #cmt-wrapper{
   margin-top: 30px;   
@@ -139,31 +165,34 @@ html, body {
     margin-top: 10px;
 }
 /* Media */
+#media-photo{
+}
+#media-video{
+}
+.media-preview{
+    width: 100px;   
+}
+.media-pic{
+    width: 50px;   
+}
 .drop-box {
-    border: 5px dashed #DDD;
+    border: 2px dashed #fff;
+    background-color:#F2D6DB;
     height: 150px; 
     text-align: center;
 }
 .drop-box.dragover {
-    border: 5px dashed blue;
+    border: 2px dashed blue;
 }
-img.post-avatar{
-  width: 50px;  
+#media-footer{
+    > ul {
+       list-style: none;
+    }
+    > ul > li {
+        display: inline-block;
+    }
+    > ul > li > a{
+       
+       
+    }
 }
-img.avatar-to-upload{
-   width: 100px;   
-}
-.media-pic{
-   width: 80px; 
-}
-/* navigation overlay 
-div#overlay {
-    position: absolute;
-    margin-top: -100px;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: rgba(57,173,227,0.5);
-}//$('body').append('<div id="overlay"></div>');
-*/

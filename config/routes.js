@@ -64,5 +64,12 @@ module.exports = function(app, passport,auth,io) {
     /* User Id Param */
     app.param('userId', userController.user);
     app.param('userEmail', userController.userByEmail);
-   
+    
+    /* Admin Media Api */
+    var mediaController = require('../app/controllers/api/media');
+    app.post('/admin/api/media',auth.apiRequiresLogin ,mediaController.create(io));
+    app.get('/admin/api/media',auth.apiRequiresLogin, mediaController.all);
+    
+    /* Media Id Param */
+    app.param('mediaId', mediaController.media);
 }
