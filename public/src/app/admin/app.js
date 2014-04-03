@@ -50,18 +50,29 @@
         };
     })
     .factory('Memory', function() {
-        var data = '';
+        var ids = [];
+        var post = {};
+        post.body = '';
         return {
-           get:function(){
-               return data;
+           setPost:function(model){
+              post = model;
            },
-           set:function(val){
-              data = val; 
+           getPost:function(){
+              return post;
            },
-           add:function(val){
-              data += val; 
+           addToBody:function(val){
+              post.body += val; 
+           },
+           addId:function(id){
+               ids.push(id);
+           },
+           getIds:function(){
+              return ids;
+           },
+           resetIds:function(){
+              ids.length = 0;
            }
-        }
+       }
     })
     .controller('MainCtrl', function ($scope,$location) {
             
@@ -88,6 +99,19 @@
             })
         }
     })
+    .directive('nbPicMedia',function($state,Memory) {
+        return {
+            restrict: 'A',
+            link: function(scope,element,attrs) {
+                var $textarea = $(attrs.nbPicMedia);
+                element.click(function(e){
+                   e.preventDefault();
+                   Memory.setPost(scope.post);
+                   return $state.transitionTo('media'); 
+                })
+            }
+        };
+    })
     .directive('nbAddMemory',function($state,Memory) {
         return {
             restrict: 'A',
@@ -99,31 +123,28 @@
                     var $this = $(this);
                     if($this.is(':checked')){
                         var img = ' <img alt="'+scope.media.title+'" title="'+scope.media.title+'" src="/upload/'+scope.media.url+'" />';
-                        Memory.add(img)
+                        Memory.addToBody(img);
+                        Memory.addId(scope.media.id);
                         return $state.transitionTo('post_create'); 
                     }
                 })
             }
         };
     })
-    .directive('nbPicMedia',function($state,Memory) {
+    .directive('nbMemoryPost',function(Post,Memory) {
         return {
             restrict: 'A',
-            link: function(scope,element,attrs) {
-                var $textarea = $(attrs.nbPicMedia);
-                element.click(function(e){
-                   e.preventDefault();
-                   Memory.set($textarea.val());
-                   return $state.transitionTo('media'); 
-                })
-            }
-        };
-    })
-    .directive('nbGetMemory',function($state,Memory) {
-        return {
-            restrict: 'A',
-            link: function(scope,element) {
-                scope.post.body = Memory.get();
+            controller: function($scope) {
+                $scope.post = Memory.getPost(); 
+                $scope.post.status = Post.status[0];
+                $scope.post.published = new Date();
+                $scope.post.meta  = {};
+                Memory.setPost($scope.post);
+            },
+            link: function(scope) {
+               scope.$watch('post',function(newValue,o){
+                   Memory.setPost(newValue);
+               },true);
             }
         };
     })
@@ -141,19 +162,6 @@
                         $visual.height($body.height());
                         $visual.html($body.val()); 
                     }
-                    $this.tab('show');
-                });
-            }
-        };
-    })
-    .directive('nbTabsMedia',function() {
-        return {
-            restrict: 'A',
-            link: function(scope,element) {
-                var tabs = element.find('a');
-                tabs.click(function (e) {
-                    e.preventDefault();
-                    var $this = $(this);
                     $this.tab('show');
                 });
             }
@@ -215,7 +223,7 @@
             }
         };
     })
-    .directive('uploader',function() {
+    .directive('nbUploader',function() {
         return {
             restrict: 'A',
             link: function(scope, elem, attrs, ctrl) {

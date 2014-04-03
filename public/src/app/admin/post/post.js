@@ -149,7 +149,7 @@ angular.module('nodblog.admin.post',['ui.bootstrap'])
         
     })
     .controller('PostParentCtrl', function ($scope,$timeout,PostUploader,socket) {
-        $scope.post = {}; 
+       
         
         /* Datepicker config */
         $scope.showWeeks = true;
@@ -206,31 +206,15 @@ angular.module('nodblog.admin.post',['ui.bootstrap'])
             $state.transitionTo('post_comments',{id:post._id});
         };
     })
-    .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader,socket) {
+    .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader,Memory,socket) {
         
         angular.extend($scope, new $controller('PostParentCtrl', {$scope:$scope,$timeout:$timeout,PostUploader:PostUploader}));
         
         $scope.header = Post.labels.frmCreateHeader;
         $scope.status = Post.status;
         
-        $scope.post.status = $scope.status[0];
-        $scope.post.published = new Date();
-         
-        $scope.save = function(){
-           
-            $scope.post.published = $filter('datetots')($scope.post.published);
-            $scope.post.categories = $filter('strcstoarray')($scope.post.categories);
-            $scope.post.tags = $filter('strcstoarray')($scope.post.tags);
-            Post.store($scope.post).then(
-                function(data) {
-                    socket.emit('addPost',data);
-                    return $state.transitionTo('post');
-                }, 
-                function error(err) {
-                    throw new Error(err);
-                }
-            );
-        };
+        
+        
         
     })
     .controller('PostEditCtrl', function ($scope,$state,$timeout,$controller,$filter,PostUploader,Post,post) {

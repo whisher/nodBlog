@@ -19,15 +19,25 @@ angular.module('nodblog.admin.media',[])
                 templateUrl: 'src/app/admin/media/form.tpl.html',
                 controller: 'MediaCreateCtrl'
             })
-            .state('media_pic', {
-                url: '/media',
-                templateUrl:'src/app/admin/media/media.tpl.html',
+            .state('media_edit', {
+                url: '/media/edit/:id',
+                templateUrl:'src/app/admin/media/form.tpl.html',
                 resolve: {
-                    medias: function(Media){
-                        return Media.all();
+                    media: function(Media, $stateParams){
+                        return Media.one($stateParams.id);
                     }
                 },
-                controller:'MediaPicCtrl'
+                controller: 'MediaEditCtrl'
+            })
+            .state('media_delete', {
+                url: '/media/delete/:id',
+                templateUrl: 'src/app/admin/media/delete.tpl.html',
+                resolve: {
+                    media: function(Media,$stateParams){
+                        return Media.one($stateParams.id);
+                    }
+                },
+                controller: 'MediaDeleteCtrl'
             });
             RestangularProvider.setBaseUrl('/admin/api');
             RestangularProvider.setRestangularFields({
@@ -82,10 +92,10 @@ angular.module('nodblog.admin.media',[])
         }
         $scope.media = {};
         $scope.fileReaderSupported = window.FileReader != null;
-	$scope.uploadRightAway = true;
+	$scope.uploadRightAway = false;
 	
 	$scope.hasUploader = function(index) {
-            return $scope.upload[index] !== null;
+            return (typeof $scope.upload[index] !== 'undefined');
 	};
 	$scope.abort = function(index) {
             $scope.upload[index].abort(); 
@@ -108,6 +118,11 @@ angular.module('nodblog.admin.media',[])
             $scope.dataUrls = [];
             for ( var i = 0; i < $files.length; i++) {
                 var $file = $files[i];
+                var isImage = /\.(jpeg|jpg|gif|png)$/i.test($file.name);
+                if(!isImage){
+                    alert('Only images are allowed');
+                    return;
+                }
                 if (window.FileReader && $file.type.indexOf('image') > -1) {
                     var fileReader = new FileReader();
                     fileReader.readAsDataURL($files[i]);
@@ -147,7 +162,40 @@ angular.module('nodblog.admin.media',[])
             });
         }
     })
-    .controller('MediaPicCtrl', function ($scope,$state,medias,Paginator) {
-        $scope.paginator =  Paginator(2,5,medias);
+    .controller('MediaEditCtrl', function ($scope,$state,Media,media) {
+        var original = media;
+        $scope.media = Media.copy(original);
+        $scope.isClean = function() {
+            return angular.equals(original, $scope.post);
+        };
+      
+        $scope.save = function() { 
+            $scope.media.put().then(
+                function(data) {
+                    return $state.transitionTo('media');
+                },
+                function error(reason) {
+                    throw new Error(reason);
+                }
+            );
+        };
+    })
+    .controller('MediaDeleteCtrl', function ($scope,$state,media) {
+        
+        $scope.save = function() {
+            return $state.transitionTo('media');
+        };
+        
+        $scope.destroy = function() {
+            media.remove().then(
+                function() {
+                    return $state.transitionTo('media');
+                },
+                function error(reason) {
+                    throw new Error(reason);
+                }
+            );
+        };
+        
     });
 })(window, angular);

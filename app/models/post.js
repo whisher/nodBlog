@@ -71,7 +71,7 @@ var PostSchema = new Schema({
                 default: 0
             }
         },
-        medias:[Schema.Types.ObjectId]
+        medias:[String]
     }
 });
 
@@ -95,7 +95,7 @@ PostSchema.path('body').validate(function(body) {
 
 PostSchema.path('avatar').validate(function(avatar) {
     return /\.(jpeg|jpg|gif|png)$/i.test(avatar);
-}, 'Is not a valid avatar url');
+}, 'Is not a valid avatar format');
 
 PostSchema.path('status').validate(function(status) {
     return /publish|draft/.test(status);

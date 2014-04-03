@@ -53,7 +53,9 @@ MediaSchema.path('url').validate(function(url) {
     return false;
 }, 'Url cannot be empty');
 
-
+MediaSchema.path('url').validate(function(url) {
+    return /\.(jpeg|jpg|gif|png)$/i.test(url);
+}, 'Is not a valid media format');
 
 /**
  * Statics

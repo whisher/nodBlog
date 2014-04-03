@@ -1,6 +1,6 @@
 <div class="row">
     <h2>{{header}}</h2>
-    <form name="form" class="form-horizontal" role="form" data-ng-submit="save()" uploader>
+    <form name="form" class="form-horizontal" role="form" data-ng-submit="save()" nb-memory-post nb-uploader>
         <div class="col-md-8">
             <div class="form-group">
                 <input type="text" name="title" id="title" class="form-control" placeholder="Enter title here" required="required" data-ng-model="post.title" />
@@ -17,7 +17,7 @@
                 </ul>
                 <div class="tab-content">
                     <div id="show-as-text" class="tab-pane active">
-                        <textarea name="body" id="body" rows="8" class="form-control" placeholder="Enter body here" required="required" data-ng-model="post.body" wordcount=".counter" nb-get-memory></textarea>
+                        <textarea name="body" id="body" rows="8" class="form-control" placeholder="Enter body here" required="required" data-ng-model="post.body" wordcount=".counter"></textarea>
                     </div>
                     <div id="show-as-html" class="tab-pane"></div>
                     <p class="text-muted">Word count: <span class="counter"></span></p>

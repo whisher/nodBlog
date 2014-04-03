@@ -1,65 +1,39 @@
 <div class="row">
     <div class="well">
         <div class="col-md-6 center tab-content">
-            <div id="media-photo" class="tab-pane active">
-                <form class="form-horizontal" name="form" role="form" ng-upload="complete(content)">
-                    <div class="form-group">
-                        <input type="text" name="title" class="form-control" id="photo-title" placeholder="Title" required="required"  data-ng-model="media.title" />
+            <form class="form-horizontal" name="form" role="form" ng-upload="complete(content)">
+                <div class="form-group">
+                    <input type="text" name="title" class="form-control" id="photo-title" placeholder="Title" data-ng-model="media.title" />
+                </div>
+                <div class="form-group">
+                    <div style="position:relative;">
+                        <span class="btn btn-primary">
+                            Choose File
+                            <input type="file" class="file-upload-input" data-ng-file-select="onFileSelect($files)">
+                        </span>
+                        &nbsp;
+                        <span class='label label-info' id="upload-file-info"></span>
                     </div>
-                    <div class="form-group">
-                        <div style="position:relative;">
-                            <span class="btn btn-primary">
-                                Choose File
-                                <input type="file" class="file-upload-input" data-ng-file-select="onFileSelect($files)">
-                            </span>
-                            &nbsp;
-                            <span class='label label-info' id="upload-file-info"></span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <div data-ng-file-drop-available="dropSupported=true" data-ng-show="dropSupported" class="drop-box" data-ng-file-drop="onFileSelect($files)">
+                        <span class="glyphicon glyphicon-picture"></span>
+                        <span>or drag photos here</span>
                     </div>
-                    <div class="form-group">
-                        <div data-ng-file-drop-available="dropSupported=true" data-ng-show="dropSupported" class="drop-box" data-ng-file-drop="onFileSelect($files)">
-                            <span class="glyphicon glyphicon-picture"></span>
-                             <span>or drag photos here</span>
-                        </div>
-                        <div data-ng-show="!dropSupported">HTML5 Drop File is not supported on this browser</div>
+                    <div data-ng-show="!dropSupported">HTML5 Drop File is not supported on this browser</div>
+                </div>
+                <div class="form-group" data-ng-show="selectedFiles !== null">
+                    <div class="sel-file" ng-repeat="f in selectedFiles">
+                        <img class="media-preview" data-ng-show="dataUrls[$index]" data-ng-src="{{dataUrls[$index]}}">
+                        <button type="button" class="btn btn-default btn-xs" data-ng-click="start($index)" data-ng-show="progress[$index] < 0">Start</button>
+                        <span class="progress" data-ng-show="progress[$index] >= 0">						
+                            <div style="width:{{progress[$index]}}%">{{progress[$index]}}%</div>
+                        </span>				
+                        <button type="button" class="btn btn-default btn-xs" data-ng-click="abort($index)" data-ng-show="hasUploader($index) && progress[$index] < 100">Abort</button>
+                        {{f.name}} - size: {{f.size}}B - type: {{f.type}}
                     </div>
-                    <div class="form-group" data-ng-show="selectedFiles !== null">
-			<div class="sel-file" ng-repeat="f in selectedFiles">
-				{{($index + 1) + '.'}}
-				<img class="media-preview" data-ng-show="dataUrls[$index]" data-ng-src="{{dataUrls[$index]}}">
-				<button class="button" ng-click="start($index)" ng-show="progress[$index] < 0">Start</button>
-				<span class="progress" ng-show="progress[$index] >= 0">						
-					<div style="width:{{progress[$index]}}%">{{progress[$index]}}%</div>
-				</span>				
-				<button class="button" ng-click="abort($index)" ng-show="hasUploader($index) && progress[$index] < 100">Abort</button>
-				{{f.name}} - size: {{f.size}}B - type: {{f.type}}
-			</div>
-                    </div>
-                </form>
-            </div>
-            <div id="media-video"class="tab-pane">
-                <form class="form-horizontal" name="form" role="form">
-                    <div class="form-group">
-                        <input type="text" name="title" class="form-control" id="video-title" placeholder="Title" required="required"  data-ng-model="media.title" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" name="url" class="form-control" id="video-url" placeholder="Video url" required="required"  data-ng-model="media.url" />
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-default" data-ng-disabled="form.$invalid || $isLoading">Save</button>
-                    </div>
-                </form>
-            </div>
-            <div id="media-footer">
-                <ul class="nav nav-tabs" id="showAsTab" data-nb-tabs-media>
-                    <li class="active">
-                       <a data-toggle="tab" href="#media-photo" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-camera"></span></a>    
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#media-video" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-facetime-video"></span></a>
-                    </li>
-                </ul>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>    
