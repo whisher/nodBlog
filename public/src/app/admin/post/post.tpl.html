@@ -2,7 +2,7 @@
     <div class="well add-new-box">
         <a data-ui-sref="post_create" class="btn btn-primary">New</a>
     </div>
-    <table class="table table-striped" data-ng-if="paginator.items.length > 0">
+    <table class="table table-striped" data-ng-if="hasItems">
         <thead>
             <tr>
                 <th>Title</th>
@@ -48,7 +48,7 @@
             </tr>
         </tbody>
     </table>
-    <div class="text-center" data-ng-if="paginator.items.length > 0">
+    <div class="text-center" data-ng-if="hasItems">
         <ul class="pagination">
             <li data-ng-class="{disabled: !paginator.hasPrevious()}">
                 <a href data-ng-click="paginator.previous()">&laquo;</a>

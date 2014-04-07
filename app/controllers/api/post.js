@@ -21,11 +21,19 @@ var uploadDir = path.normalize(__dirname + '/../../../public/upload');
  */
 exports.post = function(req, res, next, id) {
     if (!/^[0-9a-fA-F]{24}$/.test(id)) {
-        return res.jsonp(404,{ error: 'Failed to load post with id ' + id });
+        return res.jsonp(404,{
+            error: 'Failed to load post with id ' + id
+        });
     }
     Post.load(id, function(err, post) {
-        if (err) return next(err);
-        if (!post) return res.jsonp(404,{ error: 'Failed to load post with id ' + id });
+        if (err) {
+            return next(err);
+        }
+        if (!post){ 
+            return res.jsonp(404,{
+                error: 'Failed to load post with id ' + id
+            });
+        }
         req.post = post;
         next();
     });

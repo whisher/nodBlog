@@ -69,6 +69,11 @@ module.exports = function(app, passport,auth,io) {
     var mediaController = require('../app/controllers/api/media');
     app.post('/admin/api/media',auth.apiRequiresLogin ,mediaController.create(io));
     app.get('/admin/api/media',auth.apiRequiresLogin, mediaController.all);
+    app.get('/admin/api/media/:mediaId',auth.apiRequiresLogin, mediaController.show);
+    app.put('/admin/api/media/:mediaId',auth.apiRequiresLogin,auth.isOwnerProfile,mediaController.update);
+    app.del('/admin/api/media/:mediaId',auth.apiRequiresLogin,auth.isAdmin, mediaController.destroy);
+    app.post('/admin/api/media/:mediaId/crop',auth.apiRequiresLogin ,mediaController.crop);
+    app.post('/admin/api/media/:mediaId/resize',auth.apiRequiresLogin ,mediaController.resize);
     
     /* Media Id Param */
     app.param('mediaId', mediaController.media);

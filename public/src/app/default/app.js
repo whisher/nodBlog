@@ -71,14 +71,15 @@
             compile:function(element){
                 var windowHeight = $(window).height();
                 var navHeight = $('#nav').height();
+                var navFooter = $('#footer').height();
+                console.log(windowHeight-navHeight);
                 var currentElHeigh = element.height();
                 var totHeight = navHeight + currentElHeigh;
                 if(windowHeight > totHeight){
                     var paddding = Math.floor((windowHeight - totHeight + BODY_PADDING_TOP)/2);
-                    element.height(totHeight+paddding); 
+                    element.height(windowHeight-navHeight); 
                 }
-                
-             }
+            }
         };
     });
 })(window, angular);

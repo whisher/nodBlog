@@ -5,6 +5,7 @@
 @import "variables.less";
 @import "../../../vendor/bootstrap/less/mixins.less";
 @import "cerulean/bootswatch.less";
+@import "bootstrap-social.less";
 
 html,
 body {
@@ -14,9 +15,20 @@ body {
     padding-top: 70px;
 }
 #nav {}
-
+.navbar {
+    min-height: @navbar-height; // Ensure a navbar always shows (e.g., without a .navbar-brand in collapsed mode)
+    margin-bottom: @navbar-margin-bottom;
+    border: 0;
+}
+.navbar-nav {
+  margin: 0;
+  padding: 0;
+}
+.navbar-brand {
+    padding: 0;
+}
 #footer {
-    padding: 40px 0;
+    padding:40px 0;
     color: #A9A7AF;
     text-align: center;
     background-color: #42454D;

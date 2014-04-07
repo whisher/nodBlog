@@ -16,18 +16,28 @@ angular.module('nodblog.admin.media',[])
             })
             .state('media_create', {
                 url: '/media/create',
-                templateUrl: 'src/app/admin/media/form.tpl.html',
+                templateUrl: 'src/app/admin/media/create.tpl.html',
                 controller: 'MediaCreateCtrl'
             })
             .state('media_edit', {
                 url: '/media/edit/:id',
-                templateUrl:'src/app/admin/media/form.tpl.html',
+                templateUrl:'src/app/admin/media/edit.tpl.html',
                 resolve: {
                     media: function(Media, $stateParams){
                         return Media.one($stateParams.id);
                     }
                 },
                 controller: 'MediaEditCtrl'
+            })
+            .state('media_view', {
+                url: '/media/view/:id',
+                templateUrl:'src/app/admin/media/view.tpl.html',
+                resolve: {
+                    media: function(Media, $stateParams){
+                        return Media.one($stateParams.id);
+                    }
+                },
+                controller: 'MediaViewCtrl'
             })
             .state('media_delete', {
                 url: '/media/delete/:id',
@@ -52,7 +62,14 @@ angular.module('nodblog.admin.media',[])
             });      
     })
     .factory('Media', function(Base) {
-        function NgMedia() {}
+        function NgMedia() {
+            this.crop = function(id,data){
+               this.specialCopy(id).post('crop',data);
+            };
+            this.resize = function(id,data){
+               this.specialCopy(id).post('resize',data);
+            };
+        }
         return angular.extend(Base('media'), new NgMedia());
     })
     .factory('PreparedMedias',function($filter){
@@ -63,11 +80,11 @@ angular.module('nodblog.admin.media',[])
                     this.push({
                         id:value._id,
                         title:value.title,
+                        url:value.url,
                         description:value.description,
                         author:value.user.name,
                         author_id:value.user._id,
                         type:value.type,
-                        url:value.url,
                         created:$filter('date')(value.created,'short')
                     });
                 }, data);
@@ -81,6 +98,7 @@ angular.module('nodblog.admin.media',[])
             preparedMedias = PreparedMedias.get(medias);
         }
         $scope.paginator =  Paginator(2,5,preparedMedias);
+        $scope.hasItems = ($scope.paginator.items.length > 0);
     })
     .controller('MediaCreateCtrl', function ($scope,$timeout, $upload) {
         function setPreview(fileReader, index) {
@@ -162,14 +180,15 @@ angular.module('nodblog.admin.media',[])
             });
         }
     })
-    .controller('MediaEditCtrl', function ($scope,$state,Media,media) {
+    .controller('MediaEditCtrl', function ($scope,$state,media,Media) {
+        $scope.crop = {};
+        $scope.resize = {};
         var original = media;
         $scope.media = Media.copy(original);
         $scope.isClean = function() {
-            return angular.equals(original, $scope.post);
+            return angular.equals(original, $scope.media);
         };
-      
-        $scope.save = function() { 
+        $scope.edited = function() { 
             $scope.media.put().then(
                 function(data) {
                     return $state.transitionTo('media');
@@ -179,6 +198,17 @@ angular.module('nodblog.admin.media',[])
                 }
             );
         };
+        $scope.cropped = function() { 
+           Media.crop(media._id,$scope.crop);
+           $state.transitionTo('media');
+        };
+        $scope.resized = function() { 
+            Media.resize(media._id,$scope.resize);
+            $state.transitionTo('media');
+        };
+    })
+    .controller('MediaViewCtrl', function ($scope,$state,media) {
+        $scope.media = media;
     })
     .controller('MediaDeleteCtrl', function ($scope,$state,media) {
         
@@ -197,5 +227,99 @@ angular.module('nodblog.admin.media',[])
             );
         };
         
+    })
+    .directive('nbAddMemory',function($state,Memory) {
+        return {
+            restrict: 'A',
+            scope:{
+              media:'='  
+            },
+            link: function(scope,element) {
+                element.click(function(e){
+                    var $this = $(this);
+                    if($this.is(':checked')){
+                        var img = ' <img alt="'+scope.media.title+'" title="'+scope.media.title+'" src="/upload/'+scope.media.url+'" />';
+                        Memory.addBody(img);
+                        Memory.addMediaId(scope.media.id);
+                        return $state.transitionTo('post_create'); 
+                    }
+                })
+            }
+        };
+    })
+    .directive('nbTabs',function() {
+        return {
+            restrict: 'A',
+            link: function(scope,element) {
+                var tabs = element.find('button');
+                tabs.click(function (e) {
+                    e.preventDefault();
+                    var $this = $(this);
+                    $this.tab('show');
+                });
+            }
+        };
+    })
+    .directive('nbJcrop',function($interpolate) {
+        return {
+            restrict: 'A',
+            link: function(scope,element) {
+                function showCoords(c)
+                {   
+                    scope.crop.x = c.x;
+                    scope.crop.y = c.y;
+                    scope.crop.w = c.w;
+                    scope.crop.h = c.h;
+                    scope.$apply();
+                };
+                var url = $interpolate($(element).attr('data-ng-src'))(scope);
+                var $element = $(element).parent();
+                var img = new Image();
+                img.onload = function () {
+                    scope.crop.cw = $element.width();
+                    scope.crop.ch = $element.height();
+                    $(element).Jcrop({
+                        onChange: showCoords,
+                        onSelect: showCoords
+                    });
+                };
+                img.src = url;
+           }
+        };
+    })
+    .directive('nbUiResize',function($interpolate) {
+        return {
+            restrict: 'A',
+            link: function(scope,element) {
+                var $parentContainer = $('#media-edit'),
+                    $element = $(element),
+                    $resizable = $element.find('#media-wrapper'),
+                    $image = $element.find('#media-resize-img');
+                
+                var url = $interpolate($image.attr('data-ng-src'))(scope);
+                var img = new Image();
+                img.onload = function () {
+                    var imgW = img.width,
+                    imgH = img.height,
+                    pcW = $parentContainer.width(),
+                    pcH = $parentContainer.height(),
+                    reW = (pcW > imgW)?imgW:pcW,
+                    reH = (pcH > imgW)?imgH:pcH;
+                    $resizable.width(reW); 
+                    $resizable.height(reH);
+                    $resizable.resizable({
+                        alsoResize: "#media-resize-img",
+                        resize: function( event, ui ) {
+                            scope.resize.w = ui.size.width;
+                            scope.resize.h =ui.size.height;
+                            scope.$apply();
+                        }
+                       
+                    }); 
+                };
+                img.src = url;
+            }
+        };
     });
 })(window, angular);
+

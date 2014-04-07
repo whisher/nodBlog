@@ -14,16 +14,23 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it')
         link(rel='bookmark', href='favicon.ico')
         link(rel='stylesheet', href='/src/assets/default/css/bootstrap.css')
         link(rel='stylesheet', href='/src/assets/default/css/theme.css')
+        link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css')
         | <!--[if lt IE 7]> <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p> <![endif]-->
         | <!--[if lt IE 9]> <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script> <![endif]-->
         | <!--[if lt IE 9]> <script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.0/json3.min.js"></script> <![endif]-->
     body(data-ng-controller="MainCtrl")
-        nav#nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
+        div#nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
             div.container
                 div.navbar-header
-                    a.navbar-brand(href='#') Nodblog
-                div.collapse.navbar-collapse
-                    ul.nav.navbar-nav
+                    button.navbar-toggle(type='button',data-toggle='collapse',data-target='#nb-navbar-collapse')
+                        span.sr-only Toggle navigation
+                        span.icon-bar
+                        span.icon-bar 
+                        span.icon-bar   
+                    a.navbar-brand(href='/') 
+                        img.img-responsive(alt='il web di fabio',title='il web di fabio',src='/src/assets/default/img/logo.png') 
+                div#nb-navbar-collapse.collapse.navbar-collapse
+                    ul.nav.navbar-nav.navbar-left
                         li(data-ng-class="{ active: $state.includes('index') }")
                             a(data-ui-sref='index',data-nb-scroll="index") Home
                         li
@@ -33,16 +40,42 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it')
                         li(data-ng-class="{ active: $state.includes('blog') }")
                             a(data-ui-sref='blog') Blog 
                                 span.label(data-ng-bind='num',data-ng-class="isVisited()?'label-danger':'label-default'",data-ng-click='update()') 0
+                    ul.nav.navbar-nav.navbar-right
+                        li
+                            a.btn.btn-social-icon.btn-sm.btn-twitter
+                                i.fa.fa-twitter
+                        li
+                            a.btn.btn-social-icon.btn-tumblr
+                                i.fa.fa-tumblr
+                        li
+                            a.btn.btn-social-icon.btn-instagram
+                                i.fa.fa-instagram
+                        li
+                            a.btn.btn-social-icon.btn-google-plus
+                                i.fa.fa-google-plus
+                        li
+                            a.btn.btn-social-icon.btn-github
+                                i.fa.fa-github
+                        li
+                            a.btn.btn-social-icon.btn-foursquare
+                                i.fa.fa-foursquare
+                        li
+                            a.btn.btn-social-icon.btn-facebook
+                                i.fa.fa-facebook
         div.container
             div#content.ui-view-container(data-ng-controller="viewCtrl")
                 | <!--h1.text-center.text-danger Sito in costruzione -->
                 div(data-ui-view,data-ng-class="{animation: animation}")
         div#footer
-            p Blog template built for 
+            p 
+                a(href='mailto:someone@example.com') info@ilwebdifabio.it
+            p Fabio Bedini aka whisher
+            p P.I. 01371160118
             a(href="#",data-nb-scroll="content") Vai al top
         script(type='text/javascript', src='/socket.io/socket.io.js')
         script(type='text/javascript', src='/vendor/lodash/dist/lodash.js')
         script(type='text/javascript', src='/vendor/jquery/jquery.js')
+        script(type='text/javascript', src='/vendor/bootstrap/dist/js/bootstrap.js')
         script(type='text/javascript', src='/vendor/angular/angular.js')
         script(type='text/javascript', src='/vendor/angular-ui-router/release/angular-ui-router.js')
         script(type='text/javascript', src='/vendor/angular-animate/angular-animate.js')

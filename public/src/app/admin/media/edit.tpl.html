@@ -1,0 +1,94 @@
+<div class="row">
+    <div id="media-edit" class="col-md-12">
+        <div id="media-top">
+            <ul class="nav nav-tabs" id="showAsTab" data-nb-tabs>
+                <li class="active">
+                    <button type="button" data-toggle="tab" data-target="#media-original" class="btn btn-default btn-lg">
+                        <span class="glyphicon glyphicon-edit"></span>
+                        Original
+                    </button>    
+                </li>
+                <li>
+                    <button type="button" data-toggle="tab" data-target="#media-crop" class="btn btn-default btn-lg">
+                        <span class="glyphicon glyphicon-picture"></span>
+                        Crop
+                    </button>    
+                </li>
+                <li>
+                    <button type="button" data-toggle="tab" data-target="#media-resize" class="btn btn-default btn-lg">
+                        <span class="glyphicon glyphicon-resize-full"></span>
+                        Resize
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div id="media-original" class="tab-pane active">
+                <form class="form-inline" role="form" name="edit" data-ng-submit="edited()">
+                    <div class="form-group">
+                        <label for="title-edit">Title:</label>
+                        <input type="text" class="form-control" id="title-edit" placeholder="title" required="required" data-ng-model="media.title">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default" data-ng-disabled="isClean() || edit.$invalid">Save</button>
+                    </div>
+                </form>
+                <div id="media-edit-img">
+                    <img width="100%" id="" class="media-view" alt="{{media.title}}" title="{{media.title}}" data-ng-src="/upload/{{media.url}}" />
+                </div>
+            </div>
+            <div id="media-crop" class="tab-pane">
+                <form class="form-inline" role="form" name="crop" data-ng-submit="cropped()">
+                    <div class="form-group">
+                        <label for="title-crop">Title:</label>
+                        <input type="text" class="form-control" id="title-crop" placeholder="title" required="required" data-ng-model="crop.title">
+                    </div>
+                    <div class="form-group">
+                        <label for="x">X:</label>
+                        <input type="text" class="form-control" id="x" placeholder="0" required="required" data-ng-model="crop.x">
+                    </div>
+                    <div class="form-group">
+                        <label for="y">Y:</label>
+                        <input type="text" class="form-control" id="y" placeholder="0" required="required" data-ng-model="crop.y">
+                    </div>
+                    <div class="form-group">
+                        <label for="w">W:</label>
+                        <input type="text" class="form-control" id="w" placeholder="0" required="required" data-ng-model="crop.w">
+                    </div>
+                    <div class="form-group">
+                        <label for="h">H:</label>
+                        <input type="text" class="form-control" id="h" placeholder="0" required="required" data-ng-model="crop.h">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default" data-ng-disabled="crop.$invalid">Save</button>
+                    </div>
+                </form>
+                <div id="media-img" class="">
+                    <img width="100%" id="media-crop-img" class="media-view" alt="{{media.title}}" title="{{media.title}}" data-ng-src="/upload/{{media.url}}" nb-jcrop />
+                </div>
+            </div>
+            <div id="media-resize" class="tab-pane" data-nb-ui-resize>
+                <form class="form-inline" role="form" name="resize" data-ng-submit="resized()">
+                    <div class="form-group">
+                        <label for="title-resize">Title:</label>
+                        <input type="text" class="form-control" id="title-resize" placeholder="title" required="required" data-ng-model="resize.title">
+                    </div>
+                    <div class="form-group">
+                        <label for="w">W:</label>
+                        <input type="text" class="form-control" id="w" placeholder="0" required="required" data-ng-model="resize.w">
+                    </div>
+                    <div class="form-group">
+                        <label for="h">H:</label>
+                        <input type="text" class="form-control" id="h" placeholder="0" required="required" data-ng-model="resize.h">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default" data-ng-disabled="resize.$invalid">Save</button>
+                    </div>
+                </form>
+                <div id="media-wrapper">
+                    <img id="media-resize-img" class="media-view" alt="{{media.title}}" title="{{media.title}}" data-ng-src="/upload/{{media.url}}" />
+                </div>    
+            </div>
+        </div>
+   </div>
+ </div>    

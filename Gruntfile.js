@@ -247,6 +247,12 @@ module.exports = function(grunt) {
                 dest: '<%= src.fontModules.app %>/',
                 expand: true
             },
+            fontsAppSocial: {
+                cwd: '<%= src.vendor %>/bootstrap-social/fonts/',
+                src: '*',
+                dest: '<%= src.fontModules.app %>/',
+                expand: true
+            },
             fontsAdmin: {
                 cwd: '<%= src.vendor %>/bootstrap/fonts/',
                 src: '*',

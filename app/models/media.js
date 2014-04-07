@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    monguurl = require('monguurl'),
     Schema = mongoose.Schema;
 
 
@@ -13,19 +14,29 @@ var mongoose = require('mongoose'),
 var MediaSchema = new Schema({
     title: {
         type: String,
-        default: '',
+        required: true,
         trim: true
+    },
+    slug: {
+        type: String,
+        index: { unique: true }
     },
     description: {
         type: String,
         default: '',
         trim: true
     },
-    user: {
-        type: Schema.ObjectId,
-        ref: 'User'
-    },
     type: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    ext: {
         type: String,
         required: true,
         trim: true
@@ -39,23 +50,30 @@ var MediaSchema = new Schema({
         type: Date,
         required: true,
         default: Date.now
+    },
+    user: {
+        type: Schema.ObjectId,
+        ref: 'User'
     }
 });
 
 /**
  * Validations
  */
-
-MediaSchema.path('url').validate(function(url) {
-    if(typeof url !== "undefined" && url !== null){
-        return url.length > 0
+MediaSchema.path('title').validate(function(title) {
+    if(typeof title !== "undefined" && title !== null){
+        return title.length > 0
     }
     return false;
-}, 'Url cannot be empty');
+}, 'Title cannot be empty');
 
-MediaSchema.path('url').validate(function(url) {
-    return /\.(jpeg|jpg|gif|png)$/i.test(url);
-}, 'Is not a valid media format');
+MediaSchema.path('name').validate(function(name) {
+    if(typeof name !== "undefined" && name !== null){
+        return name.length > 0
+    }
+    return false;
+}, 'Name cannot be empty');
+
 
 /**
  * Statics
@@ -65,5 +83,11 @@ MediaSchema.statics.load = function(id, cb) {
         _id: id
     }).populate('user', '_id name username role').exec(cb);
 };
+
+MediaSchema.plugin(monguurl({
+  source: 'title',
+  target: 'slug',
+  length: 40
+}));
 
 mongoose.model('Media', MediaSchema);

@@ -148,8 +148,9 @@ angular.module('nodblog.admin.post',['ui.bootstrap'])
         
         
     })
-    .controller('PostParentCtrl', function ($scope,$timeout,PostUploader,socket) {
+    .controller('PostParentCtrl', function ($scope,$timeout,PostUploader,Memory,socket) {
        
+        $scope.post = {}; 
         
         /* Datepicker config */
         $scope.showWeeks = true;
@@ -197,11 +198,13 @@ angular.module('nodblog.admin.post',['ui.bootstrap'])
      
     })
     .controller('PostIndexCtrl', function ($scope,$state,posts,PreparedPosts,Paginator) {
+       
         var preparedPosts = [];
         if(posts.length > 0){
             preparedPosts = PreparedPosts.get(posts);
         }
         $scope.paginator =  Paginator(2,5,preparedPosts);
+        $scope.hasItems = ($scope.paginator.items.length > 0);
         $scope.showComments = function(post){
             $state.transitionTo('post_comments',{id:post._id});
         };
@@ -213,8 +216,38 @@ angular.module('nodblog.admin.post',['ui.bootstrap'])
         $scope.header = Post.labels.frmCreateHeader;
         $scope.status = Post.status;
         
+        $scope.post.status = Post.status[0];
+        $scope.post.published = new Date();
+        $scope.post.meta  = {};
         
+        var memoryPost = Memory.getPost();
+        var dataUrl = Memory.getDataUrl();
+        if(!_.isEmpty(memoryPost)){
+            $scope.post = memoryPost;
+            
+        }
+        if(dataUrl){
+            $timeout(function(){
+                $scope.dataUrl = dataUrl;
+            });
+        }
         
+        $scope.save = function(){
+            $scope.post.published = $filter('datetots')($scope.post.published);
+            $scope.post.categories = $filter('strcstoarray')($scope.post.categories);
+            $scope.post.tags = $filter('strcstoarray')($scope.post.tags);
+            $scope.post.meta.medias  = Memory.getMediaIds();
+            Post.store($scope.post).then(
+                function(data) {
+                    socket.emit('addPost',data);
+                    Memory.resetAll();
+                    return $state.transitionTo('post');
+                }, 
+                function error(err) {
+                    throw new Error(err);
+                }
+           );
+        };
         
     })
     .controller('PostEditCtrl', function ($scope,$state,$timeout,$controller,$filter,PostUploader,Post,post) {
@@ -307,5 +340,38 @@ angular.module('nodblog.admin.post',['ui.bootstrap'])
             $scope.isCollapsed = true;
             $scope.reply = '';
         }; 
+    })
+    .directive('nbMemoryPost',function($timeout,$state,Memory) {
+        return {
+            restrict: 'A',
+            link: function(scope,element) {
+                var $pickUpMedia = element.find('#pick-up-media');
+                $pickUpMedia.on('click',function(e){
+                    e.preventDefault();
+                    Memory.setPost(scope.post);
+                    Memory.setDataUrl(scope.dataUrl);
+                    return $state.transitionTo('media'); 
+                })
+            }
+        };
+    })
+    .directive('nbTabs',function() {
+        return {
+            restrict: 'A',
+            link: function(scope,element) {
+                var tabs = element.find('a'),
+                    $body = $('#body'),
+                    $visual = $('#show-as-html');
+                tabs.click(function (e) {
+                    e.preventDefault();
+                    var $this = $(this);
+                    if($this.attr('href') === '#show-as-html'){
+                        $visual.height($body.height());
+                        $visual.html($body.val()); 
+                    }
+                    $this.tab('show');
+                });
+            }
+        };
     });
 })(window, angular);

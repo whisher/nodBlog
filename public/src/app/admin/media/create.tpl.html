@@ -1,9 +1,9 @@
 <div class="row">
     <div class="well">
-        <div class="col-md-6 center tab-content">
+        <div class="col-md-6 center">
             <form class="form-horizontal" name="form" role="form" ng-upload="complete(content)">
                 <div class="form-group">
-                    <input type="text" name="title" class="form-control" id="photo-title" placeholder="Title" data-ng-model="media.title" />
+                    <input type="text" name="title" class="form-control" id="photo-title" placeholder="Title" required="required" data-ng-model="media.title" data-input-feedback />
                 </div>
                 <div class="form-group">
                     <div style="position:relative;">
@@ -25,7 +25,7 @@
                 <div class="form-group" data-ng-show="selectedFiles !== null">
                     <div class="sel-file" ng-repeat="f in selectedFiles">
                         <img class="media-preview" data-ng-show="dataUrls[$index]" data-ng-src="{{dataUrls[$index]}}">
-                        <button type="button" class="btn btn-default btn-xs" data-ng-click="start($index)" data-ng-show="progress[$index] < 0">Start</button>
+                        <button type="button" class="btn btn-default btn-xs" data-ng-click="start($index)" data-ng-show="progress[$index] < 0" data-ng-disabled="form.$invalid">Start</button>
                         <span class="progress" data-ng-show="progress[$index] >= 0">						
                             <div style="width:{{progress[$index]}}%">{{progress[$index]}}%</div>
                         </span>				

@@ -1,14 +1,14 @@
 <div class="row">
     <h2>{{header}}</h2>
-    <form name="form" class="form-horizontal" role="form" data-ng-submit="save()" nb-memory-post nb-uploader>
+    <form name="form" class="form-horizontal" data-ng-submit="save()" nb-memory-post nb-uploader>
         <div class="col-md-8">
             <div class="form-group">
                 <input type="text" name="title" id="title" class="form-control" placeholder="Enter title here" required="required" data-ng-model="post.title" />
             </div>
             <div class="form-group">
-                <a href="#" class="btn btn-default btn-sm" title="pick media" nb-pic-media="#body">
-                 <span class="glyphicon glyphicon-picture"></span> Add media
-                </a>
+                <button type="button" id="pick-up-media" class="btn btn-default btn-sm" title="pick media">
+                    <span class="glyphicon glyphicon-picture"></span> Add media
+                </button>
             </div>
             <div class="form-group">
                 <ul class="nav nav-tabs" id="showAsTab" data-nb-tabs>
@@ -79,4 +79,5 @@
         </div>    
     </form>
 </div>
+
 

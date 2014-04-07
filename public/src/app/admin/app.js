@@ -33,9 +33,9 @@
             },
             isActionDisabled:function(post){
                 if(this.isAdmin()){
-                    return false;   
+                    return false;
                 }
-                return (this.user.id === post.author_id)
+                return (this.user.id === post.author_id);
             }
         };
         return _this._data;
@@ -50,122 +50,73 @@
         };
     })
     .factory('Memory', function() {
-        var ids = [];
-        var post = {};
-        post.body = '';
+        var mediaIds = [],
+            post = {},
+            dataUrl = '';
         return {
-           setPost:function(model){
-              post = model;
-           },
-           getPost:function(){
-              return post;
-           },
-           addToBody:function(val){
-              post.body += val; 
-           },
-           addId:function(id){
-               ids.push(id);
-           },
-           getIds:function(){
-              return ids;
-           },
-           resetIds:function(){
-              ids.length = 0;
-           }
-       }
+            setPost:function(model){
+                post = model;
+            },
+            getPost:function(){
+                return post;
+            },
+            addBody:function(val){
+                if(typeof post.body === 'undefined'){
+                    post.body = '';
+                }
+                post.body += val;
+            },
+            resetPost:function(){
+                post = {};
+            },
+            getMediaIds:function(){
+                return mediaIds;
+            },
+            addMediaId:function(id){
+                mediaIds.push(id);
+            },
+            resetMediaIds:function(){
+                mediaIds.length = 0;
+            },
+            getDataUrl:function(){
+                return dataUrl;
+            },
+            setDataUrl:function(src){
+                dataUrl = src;
+            },
+            resetDataUrl:function(){
+                dataUrl = '';
+            },
+            resetAll:function(){
+                this.resetPost();
+                this.resetMediaIds();
+                this.resetDataUrl();
+            }
+        };
     })
     .controller('MainCtrl', function ($scope,$location) {
             
         /* Nav add tab */
         $scope.items = [
-        {
-            route:'post_create',
-            title:'Post'
-        },
-
-        {
-            route:'media_create',
-            title:'Media'
-        },
-        {
-            route:'page_create',
-            title:'Page'
-        }
+            {
+                route:'post_create',
+                title:'Post'
+            },
+            {
+                route:'media_create',
+                title:'Media'
+            },
+            {
+                route:'page_create',
+                title:'Page'
+            }
         ];
         if($scope.currentUser.isAdmin()){
             $scope.items.push({
                 route:'user_create',
                 title:'User'
-            })
+            });
         }
-    })
-    .directive('nbPicMedia',function($state,Memory) {
-        return {
-            restrict: 'A',
-            link: function(scope,element,attrs) {
-                var $textarea = $(attrs.nbPicMedia);
-                element.click(function(e){
-                   e.preventDefault();
-                   Memory.setPost(scope.post);
-                   return $state.transitionTo('media'); 
-                })
-            }
-        };
-    })
-    .directive('nbAddMemory',function($state,Memory) {
-        return {
-            restrict: 'A',
-            scope:{
-              media:'='  
-            },
-            link: function(scope,element) {
-                element.click(function(e){
-                    var $this = $(this);
-                    if($this.is(':checked')){
-                        var img = ' <img alt="'+scope.media.title+'" title="'+scope.media.title+'" src="/upload/'+scope.media.url+'" />';
-                        Memory.addToBody(img);
-                        Memory.addId(scope.media.id);
-                        return $state.transitionTo('post_create'); 
-                    }
-                })
-            }
-        };
-    })
-    .directive('nbMemoryPost',function(Post,Memory) {
-        return {
-            restrict: 'A',
-            controller: function($scope) {
-                $scope.post = Memory.getPost(); 
-                $scope.post.status = Post.status[0];
-                $scope.post.published = new Date();
-                $scope.post.meta  = {};
-                Memory.setPost($scope.post);
-            },
-            link: function(scope) {
-               scope.$watch('post',function(newValue,o){
-                   Memory.setPost(newValue);
-               },true);
-            }
-        };
-    })
-    .directive('nbTabs',function() {
-        return {
-            restrict: 'A',
-            link: function(scope,element) {
-                var tabs = element.find('a'),
-                    $body = $('#body'),
-                    $visual = $('#show-as-html');
-                tabs.click(function (e) {
-                    e.preventDefault();
-                    var $this = $(this);
-                    if($this.attr('href') === '#show-as-html'){
-                        $visual.height($body.height());
-                        $visual.html($body.val()); 
-                    }
-                    $this.tab('show');
-                });
-            }
-        };
     })
     .directive('inputFeedback',function() {
         return {
@@ -179,13 +130,11 @@
                     $parentDiv.addClass(currentClass);
                     if(ctrl.$valid){
                         $parentDiv.addClass('has-success');
-                     }
-                     else{
-                        $parentDiv.addClass('has-error'); 
-                     }
+                    }
+                    else{
+                        $parentDiv.addClass('has-error');
+                    }
                 });
-                
-              
             }
         };
     })
@@ -198,7 +147,7 @@
                 var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
                 $scope.isEmail = function(value){
                     return emailRegex.test(value);
-                }
+                };
             },
             link:function (scope, element, attrs, ngModelCtrl) {
                 var original;
@@ -207,13 +156,13 @@
                 ngModelCtrl.$formatters.unshift(function(modelValue) {
                     original = modelValue;
                     return modelValue;
-                })
+                });
                 // using push() here to run it as the last parser, after we are sure that other validators were run
                 ngModelCtrl.$parsers.push(function (viewValue) {
                     if (viewValue && viewValue !== original ) {
                         if(scope.isEmail(viewValue)){
                             User.isUniqueEmail(viewValue).then(function(data){
-                                ngModelCtrl.$setValidity('uniqueEmail', !data.email); 
+                                ngModelCtrl.$setValidity('uniqueEmail', !data.email);
                             });
                         }
                         return viewValue;
@@ -229,7 +178,7 @@
             link: function(scope, elem, attrs, ctrl) {
                 elem.find('#fileholder').click(function() {
                     elem.find('#file').click();
-                }); 
+                });
             }
         };
     })
@@ -259,14 +208,14 @@
                 $counter.text(0);
                 function stripTags() {
                     var content = element.val().trim();
-                    return content.replace(/(<([^>]+)>)/ig,"");
+                    return content.replace(/(<([^>]+)>)/ig,'');
                 }
                 function countWord(){
                     var count = stripTags().split(/\s+/).length;
                     $counter.text(count);
                 }
                 element.bind('keyup', function(e){
-                    if (e.keyCode == 32 || e.keyCode == 13 || e.keyCode == 8) { // if space or enter pressed
+                    if (e.keyCode === 32 || e.keyCode === 13 || e.keyCode === 8) { // if space or enter pressed
                         countWord();
                     }
                 });
@@ -276,7 +225,7 @@
                     }, 100);
                 });
             }
-        }
+        };
     })
     .filter('arraytostrcs', function() {
         return function(input) {
@@ -292,7 +241,7 @@
     .filter('strcstoarray', function() {
         return function(input) {
             return _.map(input.split(','), function(s){
-                return s.trim();  
+                return s.trim();
             });
         };
     })
@@ -304,4 +253,4 @@
             return input;
         };
     });
-})(window, angular);     
+})(window, angular);
