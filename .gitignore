@@ -1,6 +1,7 @@
 .bower-*/
 npm-debug.log
 nbproject/
+.idea/
 node_modules/
 tmp/
 public/dist
