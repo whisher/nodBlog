@@ -7,38 +7,58 @@
     <p>Social media agency</p>
 </div>
 <div class="jumbotron" id="about" role="about" data-ng-controller="AboutCtrl" data-nb-panel>
-    <h2>Design for people</h2>
+    <!-- <h2>Design for people</h2>
     <p>We’re not just a web design agency. We’re not just a graphic design firm. We're not just coders and </p>
     <p>we're not just artists. We’re a team of T-shaped product designers who help grow businesses.</p>
     <h3>Why are we in business?</h3>
     <p>With more than a full decade's worth of deliberate hard work under our belt, our experience as a team is unmatched. We're affecting people all over the world from little ol' Campbell, California.</p>
+    <canvas nb-canvas="skillsCanvas" width="500" height="300" style="background-color: red;">
+        alternate content
+    </canvas> -->
+    <h2>Cosa faccio</h2>
+    <ul>
+        <li>HTML5/SPA/javascrip web application</li>
+        <li>Mash up web application (Youtube,Facebook,Twitter,Google+,GoogleMap)</li>
+        <li>PHP web application</li>
+        <li>Phonegap</li>
+        <li>Rete social</li>
+    </ul>
 </div>
 <div class="jumbotron" id="contact" role="contact" data-ng-controller="ContactCtrl" data-nb-panel>
-    <form class="form-horizontal" role="form">
+    <h2>Chiedi un contatto</h2>
+    <script type="text/ng-template" id="contactModalOnSubmit.html">
+        <div class="modal-header">
+           <h3 class="text-info">Grazie per il feedback {{contact.username}}</h3>
+        </div>
+        <div class="modal-body">
+            <p class="text-info">Sarai contattato al più presto</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+        </div>
+    </script>
+    <form class="form-horizontal" role="form" name="form" data-ng-submit="save()">
         <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+            <label for="username" class="col-sm-2 control-label">Nome</label>
             <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                <input type="text" class="form-control" id="username" placeholder="Il tuo nome" required="required" data-input-feedback data-ng-model="contact.username" data-ng-minlength="3" data-ng-maxlength="30">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+            <label for="email" class="col-sm-2 control-label">Email</label>
             <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                <input type="email" class="form-control" id="email" placeholder="La tua email" required="required" data-input-feedback data-ng-model="contact.email">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="msg" class="col-sm-2 control-label">Messaggio</label>
+            <div class="col-sm-10">
+                <textarea name="msg" id="msg" rows="3" class="form-control" placeholder="Il tuo messaggio" required="required" data-input-feedback data-ng-model="contact.msg" data-ng-minlength="10" data-ng-maxlength="300"></textarea>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"> Remember me
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Sign in</button>
+                <button type="submit" class="btn btn-info" data-ng-disabled="form.$invalid">Salva</button>
             </div>
         </div>
     </form>

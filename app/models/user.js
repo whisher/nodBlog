@@ -5,8 +5,8 @@
  */
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    crypto = require('crypto');
-    
+    crypto = require('crypto'),
+    authTypes = ['github', 'twitter', 'facebook', 'google'];   
 /**
  * User Schema
  */

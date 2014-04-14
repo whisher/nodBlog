@@ -42,7 +42,6 @@
                        hasNext = numOfItems > (currentPage * numOfItemsXpage);
                     };
                     var paginator = {
-                        
                         items : [],
                         hasNext: function() {
                             return hasNext;

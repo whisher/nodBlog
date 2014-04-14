@@ -1,6 +1,6 @@
 (function(window, angular, undefined) {
     'use strict';
-    angular.module('nodblog.admin',[/*'templates.admin'*/,'ui.router','restangular','ngCookies','angularFileUpload','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
+    angular.module('nodblog.admin',[/*'templates.admin'*/,'ui.router','restangular','ui.bootstrap','ngCookies','angularFileUpload','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user'])
     .config(function($urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
     })

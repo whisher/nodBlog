@@ -77,4 +77,12 @@ module.exports = function(app, passport,auth,io) {
     
     /* Media Id Param */
     app.param('mediaId', mediaController.media);
+    
+    /* Admin Contact Api */
+    var contactController = require('../app/controllers/api/contact');
+    app.get('/admin/api/contact',auth.apiRequiresLogin,auth.isAdmin,contactController.all);
+    
+    /* Public Contact Api */
+    app.post('/api/contact',contactController.create);
+    
 }

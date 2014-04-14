@@ -81,6 +81,7 @@ angular.module('nodblog.admin.user',[])
     })
     .controller('UserIndexCtrl', function ($scope,$state,users,Paginator) {
         $scope.paginator =  Paginator(2,5,users);
+        $scope.hasItems = ($scope.paginator.items.length > 0);
     })
     .controller('UserCreateCtrl', function ($scope,$state,User) {
         $scope.header =  User.labels.frmCreateHeader;

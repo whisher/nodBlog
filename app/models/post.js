@@ -121,7 +121,7 @@ PostSchema.path('tags').validate(function(tags) {
 PostSchema.statics.load = function(id, cb) {
     this.findOne({
         _id: id
-    }).populate('user', '_id name username role').exec(cb);
+    }).populate('user', '_id name username email role').exec(cb);
 };
 
 PostSchema.plugin(monguurl({

@@ -1,13 +1,12 @@
 (function(window, angular, undefined) {
 'use strict';
-//Dependencies ui.router restangular nodblog.services.base
-angular.module('nodblog.blog',['ngSanitize','LocalStorageModule'])
-    .constant('PREFIX_LOCAL_STORAGE','xiferpgolbdon')
-    .config(function(PREFIX_LOCAL_STORAGE,$stateProvider,RestangularProvider,localStorageServiceProvider) {
+//Dependencies ui.router restangular LocalStorageModule nodblog.services.base
+angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
+    .config(function($stateProvider,RestangularProvider) {
         $stateProvider
             .state('blog', {
                 url: '/blog',
-                templateUrl: 'src/app/default/blog/index.tpl.html',
+                templateUrl: 'src/app/default/blog/blog.tpl.html',
                 resolve: {
                     posts: function(Post){
                         return Post.all();
@@ -27,12 +26,21 @@ angular.module('nodblog.blog',['ngSanitize','LocalStorageModule'])
                     }
                 },
                 controller: 'BlogDetailsCtrl'
+            })
+            .state('blog_tag', {
+                url: '/blog/:tag',
+                templateUrl: 'src/app/default/blog/blog.tpl.html',
+                resolve: {
+                    post: function(Post,$stateParams){
+                        return Post.one($stateParams.tag);
+                    }
+                },
+                controller: 'BlogTagCtrl'
             });
             RestangularProvider.setBaseUrl('/api');
             RestangularProvider.setRestangularFields({
                 id: "_id"
             });
-            localStorageServiceProvider.setPrefix(PREFIX_LOCAL_STORAGE);
     })
     .factory('Post', function(Base) {
         function NgPost() {
@@ -46,14 +54,40 @@ angular.module('nodblog.blog',['ngSanitize','LocalStorageModule'])
         function NgComment() {}
         return angular.extend(Base('comment'), new NgComment());
     })
-    .controller('BlogIndexCtrl', function ($scope,posts) {
-        $scope.posts = posts;
+    .factory('PreparedPosts',function($filter){
+        return {
+            get:function(posts){
+                var data = [];
+                angular.forEach(posts, function(value, key){
+                    this.push({
+                        id: value._id,
+                        title : $filter('ucfirst')(value.title),
+                        slug : value.slug,
+                        published : $filter('date')(value.published,'dd/MM/yyyy'),
+                        body : $filter('words')(value.body,20),
+                        avatar: value.avatar,
+                        tags : value.tags
+                    });
+                }, data);
+                return data;
+            }
+        };   
     })
-    .controller('BlogInnerCtrl', function ($scope,$filter) {
-        $scope.post.title =  $filter('ucfirst')($scope.post.title);
-        $scope.post.published =  $filter('date')($scope.post.published,'short');
-        $scope.post.body =  $filter('words')($scope.post.body,20);
-    })
+    .controller('BlogIndexCtrl', function ($scope,posts,PreparedPosts,Paginator) {
+        
+        var preparedPosts = [];
+        if(posts.length > 0){
+            preparedPosts = PreparedPosts.get(posts);
+        }
+        $scope.paginator =  Paginator(2,preparedPosts);
+        $scope.filter = function(tag){
+             var cb = function(item){  return _.indexOf(item.tags, tag)!==-1; }
+             $scope.paginator.filter(cb);
+        };
+        
+        $scope.hasItems = ($scope.paginator.items.length > 0);
+        
+      })
     .controller('BlogDetailsCtrl', function ($scope,localStorageService,post,comments,Comment) {
         $scope.post = post;
         $scope.comments = comments;
@@ -84,24 +118,15 @@ angular.module('nodblog.blog',['ngSanitize','LocalStorageModule'])
             return !!$scope.comments.length;
         };
     })
-    .directive('inputFeedback',function() {
+    .directive('nbNavTags',function() {
         return {
-            require: 'ngModel',
             restrict: 'A',
-            link: function(scope, element, attrs,ctrl) {
-                var $parentDiv = element.parent();
-                var currentClass = $parentDiv.attr('class');
-                element.on('blur',function() {
-                    $parentDiv.removeClass();
-                    $parentDiv.addClass(currentClass);
-                    if(ctrl.$valid){
-                        $parentDiv.addClass('has-success');
-                     }
-                     else{
-                        $parentDiv.addClass('has-error'); 
-                     }
-                });
-                
+            template:'<i class="glyphicon glyphicon-tags"></i><span data-ng-repeat="tag in tags"><a data-ng-click="filter({tag:tag})">{{tag}}</a><span data-ng-if="!$last">,</span></span>',
+            scope: {
+                tags: '=',
+                filter: '&'
+            },
+            link: function(scope, elem) {
               
             }
         };
@@ -119,6 +144,11 @@ angular.module('nodblog.blog',['ngSanitize','LocalStorageModule'])
             return input;
         };
     })
+    .filter('arraytostrcs', function() {
+        return function(input) {
+            return input.join(',');
+        };
+    })
     .filter('ucfirst', function () {
         return function (input) {
             if (input) {
@@ -129,4 +159,88 @@ angular.module('nodblog.blog',['ngSanitize','LocalStorageModule'])
     });
  })(window, angular);         
     
+    
+(function(window, angular, undefined) {
+    'use strict';
+    angular.module('nodblog.ui.paginators.simple',[])
+        .factory('Paginator', function() {
+            return function(pageSize,data) {
+                    var cache =[];
+                    var staticCache =[];
+                    var hasNext = false;
+                    var currentOffset= 0;
+                    var numOfItemsXpage = pageSize;
+                    var numOfItems = 0;
+                    var totPages = 0;
+                    var currentPage = 1;
+                   
+                    var load = function() {
+                        staticCache = data;
+                        cache = data;
+                        loadFromCache();
+                    };
+                    var loadFromCache= function() {
+                        numOfItems = cache.length;
+                        totPages = Math.ceil(numOfItems/numOfItemsXpage);
+                        paginator.items = cache.slice(currentOffset, numOfItemsXpage*currentPage);
+                    };
+                    var paginator = {
+                        items : [],
+                        hasOlder: function() {
+                            return numOfItems > (currentPage * numOfItemsXpage);
+                        },
+                        hasNewer: function() {
+                            return (numOfItems > numOfItemsXpage) && (currentPage!==1);
+                        },
+                        older: function() {
+                            if (this.hasOlder()) {
+                                currentPage++;
+                                currentOffset += numOfItemsXpage;
+                                loadFromCache();
+                            }
+                        },
+                        newer: function() {
+                            if(this.hasNewer()) {
+                                currentPage--;
+                                currentOffset -= numOfItemsXpage;
+                                loadFromCache();
+                            }
+                        },
+                        getNumOfItems : function(){
+                            return numOfItems;
+                        },
+                        getCurrentPage: function() {
+                            return currentPage;
+                        },
+                        getTotPages: function() {
+                            return totPages;
+                        },
+                        getNumOfItemsXpage:function(){
+                            return numOfItemsXpage;
+                        },
+                        filter:function(callback){
+                            if(typeof callback === 'undefined'){
+                                if(this.isClean()){
+                                    return;
+                                }
+                                cache = staticCache;
+                            }
+                            else{
+                                cache = staticCache;
+                                cache = _.filter(cache, callback);
+                            }
+                            currentPage = 1;
+                            currentOffset= 0;
+                            loadFromCache();
+                        },
+                        isClean:function(){
+                            return angular.equals(staticCache, cache);
+                        }
+                    };
+                    load();
+                    return paginator;
+                 }
+            });
+        
+})(window, angular);
     

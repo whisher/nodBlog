@@ -18,4 +18,24 @@ exports.addCommentNotice = function(userEmail,postId,data) {
         //everything's good, lets see what mandrill said
         console.log(response);
     });
+};
+
+exports.addContactNotice = function(username,email,msg) {
+    mandrill('/messages/send', {
+        message: {
+            to: [{email: 'whisher06@gmail.com', name: 'Yasin'}],
+            from_email: email,
+            subject: 'Add contact to nodblog',
+            text: username + ' ' + email + ' ' + msg
+        }
+    }, 
+    function(error, response){
+        //uh oh, there was an error
+        if (error){ 
+            console.log( JSON.stringify(error) );
+            return;
+        }
+        //everything's good, lets see what mandrill said
+        console.log(response);
+    });
 }

@@ -1,0 +1,54 @@
+<div id="article-list" class="row" data-ng-if="hasItems">
+    <div class="col-md-12">
+        <a href="#" data-ng-hide="paginator.isClean()" data-ng-click="paginator.filter()">
+            <span class="badge" title="Tutti">Tutti</span>
+        </a>
+    </div>
+    <div class="col-md-12 pagination clearfix">
+        <a class="pull-left" href="#" data-ng-show="paginator.hasOlder()" data-ng-click="paginator.older()">
+            <span class="badge" title="&lt;- Archivio">&lt;- Archivio</span>
+        </a>
+        <a class="pull-right" href="#" data-ng-show="paginator.hasNewer()" data-ng-click="paginator.newer()">
+            <span class="badge" title="Recenti -&gt;">Recenti -&gt;</span>
+        </a>
+    </div>
+    <article class="col-md-12 article" data-ng-class="{last:$last}" data-ng-repeat="article in paginator.items">
+        <header class="article-header clearfix">
+            <a href="#" class="pull-left">
+                <!--article thumbnail-->
+                <img alt="thumbnail-article" data-ng-src="/upload/{{article.avatar}}" />
+            </a>
+            <h1>
+                <a data-ui-sref="blog_details({ id: article.id,slug: article.slug })" title="{{article.title}}">
+                    {{article.title}}
+                </a>
+                <span class="label label-default" data-ng-if="$first">New</span>
+            </h1>   
+        </header>
+        <div class="article-body">
+            <ul class="article-meta">
+                <li>
+                    <span class="glyphicon glyphicon-calendar"></span>
+                    <time pubdate date="{{article.published}}">
+                        <em>{{article.published}}</em>
+                    </time> |  
+                </li>
+                <li>
+                    <span class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-comment"></span> {{article.meta.comments.approved}}
+                    </span> | 
+                </li>
+                <li class="article-tags" tags="article.tags" filter="filter(tag)" data-nb-nav-tags>
+                    
+                </li>
+            </ul>
+            <!--article prologue -->
+            <div class="article-prologue" data-ng-bind-html="article.body">
+            </div>
+        </div>
+        <!--article footer -->
+        <footer class="article-footer clearfix">
+            <a role="button" data-ui-sref="blog_details({ id: article._id,slug: article.slug })" class="btn btn-default pull-right">Leggi »</a>  
+        </footer>
+    </article>
+</div>

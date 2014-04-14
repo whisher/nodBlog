@@ -6,7 +6,7 @@
 var fs = require('fs'),
     path = require('path'),
     formidable = require('formidable'),
-    im = require('imagemagick'),
+    easyimage = require('easyimage'),
     mongoose = require('mongoose'),
     Post = mongoose.model('Post'),
     Comment = mongoose.model('Comment'),
@@ -61,7 +61,7 @@ exports.create = function(req, res) {
  * List of all public posts
  */
 exports.all = function(req, res) {
-    Post.find({status:'publish',published:{$lt : Date.now()}}).sort('-created').populate('user', '_id name username role').exec(function(err, posts) {
+    Post.find({status:'publish',published:{$lt : Date.now()}}).sort('-created').populate('user', '_id name username email role').exec(function(err, posts) {
         if (err) {
             var errs = Object.keys(err.errors);
             if (errs.length > 0){
@@ -79,7 +79,7 @@ exports.all = function(req, res) {
  * List of all posts for admin
  */
 exports.allForAdmin = function(req, res) {
-    Post.find().sort('-created').populate('user', '_id name username role').exec(function(err, posts) {
+    Post.find().sort('-created').populate('user', '_id name username email role').exec(function(err, posts) {
         if (err) {
             var errs = Object.keys(err.errors);
             if (errs.length > 0){
@@ -169,23 +169,30 @@ exports.upload = function(io) {
             var tmp = path.basename(files.avatar.path) + ext;
             var filename = uploadDir + '/' + tmp;
             var data = {url:tmp};
-            im.crop({
-                    srcPath:  files.avatar.path,
-                    dstPath: filename,
-                    width: w,
-                    height: h,
-                    quality: 1,
-                    gravity: "North"
-                }, 
-                function(err, stdout, stderr){
-                    if (err){
-                        return res.jsonp(500, {error:'Cannot crop file'});
-                    } 
+            easyimage.crop({
+                    src:files.avatar.path, 
+                    dst:filename,
+                    cropwidth:100, 
+                    cropheight:100,
+                    x:0, 
+                    y:0
+                },
+                function(err, stdout, stderr) {
+                    if (err) {
+                        return res.json(500,{
+                            error: 'Cannot crop the thumbnail'
+                        });
+                    }
                     fs.unlink(files.avatar.path, function (err) {
                         if (err) {}
                     });
-                    res.jsonp(200,data);
-            });
+                    res.json(200,data);
+                }
+            );
+           
+
+
+               
         });
     };
 };

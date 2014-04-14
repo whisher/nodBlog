@@ -9,3 +9,5 @@ angular.element(document).ready(function() {
     angular.bootstrap(document, ['nodblog']);
 });
 })(window, angular);
+
+

@@ -1,15 +1,18 @@
 (function(window, angular, undefined) {
 'use strict';
- angular.module('nodblog',[/*'templates.app'*/,'ui.router','ngAnimate','restangular','nodblog.services.base','nodblog.services.socket','nodblog.site','nodblog.blog'])
-    .config(function($locationProvider,$urlRouterProvider) {
-        $urlRouterProvider.otherwise('/');
-        $locationProvider.html5Mode(true).hashPrefix('!');    
-    })
+ angular.module('nodblog',[/*'templates.app'*/,'ui.router','ngAnimate','restangular','LocalStorageModule','ui.bootstrap','nodblog.services.base','nodblog.services.socket','nodblog.site','nodblog.blog'])
     .constant('BODY_PADDING_TOP',70)
+    .constant('PREFIX_LOCAL_STORAGE','xiferpgolbdon')
+    .config(function(PREFIX_LOCAL_STORAGE,$locationProvider,$urlRouterProvider,localStorageServiceProvider) {
+        $urlRouterProvider.otherwise('/');
+        $locationProvider.html5Mode(true).hashPrefix('!'); 
+        localStorageServiceProvider.setPrefix(PREFIX_LOCAL_STORAGE);
+    })
     .run(function ($state,$rootScope,$log) {
         $state.transitionTo('index');
         $rootScope.$log = $log;
         $rootScope.$state = $state;
+        
     })
     .controller('MainCtrl', function ($scope,socket) {
         var messages  = [];
@@ -61,7 +64,6 @@
                             'slow'
                         );
                     });
-                    
                 });
             }
         };
@@ -72,7 +74,6 @@
                 var windowHeight = $(window).height();
                 var navHeight = $('#nav').height();
                 var navFooter = $('#footer').height();
-                console.log(windowHeight-navHeight);
                 var currentElHeigh = element.height();
                 var totHeight = navHeight + currentElHeigh;
                 if(windowHeight > totHeight){
@@ -81,5 +82,25 @@
                 }
             }
         };
+    })
+    .directive('inputFeedback',function() {
+        return {
+            require: 'ngModel',
+            restrict: 'A',
+            link: function(scope, element, attrs,ctrl) {
+                var $parentDiv = element.parent();
+                var currentClass = $parentDiv.attr('class');
+                element.on('blur',function() {
+                    $parentDiv.removeClass();
+                    $parentDiv.addClass(currentClass);
+                    if(ctrl.$valid){
+                        $parentDiv.addClass('has-success');
+                     }
+                     else{
+                        $parentDiv.addClass('has-error'); 
+                     }
+                });
+            }
+        };
     });
-})(window, angular);
+ })(window, angular);

@@ -1,7 +1,7 @@
 (function(window, angular, undefined){
 'use strict';
-//Dependencies ui.router angularFileUpload nodblog.services.base nodblog.services.socket nodblog.ui.paginators.elastic
-angular.module('nodblog.admin.post',['ui.bootstrap'])
+//Dependencies ui.router angularFileUpload ui.bootstrap nodblog.services.base nodblog.services.socket nodblog.ui.paginators.elastic
+angular.module('nodblog.admin.post',[])
     .config(function($stateProvider,RestangularProvider,$provide) {
         $stateProvider
             .state('post', {

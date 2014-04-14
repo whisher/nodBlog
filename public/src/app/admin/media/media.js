@@ -294,10 +294,9 @@ angular.module('nodblog.admin.media',[])
                 var $parentContainer = $('#media-edit'),
                     $element = $(element),
                     $resizable = $element.find('#media-wrapper'),
-                    $image = $element.find('#media-resize-img');
-                
-                var url = $interpolate($image.attr('data-ng-src'))(scope);
-                var img = new Image();
+                    $image = $element.find('#media-resize-img'),
+                    url = $interpolate($image.attr('data-ng-src'))(scope),
+                    img = new Image();
                 img.onload = function () {
                     var imgW = img.width,
                     imgH = img.height,
