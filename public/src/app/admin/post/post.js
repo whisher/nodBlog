@@ -198,7 +198,6 @@ angular.module('nodblog.admin.post',[])
      
     })
     .controller('PostIndexCtrl', function ($scope,$state,posts,PreparedPosts,Paginator) {
-       
         var preparedPosts = [];
         if(posts.length > 0){
             preparedPosts = PreparedPosts.get(posts);
@@ -209,7 +208,7 @@ angular.module('nodblog.admin.post',[])
             $state.transitionTo('post_comments',{id:post._id});
         };
     })
-    .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader,Memory,socket) {
+    .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader,Memory,Socket) {
         
         angular.extend($scope, new $controller('PostParentCtrl', {$scope:$scope,$timeout:$timeout,PostUploader:PostUploader}));
         
@@ -239,7 +238,7 @@ angular.module('nodblog.admin.post',[])
             $scope.post.meta.medias  = Memory.getMediaIds();
             Post.store($scope.post).then(
                 function(data) {
-                    socket.emit('addPost',data);
+                    Socket.emit('addPost',data);
                     Memory.resetAll();
                     return $state.transitionTo('post');
                 }, 

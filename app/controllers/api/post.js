@@ -14,8 +14,6 @@ var fs = require('fs'),
 
 var uploadDir = path.normalize(__dirname + '/../../../public/upload');
 
-
-
 /**
  * Find post by id
  */
@@ -61,7 +59,7 @@ exports.create = function(req, res) {
  * List of all public posts
  */
 exports.all = function(req, res) {
-    Post.find({status:'publish',published:{$lt : Date.now()}}).sort('-created').populate('user', '_id name username email role').exec(function(err, posts) {
+    Post.find({status:'publish',published:{$lt : Date.now()}}).sort('-published').populate('user', '_id name username email role').exec(function(err, posts) {
         if (err) {
             var errs = Object.keys(err.errors);
             if (errs.length > 0){
@@ -189,13 +187,67 @@ exports.upload = function(io) {
                     res.json(200,data);
                 }
             );
-           
-
-
-               
         });
     };
 };
+
+/**
+ * List of posts by tag
+ */
+exports.fetchByTag = function(req, res) {
+    var tag = req.params.tag;
+    Post.find({status:'publish', tags: tag }).sort('-published').populate('user', '_id name username email role').exec(function(err, posts) {
+        if (err) {
+            var errs = Object.keys(err.errors);
+            if (errs.length > 0){
+                return res.jsonp(500,{
+                    error: err.errors[errs[0]].message
+                }); 
+            }
+           return res.jsonp(500,{ error: 'Cannot get the posts by '+tag });
+        } 
+        res.jsonp(200,posts);
+    });
+};
+
+/**
+ * Next post 
+ */
+exports.next = function(req, res) {
+    var curId = req.post._id;
+    Post.find({_id: {$gt: curId}}).sort({_id: 1 }).limit(1).select('_id title slug').exec(function(err, post) {
+        if (err) {
+            var errs = Object.keys(err.errors);
+            if (errs.length > 0){
+                return res.jsonp(500,{
+                    error: err.errors[errs[0]].message
+                }); 
+            }
+           return res.jsonp(500,{ error: 'Cannot get the next post'});
+        } 
+        res.jsonp(200,post);
+    });
+};
+
+/**
+ * Previous post 
+ */
+exports.previous = function(req, res) {
+    var curId = req.post._id;
+    Post.find({_id: {$lt: curId}}).sort({_id: -1}).limit(1).select('_id title slug').exec(function(err, post) {
+        if (err) {
+            var errs = Object.keys(err.errors);
+            if (errs.length > 0){
+                return res.jsonp(500,{
+                    error: err.errors[errs[0]].message
+                }); 
+            }
+           return res.jsonp(500,{ error: 'Cannot get the previous post'});
+        } 
+        res.jsonp(200,post);
+    });
+};
+
 /**
  * Find comment by post id
  */

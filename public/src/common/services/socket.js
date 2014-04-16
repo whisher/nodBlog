@@ -1,7 +1,7 @@
 (function(window, angular, undefined) {
     'use strict';
     angular.module('nodblog.services.socket', [])
-        .factory('socket', function ($rootScope) {
+        .factory('Socket', function ($rootScope) {
             var socket = io.connect();
             return {
                 on: function (eventName, callback) {

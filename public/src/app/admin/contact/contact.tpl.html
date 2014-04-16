@@ -1,0 +1,50 @@
+<div class="row">
+    <table class="table table-striped" data-ng-if="hasItems">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Ip</th>
+                <th>Referer</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="contact in paginator.items">
+                <td>{{contact.username}}</td>
+                <td><a href="mailto:{{contact.email}}" target="_blank">{{contact.email}}</a></td>
+                <td>{{contact.msg}}</td>
+                <td>{{contact.ip}}</td>
+                <td>{{contact.referer}}</td>
+                <td>{{contact.created}}</td>
+                <td>
+                    <a data-ui-sref="contact_view({ id: contact.id })" class="btn btn-info btn-sm" title="view media">
+                        <span class="glyphicon glyphicon-eye-open"></span> View
+                    </a>
+               </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center" data-ng-if="hasItems">
+        <ul class="pagination">
+            <li data-ng-class="{disabled: !paginator.hasPrevious()}">
+                <a href data-ng-click="paginator.previous()">&laquo; </a>
+            </li>
+            <li data-ng-class="{disabled: !paginator.hasFirst()}">
+                <a href data-ng-click="paginator.first()">&lsaquo;</a>
+            </li>
+            <li data-ng-repeat="n in [] | pagination:paginator.getStart():paginator.getEnd()" data-ng-class="{active: n == paginator.getCurrentPage()}">
+                <a  href data-ng-click="paginator.toPageId(n)">{{n}}</a>
+            </li>
+            <li data-ng-class="{disabled: !paginator.hasLast()}">
+                <a href data-ng-click="paginator.last()">&rsaquo; </a>
+            </li>
+            <li data-ng-class="{disabled: !paginator.hasNext()}">
+                <a href data-ng-click="paginator.next()">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>    
+
+

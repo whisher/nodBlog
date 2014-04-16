@@ -50,6 +50,10 @@ html#ng-app(xmlns:ng='http://angularjs.org',lang='en')
                                 a(data-ui-sref='user')
                                     i.glyphicon.glyphicon-user
                                     .span User
+                            li(data-ng-if="currentUser.isAdmin()",data-ng-class="{ active: $state.includes('contact') }")
+                                a(data-ui-sref='contact')
+                                    i.glyphicon.glyphicon-envelope
+                                    .span Contact
                             li.dropdown
                                 a.dropdown-toggle
                                     i.glyphicon.glyphicon-plus
@@ -58,6 +62,9 @@ html#ng-app(xmlns:ng='http://angularjs.org',lang='en')
                                     li(data-ng-repeat='choice in items')
                                         a(data-ui-sref='{{choice.route}}') {{choice.title}}
                         ul.nav.navbar-nav.navbar-right
+                            li.signals 
+                                a(href='#') 
+                                    span.label(data-ng-bind='num',data-ng-class="isVisited()?'label-danger':'label-default'",data-ng-click='update()') 0
                             li.dropdown
                                 a.dropdown-toggle(href='#',data-toggle='dropdown')
                                     i.glyphicon.glyphicon-user 
@@ -94,6 +101,7 @@ html#ng-app(xmlns:ng='http://angularjs.org',lang='en')
         script(type='text/javascript', src='/src/app/admin/post/post.js')
         script(type='text/javascript', src='/src/app/admin/media/media.js')
         script(type='text/javascript', src='/src/app/admin/user/user.js')
+        script(type='text/javascript', src='/src/app/admin/contact/contact.js')
         script(type='text/javascript', src='/src/app/admin/app.js')
         script(type='text/javascript', src='/src/app/admin/init.js')
         - var env = process.env.NODE_ENV

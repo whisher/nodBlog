@@ -1,0 +1,10 @@
+<div class="row">
+    <div class="col-md-6">
+        <ul class="list-group">
+            <li class="list-group-item">{{contact.created | date:'short'}}</li>
+            <li class="list-group-item">{{contact.username}}</li>
+            <li class="list-group-item"><a href="mailto:{{contact.email}}" target="_blank">{{contact.email}}</a></li>
+            <li class="list-group-item text-info">{{contact.msg}}</li>
+        </ul>
+    </div>
+</div>    

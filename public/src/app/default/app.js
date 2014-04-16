@@ -14,10 +14,10 @@
         $rootScope.$state = $state;
         
     })
-    .controller('MainCtrl', function ($scope,socket) {
+    .controller('MainCtrl', function ($scope,Socket) {
         var messages  = [];
         $scope.num = 0;
-        socket.on('addedPost', function (data) {
+        Socket.on('addedPost', function (data) {
              messages.push(data);
              $scope.num = messages.length;
         });

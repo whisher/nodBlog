@@ -1,11 +1,12 @@
 (function(window, angular, undefined) {
 'use strict';
+//Dependencies ui.router nodblog.services.base nodblog.services.socket
 angular.module('nodblog.site',[])
     .config(function($stateProvider) {
         $stateProvider
             .state('index', {
                 url: '/',
-                templateUrl: 'src/app/default/site/index.tpl.html',
+                templateUrl: 'src/app/default/site/site.tpl.html',
                 controller: 'IndexCtrl'
             })
     })
@@ -20,33 +21,30 @@ angular.module('nodblog.site',[])
         $scope.test = 'about';
     })
     .controller('ModalContactCtrl', function ($scope, $modalInstance,contact) {
-         console.log($modalInstance); console.log(contact);
         $scope.contact = contact;
         $scope.ok = function () {
-            $scope.contact = {};
             $modalInstance.close();
         };
-
-        
     })
-    .controller('ContactCtrl', function ($scope,$modal,Contact) {
+    .controller('ContactCtrl', function ($scope,$modal,Contact,Socket) {
         $scope.contact = {};
         $scope.save = function(){
-            Contact.store($scope.contact).then(
-                function(data) {
-                    var modalInstance = $modal.open({
-                        templateUrl: 'contactModalOnSubmit.html',
-                        controller: 'ModalContactCtrl',
-                        resolve: {
-                            contact: function () {
-                                return $scope.contact;
-                            }
+            Contact.store($scope.contact).then(function(data) {
+                Socket.emit('addContact',data);
+                $scope.contact = {};
+                var modalInstance = $modal.open({
+                    templateUrl: 'contactModalOnSubmit.html',
+                    controller: 'ModalContactCtrl',
+                    resolve: {
+                        contact: function () {
+                            return $scope.contact;
                         }
-                    });
-                }, 
-                function error(err) {
-                    throw new Error(err);
-                }
+                    }
+                });
+            }, 
+            function error(err) {
+                throw new Error(err);
+            }
             );
         };
     });

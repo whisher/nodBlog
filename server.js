@@ -71,9 +71,13 @@ var port = process.env.PORT || config.port;
 server.listen(port);
 
 io.sockets.on('connection', function (socket){
-    
     socket.on('addPost', function (data) {
+        data.label = 'add post';
         socket.broadcast.emit('addedPost', data);
+    });
+    socket.on('addContact', function (data) {
+        data.label = 'add contact';
+        socket.broadcast.emit('addedContact', data);
     });
 });
 

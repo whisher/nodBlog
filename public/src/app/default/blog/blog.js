@@ -18,17 +18,23 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
                 url: '/blog/:id/:slug',
                 templateUrl: 'src/app/default/blog/details.tpl.html',
                 resolve: {
-                    post: function(Post,$stateParams){
+                    current: function(Post,$stateParams){
                         return Post.one($stateParams.id);
                     },
                     comments: function(Post,$stateParams){
                         return Post.commentsByPostId($stateParams.id);
+                    },
+                    next: function(Post,$stateParams){
+                        return Post.next($stateParams.id);
+                    },
+                    previous: function(Post,$stateParams){
+                        return Post.previous($stateParams.id);
                     }
                 },
                 controller: 'BlogDetailsCtrl'
             })
             .state('blog_tag', {
-                url: '/blog/:tag',
+                url: '/blog/tag/:tag',
                 templateUrl: 'src/app/default/blog/blog.tpl.html',
                 resolve: {
                     post: function(Post,$stateParams){
@@ -47,6 +53,12 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
             this.commentsByPostId = function(id){
                 return this.getElements().one('comments',id).getList();
             };
+            this.next = function(id){
+                return this.specialCopy(id).getList('next');
+            };
+            this.previous = function(id){
+                return this.specialCopy(id).getList('previous');
+            };
         }
         return angular.extend(Base('post'), new NgPost());
     })
@@ -59,12 +71,13 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
             get:function(posts){
                 var data = [];
                 angular.forEach(posts, function(value, key){
+                    var text = $filter('nbStripTags')(value.body);
                     this.push({
                         id: value._id,
                         title : $filter('ucfirst')(value.title),
                         slug : value.slug,
                         published : $filter('date')(value.published,'dd/MM/yyyy'),
-                        body : $filter('words')(value.body,20),
+                        body : $filter('words')(text,35),
                         avatar: value.avatar,
                         tags : value.tags
                     });
@@ -73,8 +86,7 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
             }
         };   
     })
-    .controller('BlogIndexCtrl', function ($scope,posts,PreparedPosts,Paginator) {
-        
+    .controller('BlogIndexCtrl', function ($scope,posts,PreparedPosts,Paginator,$filter) {
         var preparedPosts = [];
         if(posts.length > 0){
             preparedPosts = PreparedPosts.get(posts);
@@ -84,29 +96,33 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
              var cb = function(item){  return _.indexOf(item.tags, tag)!==-1; }
              $scope.paginator.filter(cb);
         };
-        
         $scope.hasItems = ($scope.paginator.items.length > 0);
-        
-      })
-    .controller('BlogDetailsCtrl', function ($scope,localStorageService,post,comments,Comment) {
-        $scope.post = post;
+    })
+    .controller('BlogDetailsCtrl', function ($scope,$state,localStorageService,current,next,previous,comments,Comment) {
+        $scope.isCollapsed = true;
+        $scope.article = current;
         $scope.comments = comments;
-        var commentHasStorage = localStorageService.get('comment_id_'+post._id);
+        $scope.next = (typeof next[0] === 'undefined')?[]:next[0];
+        $scope.previous = (typeof previous[0] === 'undefined')?[]:previous[0];
+        $scope.hasComments = ($scope.comments > 0);
+        $scope.hasNext = (typeof $scope.next._id !== 'undefined');
+        $scope.hasPrevious = (typeof $scope.previous._id !== 'undefined');
+        var commentHasStorage = localStorageService.get('comment_id_'+current._id);
         $scope.commentHasStorage = commentHasStorage;
         if(commentHasStorage!==null){
             angular.forEach(comments, function(value, key){
                 if(value._id===commentHasStorage){
-                   localStorageService.remove('comment_id_'+post._id); 
+                   localStorageService.remove('comment_id_'+current._id); 
                     $scope.commentHasStorage = null;
                 }
             });
         }
         $scope.comment = {};
-        $scope.comment.post_id = post._id;
+        $scope.comment.post_id = current._id;
         $scope.save = function(){
             Comment.store($scope.comment).then(
                 function(data) {
-                    localStorageService.add('comment_id_'+post._id,data._id);
+                    localStorageService.add('comment_id_'+current._id,data._id);
                     $scope.commentHasStorage = data._id;
                 }, 
                 function error(err) {
@@ -114,14 +130,18 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
                 }
             );
         };
-        $scope.hasComments = function(){
-            return !!$scope.comments.length;
+        
+        $scope.filter = function(tag){
+             return $state.transitionTo('blog');
+        };
+        $scope.cancel = function(){
+             $scope.isCollapsed = true;
         };
     })
     .directive('nbNavTags',function() {
         return {
             restrict: 'A',
-            template:'<i class="glyphicon glyphicon-tags"></i><span data-ng-repeat="tag in tags"><a data-ng-click="filter({tag:tag})">{{tag}}</a><span data-ng-if="!$last">,</span></span>',
+            template:'<i class="glyphicon glyphicon-tags"></i> <span data-ng-repeat="tag in tags"> <a data-ng-click="filter({tag:tag})"> {{tag}}</a><span data-ng-if="!$last">,</span></span> ',
             scope: {
                 tags: '=',
                 filter: '&'
@@ -131,10 +151,19 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
             }
         };
     })
+    .filter('nbStripTags', function () {
+        return function(input) {
+            return input.replace(/<\/?[^>]+(>|$)/g, "");
+        };
+    })
     .filter('words', function () {
         return function (input, words) {
-            if (isNaN(words)) return input;
-            if (words <= 0) return '';
+            if (isNaN(words)) {
+                return input;
+            }
+            if (words <= 0){
+                return '';
+            }
             if (input) {
                 var inputWords = input.split(/\s+/);
                 if (inputWords.length > words) {

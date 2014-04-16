@@ -6,12 +6,15 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it')
         meta(name='robots', content='index,follow')
         meta(name='fragment', content='!')
         title= appTitle
-        meta(name='title', content='nodBlog') 
-        meta(name='description', content='nodBlog') 
-        meta(name='author', content='whisher') 
-        meta(name='Copyright', content='Copyright  2012. All Rights Reserved') 
-        link(rel='shortcut icon', href='favicon.ico')
-        link(rel='bookmark', href='favicon.ico')
+        meta(name='title', content='il web di fabio') 
+        meta(http-equiv='Content-type',content='text/html;charset=UTF-8')
+        meta(name='keywords',content='php, node.js, express, mongodb, mysql, html5, css3, angularjs, createJS, mash-up social api, phonegap')
+        meta(name='description',content='Blog e sito personale')
+        meta(name='author', content='Fabio Bedini aka Whisher') 
+        meta(name='Copyright', content='&#169; 2014 All Rights Reserved') 
+        link(rel='author', href='/src/humans.txt')
+        link(rel='shortcut icon', href='/src/favicon.ico',type="image/x-icon")
+        link(rel='bookmark', href='/src/favicon.ico')
         link(rel='stylesheet', href='/src/assets/default/css/bootstrap.css')
         link(rel='stylesheet', href='/src/assets/default/css/theme.css')
         link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css')
@@ -39,7 +42,8 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it')
                             a(data-ui-sref='index',data-nb-scroll="contact") Contact
                         li(data-ng-class="{ active: $state.includes('blog') }")
                             a(data-ui-sref='blog') Blog 
-                                span.label(data-ng-bind='num',data-ng-class="isVisited()?'label-danger':'label-default'",data-ng-click='update()') 0
+                        li
+                            span.label.label-danger(href='#',title='Versione Beta') Beta*
                     ul.nav.navbar-nav.navbar-right
                         li
                             a.btn.btn-social-icon.btn-sm.btn-twitter
@@ -67,10 +71,13 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it')
                 | <!--h1.text-center.text-danger Sito in costruzione -->
                 div(data-ui-view,data-ng-class="{animation: animation}")
         div#footer
-            p 
-                a(href='mailto:someone@example.com') info@ilwebdifabio.it
             p Fabio Bedini aka whisher
-            p P.I. 01371160118
+            p Nord Ovest Italia - P.I. 01371160118
+            p 
+                a(href='mailto:info@ilwebdifabio.it') info@ilwebdifabio.it
+            p powered by 
+                a(href='https://github.com/whisher/nodBlog',target='_blank') nodBlog 
+            p &#169; 2014 All Rights Reserved
             a(href="#",data-nb-scroll="content") Vai al top
         script(type='text/javascript', src='/socket.io/socket.io.js')
         script(type='text/javascript', src='/vendor/lodash/dist/lodash.js')

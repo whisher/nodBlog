@@ -33,6 +33,9 @@ module.exports = function(app, passport,auth,io) {
     app.get('/api/post',postController.all);
     app.get('/api/post/:postId',postController.show);
     app.get('/api/post/comments/:postId',postController.commentsByPostId);
+    app.get('/api/post/:postId/next',postController.next);
+    app.get('/api/post/:postId/previous',postController.previous);
+    app.get('/api/post/tag/:tag',postController.fetchByTag);
     
     /* Post Id Param */
     app.param('postId', postController.post);
@@ -81,8 +84,12 @@ module.exports = function(app, passport,auth,io) {
     /* Admin Contact Api */
     var contactController = require('../app/controllers/api/contact');
     app.get('/admin/api/contact',auth.apiRequiresLogin,auth.isAdmin,contactController.all);
+    app.get('/admin/api/contact/:contactId',auth.apiRequiresLogin,auth.isAdmin, contactController.show);
     
     /* Public Contact Api */
     app.post('/api/contact',contactController.create);
+    
+    /* Contact Id Param */
+    app.param('contactId', contactController.contact);
     
 }

@@ -1,0 +1,15 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+Author: Fabio Bedini aka whisher
+Email : whisher06@gmail.com
+Location: Nord West Italy
+   
+
+# THANKS
+mean.io 
+stackoverflow.com
+
+# TECHNOLOGY COLOPHON
+Node.js, Express 3, MongoDb , Mongoosejs, Jade, HTML5, CSS3, Angularjs, jQuery, socket.io
