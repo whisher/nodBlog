@@ -15,6 +15,8 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it')
         link(rel='author', href='/src/humans.txt')
         link(rel='shortcut icon', href='/src/favicon.ico',type="image/x-icon")
         link(rel='bookmark', href='/src/favicon.ico')
+        each val in assets.css
+            link(rel='stylesheet', href=val)
         link(rel='stylesheet', href='/src/assets/default/css/bootstrap.css')
         link(rel='stylesheet', href='/src/assets/default/css/theme.css')
         link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css')
@@ -45,6 +47,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it')
                         li
                             span.label.label-danger(href='#',title='Versione Beta') Beta*
                     ul.nav.navbar-nav.navbar-right
+                        li.dropdown.signals(data-nb-signals='',signals='signals',labels='mapLabels',routes='mapRoutes') 
                         li
                             a.btn.btn-social-icon.btn-sm.btn-twitter
                                 i.fa.fa-twitter
@@ -68,8 +71,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it')
                                 i.fa.fa-facebook
         div.container
             div#content.ui-view-container(data-ng-controller="viewCtrl")
-                | <!--h1.text-center.text-danger Sito in costruzione -->
-                div(data-ui-view,data-ng-class="{animation: animation}")
+                div(data-ui-view,data-ng-class="{animation: animation}",autoscroll='false')
         div#footer
             p Fabio Bedini aka whisher
             p Nord Ovest Italia - P.I. 01371160118
@@ -90,8 +92,10 @@ html#ng-app(xmlns:ng='http://angularjs.org', lang='it')
         script(type='text/javascript', src='/vendor/angular-sanitize/angular-sanitize.js')
         script(type='text/javascript', src='/vendor/angular-local-storage/angular-local-storage.js')
         script(type='text/javascript', src='/vendor/angular-bootstrap/ui-bootstrap-tpls.js')
+        script(type='text/javascript', src='/vendor/angular-seo/angular-seo.js')
         script(type='text/javascript', src='/src/common/services/base.js')
         script(type='text/javascript', src='/src/common/services/socket.js')
+        script(type='text/javascript', src='/src/common/ui/paginators/simple.js')
         script(type='text/javascript', src='/src/app/default/site/site.js')
         script(type='text/javascript', src='/src/app/default/blog/blog.js')
         script(type='text/javascript', src='/src/app/default/app.js')

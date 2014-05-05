@@ -31,7 +31,7 @@
                 <td>{{post.votes}}</td>
                 <td ng-switch="post.meta.comments">
                     <span class="badge" ng-switch-when="0">0</span>
-                    <a class="badge" data-ng-click="showComments(post)" data-ng-switch-default>
+                    <a class="badge" data-ui-sref="post_comments({id: post.id,slug:post.slug})" data-ng-switch-default>
                         <span class="text-warning" title="pending">{{post.comments.pending}}</span>/<span class="text-success" title="approved">{{post.comments.approved}}</span>
                     </a>
                 </td>

@@ -15,6 +15,15 @@ body {
     padding-top: 70px;
 }
 #nav {}
+.navbar-right { 
+    > li.signals{
+        visibility: hidden;
+        width:100px;
+    }
+    > li.signals .badge{
+        background-color: @label-danger-bg !important;
+    }
+}
 .navbar {
     min-height: @navbar-height; // Ensure a navbar always shows (e.g., without a .navbar-brand in collapsed mode)
     margin-bottom: @navbar-margin-bottom;
@@ -77,14 +86,17 @@ body {
         list-style: none;
     }
     > .article .article-body ul.article-meta li{
-       display:inline;
-       font-size: @font-size-h5;
+        display:inline;
+        font-size: @font-size-h5;
+    }
+    > .article .article-body ul.article-meta li span a{
+        cursor: pointer;
     }
     > .article .article-body ul.article-meta li.article-tags i:after{
-       content:" ";
+        content:" ";
     }
     > .article .article-body div.article-content{
-       font-size: @font-size-h3;
+        font-size: @font-size-h3;
     }
     > .article .article-footer{
        
@@ -148,11 +160,21 @@ body {
         }
     }
 }
-.comment-box{}
+.comment-box{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    > h5{}
+    > h6{
+        color:@gray-dark;
+    }
+}
 .comment-box > article{
     padding-left: 5px;
+    > h5{}
+    > h6{
+        color:@gray-dark;
+    }
 }
-
 .ui-view-container {
     min-height:100px;
     position: relative;

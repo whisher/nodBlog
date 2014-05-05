@@ -25,8 +25,8 @@
             <ul class="article-meta">
                 <li>
                     <span class="glyphicon glyphicon-calendar"></span>
-                    <time pubdate date="{{article.published}}">
-                        <em>{{article.published}}</em>
+                    <time pubdate date="{{article.published | date:'dd/MM/yyyy'}}">
+                        <em>{{article.published | date:'dd/MM/yyyy'}}</em>
                     </time> |  
                 </li>
                 <li>
@@ -46,7 +46,7 @@
 </div>
 <div class="row">
     <div class="col-md-5">
-        <div><button class="btn btn-default btn-sm" data-ng-click="isCollapsed = !isCollapsed">Lascia un commento</button></div>
+        <div><button class="btn btn-default btn-sm" data-ng-click="isCollapsed = !isCollapsed" data-ng-hide="commentHasStorage">Lascia un commento</button></div>
         <div id="frm-comment-wrapper" collapse="isCollapsed" data-ng-hide="commentHasStorage">
             <h6 class="text-info">L'indirizzo email non verrà pubblicato. I campi obbligatori sono contrassegnati <span class="text-danger">*</span></h6>
             <form name="form" role="form" data-ng-submit="save()">
@@ -71,41 +71,40 @@
                   <button type="button" class="btn btn-default" data-ng-click="cancel()">Cancel</button>
                   <button type="submit" class="btn btn-primary" data-ng-disabled="form.$invalid">Commenta</button>  
                 </div>
-              
             </form>
         </div>
-        <div class="text-success" data-ng-show="commentHasStorage">
-            <p>Grazie, per aver lasciato un commento</p>
-            <p>Il commento sarà visibile dopo moderazione</p>
+        <div class="panel panel-default text-info" data-ng-show="commentHasStorage">
+            <div class="panel-heading">Grazie, per aver lasciato un commento</div>
+            <div class="panel-body">Il commento sarà visibile dopo moderazione</div>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
-        <p class="text-muted" data-ng-hide="!!hasComments">
+        <p class="text-muted" data-ng-show="!hasComments">
             Non ci sono commenti
         </p>
-        <article class="comment-box" data-ng-repeat="comment in comments">
-            <header>
-                <h1>{{comment.author}}</h1>
-                <p>{{comment.body}}</p>
-            </header>
-            <footer>
-                <time pubdate date="{{comment.created | date:'short'}}">
-                   <em>{{comment.created | date:'short'}}</em>
+        <article class="comment-box" data-ng-repeat="comment in comments track by comment.id">
+            <h5>
+                <i class="glyphicon glyphicon-calendar"></i>
+                <time pubdate date="{{comment.created}}">
+                    <em>{{comment.created}}</em>
                 </time>
-            </footer>
-            <article data-ng-if="comment.children.length > 0" data-ng-repeat="children in comment.children">
-                <header>
-                    <h1>{{children.author}}</h1>
-                    <p class="text-info">{{children.body}}</p>
-                </header> 
-                <footer>
-                    <time pubdate date="{{children.created | date:'short'}}">
-                        <em>{{children.created | date:'short'}}</em>
+                <i class="glyphicon glyphicon-user"></i>
+                <span>{{comment.author}}</span>
+            </h5>
+            <h6>{{comment.body}}</h6>
+            <article id="c_{{children._id}}" data-ng-if="comment.hasChildren" data-ng-repeat="children in comment.children">
+                <h5>
+                    <i class="glyphicon glyphicon-calendar"></i>
+                    <time pubdate date="{{comment.created | date:'dd/MM/yyyy'}}">
+                        <em>{{children.created | date:'dd/MM/yyyy'}}</em>
                     </time>
-                </footer>
-            </article>
+                    <i class="glyphicon glyphicon-user"></i>
+                    <span>{{children.author}}</span>
+                </h5>
+                <h6 class="text-info">{{children.body}}</h6>
+           </article>
         </article> 
     </div>
 </div>    

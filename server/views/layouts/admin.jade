@@ -3,15 +3,16 @@ html#ng-app(xmlns:ng='http://angularjs.org',lang='en')
     head
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1, user-scalable=no')
-        meta(name='robots', content='index,follow')
+        meta(name='robots', content='noindex,nofollow')
         meta(name='fragment', content='!')
         title= appTitle
         meta(name='title', content='nodBlog') 
         meta(name='description', content='nodBlog') 
-        meta(name='author', content='whisher') 
-        meta(name='Copyright', content='Copyright  2012. All Rights Reserved') 
-        link(rel='shortcut icon', href='favicon.ico')
-        link(rel='bookmark', href='favicon.ico')
+        meta(name='author', content='Fabio Bedini aka Whisher') 
+        meta(name='Copyright', content='&#169; 2014 All Rights Reserved') 
+        link(rel='author', href='/src/humans.txt')
+        link(rel='shortcut icon', href='/src/favicon.ico',type="image/x-icon")
+        link(rel='bookmark', href='/src/favicon.ico')
         link(rel='stylesheet', href='/src/assets/admin/css/bootstrap.css')
         link(rel='stylesheet', href='/src/assets/admin/css/theme.css')
         link(rel='stylesheet', href='/vendor/Jcrop/css/jquery.Jcrop.min.css')
@@ -68,7 +69,7 @@ html#ng-app(xmlns:ng='http://angularjs.org',lang='en')
                             li.dropdown
                                 a.dropdown-toggle(href='#',data-toggle='dropdown')
                                     i.glyphicon.glyphicon-user 
-                                    span(data-ng-bind="currentUser.user.name")
+                                    span(data-ng-bind='currentUser.user.name')
                                     b.caret
                                 ul.dropdown-menu
                                     li

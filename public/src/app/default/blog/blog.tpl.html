@@ -1,12 +1,12 @@
 <div id="article-list" class="row" data-ng-if="hasItems">
-    <div class="panel panel-default" data-ng-hide="paginator.isClean()">
+    <div class="panel panel-default" data-ng-if="!paginator.isClean() && hasPagination">
         <div class="panel-body">
             <a href="#" data-ng-click="paginator.filter()">
                 <span class="badge" title="Tutti">Tutti</span>
             </a>
         </div>
     </div>
-    <div class="panel panel-default" data-ng-hide="!paginator.isClean()">
+    <div class="panel panel-default" data-ng-hide="!paginator.isClean()" data-ng-if="hasPagination">
         <div class="panel-body clearfix">
             <a class="pull-left" href="#" data-ng-show="paginator.hasOlder()" data-ng-click="paginator.older()">
                 <span class="badge" title="&lt;- Archivio">&lt;- Archivio</span>
@@ -39,12 +39,10 @@
                 </li>
                 <li>
                     <span class="btn btn-default btn-xs">
-                        <span class="glyphicon glyphicon-comment"></span> {{article.meta.comments.approved}}
+                        <span class="glyphicon glyphicon-comment"></span> {{article.comments}}
                     </span> | 
                 </li>
-                <li class="article-tags" tags="article.tags" filter="filter(tag)" data-nb-nav-tags>
-                    
-                </li>
+                <li class="article-tags" tags="article.tags" filter="filter(tag)" data-nb-nav-tags></li>
             </ul>
             <!--article prologue -->
             <div class="article-content" data-ng-bind-html="article.body">

@@ -16,6 +16,7 @@
     "angular-animate": "~1.2.14",
     "font-awesome": "~4.0.3",
     "bootstrap-social": "~4.2.1",
-    "Jcrop": "https://github.com/tapmodo/Jcrop.git#master"
+    "Jcrop": "https://github.com/tapmodo/Jcrop.git#master",
+    "angular-seo": "*"
   }
 }

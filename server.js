@@ -19,8 +19,8 @@ var express = require('express'),
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 //Initializing system variables 
-var config = require('./config/config'),
-    auth = require('./config/middlewares/authorization'),
+var config = require(__dirname + '/server/config/config'),
+    auth = require(config.sroot + '/config/middlewares/authorization'),
     mongoose = require('mongoose');
 
 //Use only for development env
@@ -31,12 +31,12 @@ if (process.env.NODE_ENV === 'development') {
 process.env.TMPDIR = config.tmp;
 
 
-    
+  
 //Bootstrap db connection
 var db = mongoose.connect(config.db);
 
 //Bootstrap models
-var modelsPath = __dirname + '/app/models';
+var modelsPath = config.sroot + '/models';
 var walk = function(path) {
     fs.readdirSync(path).forEach(function(file) {
         var newPath = path + '/' + file;
@@ -53,7 +53,7 @@ var walk = function(path) {
 walk(modelsPath);
 
 //bootstrap passport config
-require('./config/passport')(passport);
+require(config.sroot + '/config/passport')(passport);
 
 var app = express()
     , http = require('http')
@@ -61,10 +61,10 @@ var app = express()
     , io = require('socket.io').listen(server);
 
 //express settings
-require('./config/express')(app,passport,db);
+require(config.sroot + '/config/express')(app,passport,db);
 
 //Bootstrap routes
-require('./config/routes')(app,passport,auth,io);
+require(config.sroot + '/config/routes')(app,passport,auth,io);
 
 //Start the app by listening on <port>
 var port = process.env.PORT || config.port;
@@ -72,12 +72,24 @@ server.listen(port);
 
 io.sockets.on('connection', function (socket){
     socket.on('addPost', function (data) {
-        data.label = 'add post';
+        data.label = 'added_post';
         socket.broadcast.emit('addedPost', data);
     });
     socket.on('addContact', function (data) {
-        data.label = 'add contact';
+        data.label = 'added_contact';
         socket.broadcast.emit('addedContact', data);
+    });
+    socket.on('addComment', function (data) {
+        data.label = 'added_comment';
+        socket.broadcast.emit('addedComment', data);
+    });
+    socket.on('approveComment', function (data) {
+        data.label = 'approved_comment';
+        socket.broadcast.emit('approvedComment', data);
+    });
+    socket.on('replyComment', function (data) {
+        data.label = 'replied_comment';
+        socket.broadcast.emit('repliedComment', data);
     });
 });
 

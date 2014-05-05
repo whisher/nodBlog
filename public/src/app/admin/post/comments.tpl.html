@@ -16,10 +16,10 @@
                 <button type="submit" class="btn btn-primary pull-right btn-xs" data-ng-disabled="form.$invalid">Reply</button>
             </form>
             <div class="cmt-footer">
-                <a data-ng-click="approved(comment._id)" class="btn btn-success btn-xs" title="approve comment">
+                <a data-ng-click="approved(comment._id)" data-ng-if="comment.status === 'pending'" class="btn btn-success btn-xs" title="approve comment">
                     <span class="glyphicon glyphicon-ok"></span> Approve
                 </a>
-                <a data-ng-click="isCollapsed = !isCollapsed" class="btn btn-info btn-xs" title="reply comment">
+                <a data-ng-click="isCollapsed = !isCollapsed" data-ng-show="isCollapsed" class="btn btn-info btn-xs" title="reply comment">
                     <span class="glyphicon glyphicon-share-alt"></span> Reply
                 </a>
                 <a data-ng-href="#/comment/edit/{{comment._id}}" class="btn btn-warning btn-xs" title="edit comment">

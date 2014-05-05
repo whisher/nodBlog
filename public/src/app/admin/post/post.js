@@ -2,7 +2,7 @@
 'use strict';
 //Dependencies ui.router angularFileUpload ui.bootstrap nodblog.services.base nodblog.services.socket nodblog.ui.paginators.elastic
 angular.module('nodblog.admin.post',[])
-    .config(function($stateProvider,RestangularProvider,$provide) {
+    .config(function($stateProvider,RestangularProvider) {
         $stateProvider
             .state('post', {
                 url: '/post',
@@ -40,7 +40,7 @@ angular.module('nodblog.admin.post',[])
                 controller: 'PostDeleteCtrl'
             })
             .state('post_comments', {
-                url: '/post/comments/:id',
+                url: '/post/comments/:id/:slug',
                 templateUrl:'src/app/admin/post/comments.tpl.html',
                 resolve: {
                     comments: function(Post,$stateParams){
@@ -148,7 +148,7 @@ angular.module('nodblog.admin.post',[])
         
         
     })
-    .controller('PostParentCtrl', function ($scope,$timeout,PostUploader,Memory,socket) {
+    .controller('PostParentCtrl', function ($scope,$timeout,PostUploader,Memory,Socket) {
        
         $scope.post = {}; 
         
@@ -192,7 +192,7 @@ angular.module('nodblog.admin.post',[])
             $scope.dataUrl = null;
         });
         
-        socket.on('avatarUploadProgress', function (data) {
+        Socket.on('avatarUploadProgress', function (data) {
             $scope.uploadPercent = data.percent;
         });
      
@@ -204,15 +204,13 @@ angular.module('nodblog.admin.post',[])
         }
         $scope.paginator =  Paginator(2,5,preparedPosts);
         $scope.hasItems = ($scope.paginator.items.length > 0);
-        $scope.showComments = function(post){
-            $state.transitionTo('post_comments',{id:post._id});
-        };
     })
     .controller('PostCreateCtrl', function ($scope,$state,$filter,$timeout,$controller,Post,PostUploader,Memory,Socket) {
         
         angular.extend($scope, new $controller('PostParentCtrl', {$scope:$scope,$timeout:$timeout,PostUploader:PostUploader}));
         
         $scope.header = Post.labels.frmCreateHeader;
+        
         $scope.status = Post.status;
         
         $scope.post.status = Post.status[0];
@@ -221,10 +219,11 @@ angular.module('nodblog.admin.post',[])
         
         var memoryPost = Memory.getPost();
         var dataUrl = Memory.getDataUrl();
+        
         if(!_.isEmpty(memoryPost)){
             $scope.post = memoryPost;
-            
         }
+        
         if(dataUrl){
             $timeout(function(){
                 $scope.dataUrl = dataUrl;
@@ -238,7 +237,9 @@ angular.module('nodblog.admin.post',[])
             $scope.post.meta.medias  = Memory.getMediaIds();
             Post.store($scope.post).then(
                 function(data) {
-                    Socket.emit('addPost',data);
+                    if( ($scope.post.status==='publish') && !($scope.post.published > Date.now()) ){
+                       Socket.emit('addPost',{id:data._id,slug:data.slug}); 
+                    }
                     Memory.resetAll();
                     return $state.transitionTo('post');
                 }, 
@@ -303,39 +304,43 @@ angular.module('nodblog.admin.post',[])
     .controller('ShowCommentsCtrl',function ($scope,comments) {
         $scope.comments = comments;
     })
-    .controller('ShowCommentsInnerCtrl',function ($scope,$stateParams,currentUser,Comment) {
-       $scope.isCollapsed = true;
+    .controller('ShowCommentsInnerCtrl',function ($scope,$stateParams,Comment,Socket) {
+        $scope.isCollapsed = true;
+        
         $scope.approved = function(id){
             var comment = Comment.specialCopy(id);
+            
             comment.status = 'approved';
             comment.put().then(
                 function(data) {
-                    
+                    Socket.emit('approveComment',{post_id:data.post_id,post_slug:$stateParams.slug,id:data._id});   
                 },
                 function error(reason) {
                     throw new Error(reason);
                 }
-           );
+                );
         };
         
-        var reply = {};
-        reply.post_id = $stateParams.id;
-        reply.author = currentUser.name;
-        reply.email = currentUser.email;
-        reply.web = 'http://ilwebdifabio.it';
-        reply.status = 'approved';
-        reply.is_authoring = 1;
+       
         $scope.doReply = function(id){
+            var currentUser = $scope.currentUser.user;
+            var reply = {};
+            reply.post_id = $stateParams.id;
+            reply.author = currentUser.name;
+            reply.email = currentUser.email;
+            reply.web = 'http://ilwebdifabio.it';
+            reply.status = 'approved';
+            reply.is_authoring = 1;
             reply.parent = id;
             reply.body = $scope.reply;
             Comment.store(reply).then(
                 function(data) {
-                   
+                  Socket.emit('replyComment',{post_id:reply.post_id,post_slug:$stateParams.slug,id:data._id});   
                 }, 
                 function error(err) {
                     throw new Error(err);
                 }
-            );
+                );
             $scope.isCollapsed = true;
             $scope.reply = '';
         }; 

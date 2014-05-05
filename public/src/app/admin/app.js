@@ -125,6 +125,11 @@
              $scope.num = $scope.signals.length;
              console.log(data);
         });
+        Socket.on('addedComment', function (data) {
+             $scope.signals.push(data);
+             $scope.num = $scope.signals.length;
+             console.log(data);
+        });
         $scope.isVisited = function(){
             return $scope.signals.length > 0;
         };

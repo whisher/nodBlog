@@ -1,9 +1,8 @@
 .bower-*/
 npm-debug.log
 nbproject/
-.idea/
 node_modules/
-tmp/
+server/tmp
 public/dist
 public/vendor
 public/upload

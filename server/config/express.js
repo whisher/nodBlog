@@ -9,7 +9,8 @@ var express = require('express'),
     helpers = require('view-helpers'),
     protectJson = require('./protectJson'),
     xsrf = require('./xsrf'),
-    config = require('./config');
+    config = require('./config'),
+    assetmanager = require('assetmanager');
 
 module.exports = function(app,passport,db) {
     app.set('showStackError', true);
@@ -34,7 +35,7 @@ module.exports = function(app,passport,db) {
     }
 
     //Set views path, template engine and default layout
-    app.set('views', config.root + '/app/views');
+    app.set('views', config.sroot + '/views');
     app.set('view engine', 'jade');
 
     //Enable jsonp
@@ -49,6 +50,7 @@ module.exports = function(app,passport,db) {
         app.use(express.json());
         app.use(express.methodOverride());
 
+        
         //express/mongo session storage
         app.use(express.session({
             secret: config.sessionSecret,
@@ -71,6 +73,7 @@ module.exports = function(app,passport,db) {
         //xsrf vulnerability protection
         app.use(xsrf); 
         
+        
         //routes should be at the last
         app.use(app.router);
         
@@ -78,7 +81,8 @@ module.exports = function(app,passport,db) {
         app.use(express.favicon());
         //TODO
 
-        app.use(express.static(config.distFolder));
+
+        app.use(express.static(config.proot));
 
         
         

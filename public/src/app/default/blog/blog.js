@@ -15,20 +15,20 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
                 controller: 'BlogIndexCtrl'
             })
             .state('blog_details', {
-                url: '/blog/:id/:slug',
+                url: '/blog/:id/:slug?scrollTo',
                 templateUrl: 'src/app/default/blog/details.tpl.html',
                 resolve: {
                     current: function(Post,$stateParams){
                         return Post.one($stateParams.id);
-                    },
-                    comments: function(Post,$stateParams){
-                        return Post.commentsByPostId($stateParams.id);
                     },
                     next: function(Post,$stateParams){
                         return Post.next($stateParams.id);
                     },
                     previous: function(Post,$stateParams){
                         return Post.previous($stateParams.id);
+                    },
+                    comments: function(Post,$stateParams){
+                        return Post.commentsByPostId($stateParams.id);
                     }
                 },
                 controller: 'BlogDetailsCtrl'
@@ -79,7 +79,27 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
                         published : $filter('date')(value.published,'dd/MM/yyyy'),
                         body : $filter('words')(text,35),
                         avatar: value.avatar,
-                        tags : value.tags
+                        tags : value.tags,
+                        comments : value.meta.comments.approved
+                    });
+                }, data);
+                return data;
+            }
+        };   
+    })
+    .factory('PreparedComments',function($filter){
+        return {
+            get:function(comments){
+                var data = [];
+                angular.forEach(comments, function(value, key){
+                    var text = $filter('nbStripTags')(value.body);
+                    this.push({
+                        id: value._id,
+                        author:value.author,
+                        created : $filter('date')(value.created,'dd/MM/yyyy'),
+                        body : text,
+                        children: value.children,
+                        hasChildren: value.children.length > 0
                     });
                 }, data);
                 return data;
@@ -96,15 +116,18 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
              var cb = function(item){  return _.indexOf(item.tags, tag)!==-1; }
              $scope.paginator.filter(cb);
         };
-        $scope.hasItems = ($scope.paginator.items.length > 0);
+        var itemsLength = $scope.paginator.items.length; 
+        $scope.hasItems = (itemsLength > 0);
+        $scope.hasPagination = $scope.hasItems && ($scope.paginator.getNumOfItems() > itemsLength);
+        
     })
-    .controller('BlogDetailsCtrl', function ($scope,$state,localStorageService,current,next,previous,comments,Comment) {
+    .controller('BlogDetailsCtrl', function ($scope,$state,localStorageService,current,next,previous,comments,Comment,PreparedComments,Socket) {
         $scope.isCollapsed = true;
         $scope.article = current;
-        $scope.comments = comments;
+        $scope.comments = PreparedComments.get(comments);
         $scope.next = (typeof next[0] === 'undefined')?[]:next[0];
         $scope.previous = (typeof previous[0] === 'undefined')?[]:previous[0];
-        $scope.hasComments = ($scope.comments > 0);
+        $scope.hasComments = ($scope.comments.length > 0);
         $scope.hasNext = (typeof $scope.next._id !== 'undefined');
         $scope.hasPrevious = (typeof $scope.previous._id !== 'undefined');
         var commentHasStorage = localStorageService.get('comment_id_'+current._id);
@@ -112,8 +135,9 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
         if(commentHasStorage!==null){
             angular.forEach(comments, function(value, key){
                 if(value._id===commentHasStorage){
-                   localStorageService.remove('comment_id_'+current._id); 
-                    $scope.commentHasStorage = null;
+                   localStorageService.remove('comment_id_'+current._id);
+                   localStorageService.add('comment_id_reply_'+current._id,value._id);
+                   $scope.commentHasStorage = null;
                 }
             });
         }
@@ -122,10 +146,11 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
         $scope.save = function(){
             Comment.store($scope.comment).then(
                 function(data) {
+                    Socket.emit('addComment',data);
                     localStorageService.add('comment_id_'+current._id,data._id);
                     $scope.commentHasStorage = data._id;
                 }, 
-                function error(err) {
+                function(err) {
                     throw new Error(err);
                 }
             );
@@ -186,90 +211,4 @@ angular.module('nodblog.blog',['ngSanitize','nodblog.ui.paginators.simple'])
             return input;
         };
     });
- })(window, angular);         
-    
-    
-(function(window, angular, undefined) {
-    'use strict';
-    angular.module('nodblog.ui.paginators.simple',[])
-        .factory('Paginator', function() {
-            return function(pageSize,data) {
-                    var cache =[];
-                    var staticCache =[];
-                    var hasNext = false;
-                    var currentOffset= 0;
-                    var numOfItemsXpage = pageSize;
-                    var numOfItems = 0;
-                    var totPages = 0;
-                    var currentPage = 1;
-                   
-                    var load = function() {
-                        staticCache = data;
-                        cache = data;
-                        loadFromCache();
-                    };
-                    var loadFromCache= function() {
-                        numOfItems = cache.length;
-                        totPages = Math.ceil(numOfItems/numOfItemsXpage);
-                        paginator.items = cache.slice(currentOffset, numOfItemsXpage*currentPage);
-                    };
-                    var paginator = {
-                        items : [],
-                        hasOlder: function() {
-                            return numOfItems > (currentPage * numOfItemsXpage);
-                        },
-                        hasNewer: function() {
-                            return (numOfItems > numOfItemsXpage) && (currentPage!==1);
-                        },
-                        older: function() {
-                            if (this.hasOlder()) {
-                                currentPage++;
-                                currentOffset += numOfItemsXpage;
-                                loadFromCache();
-                            }
-                        },
-                        newer: function() {
-                            if(this.hasNewer()) {
-                                currentPage--;
-                                currentOffset -= numOfItemsXpage;
-                                loadFromCache();
-                            }
-                        },
-                        getNumOfItems : function(){
-                            return numOfItems;
-                        },
-                        getCurrentPage: function() {
-                            return currentPage;
-                        },
-                        getTotPages: function() {
-                            return totPages;
-                        },
-                        getNumOfItemsXpage:function(){
-                            return numOfItemsXpage;
-                        },
-                        filter:function(callback){
-                            if(typeof callback === 'undefined'){
-                                if(this.isClean()){
-                                    return;
-                                }
-                                cache = staticCache;
-                            }
-                            else{
-                                cache = staticCache;
-                                cache = _.filter(cache, callback);
-                            }
-                            currentPage = 1;
-                            currentOffset= 0;
-                            loadFromCache();
-                        },
-                        isClean:function(){
-                            return angular.equals(staticCache, cache);
-                        }
-                    };
-                    load();
-                    return paginator;
-                 }
-            });
-        
-})(window, angular);
-    
+ })(window, angular);
