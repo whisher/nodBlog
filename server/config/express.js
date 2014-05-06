@@ -34,6 +34,10 @@ module.exports = function(app,passport,db) {
         app.use(express.logger('dev'));
     }
 
+    //app.engine('html', 'swig');
+
+    // set .html as the default extension
+   // app.set('view engine', 'html');
     //Set views path, template engine and default layout
     app.set('views', config.sroot + '/views');
     app.set('view engine', 'jade');
@@ -81,8 +85,8 @@ module.exports = function(app,passport,db) {
         app.use(express.favicon());
         //TODO
 
-
-        app.use(express.static(config.proot));
+        app.use('/public', express.static(config.proot));
+        //app.use(express.static(config.proot));
 
         
         

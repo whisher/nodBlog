@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="well add-new-box">
+        <a data-ui-sref="media_create" class="btn btn-primary">New</a>
+    </div>
+    <table class="table table-striped" data-ng-if="hasItems">
+        <thead>
+            <tr>
+                <th>Pic it</th>
+                <th>Ico</th>
+                <th>File</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Created</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="media in paginator.items">
+                <td><input type="checkbox" value="" name="media" media="media" nb-add-memory="#"></td>
+                <td><img alt="{{media.title}}" title="{{media.title}}" class="media-pic" data-ng-src="public/system/upload/{{media.url}}" /></td>
+                <td>{{media.url}}</td>
+                <td>{{media.title}}</td>
+                <td>{{media.author}}</td>
+                <td>{{media.created}}</td>
+                <td>{{media.type}}</td>
+                <td>
+                    <a data-ui-sref="media_view({ id: media.id })" class="btn btn-info btn-sm" title="view media">
+                        <span class="glyphicon glyphicon-eye-open"></span> View
+                    </a>
+                    <a data-ng-disabled="currentUser.isActionDisabled(media)" data-ui-sref="media_edit({ id: media.id })" class="btn btn-warning btn-sm" title="edit post">
+                        <span class="glyphicon glyphicon-edit"></span> Edit
+                    </a>
+                    <a data-ng-disabled="currentUser.isActionDisabled(media)" data-ui-sref="media_delete({ id: media.id })" class="btn btn-danger btn-sm" title="delete post">
+                        <span class="glyphicon glyphicon-trash"></span> Delete
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center" data-ng-if="hasItems">
+        <ul class="pagination">
+            <li data-ng-class="{disabled: !paginator.hasPrevious()}">
+                <a href data-ng-click="paginator.previous()">&laquo; </a>
+            </li>
+            <li data-ng-class="{disabled: !paginator.hasFirst()}">
+                <a href data-ng-click="paginator.first()">&lsaquo;</a>
+            </li>
+            <li data-ng-repeat="n in [] | pagination:paginator.getStart():paginator.getEnd()" data-ng-class="{active: n == paginator.getCurrentPage()}">
+                <a  href data-ng-click="paginator.toPageId(n)">{{n}}</a>
+            </li>
+            <li data-ng-class="{disabled: !paginator.hasLast()}">
+                <a href data-ng-click="paginator.last()">&rsaquo; </a>
+            </li>
+            <li data-ng-class="{disabled: !paginator.hasNext()}">
+                <a href data-ng-click="paginator.next()">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>    
+
+

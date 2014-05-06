@@ -1,0 +1,218 @@
+
+//
+// Load core variables and mixins
+// --------------------------------------------------
+@import "variables.less";
+@import "../../system/lib/bootstrap/less/mixins.less";
+@import "cerulean/bootswatch.less";
+@import "../../system/lib/bootstrap-social/bootstrap-social.less";
+
+html,
+body {
+    overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+body {
+    padding-top: 70px;
+}
+#nav {}
+.navbar-right { 
+    > li.signals{
+        visibility: hidden;
+        width:100px;
+    }
+    > li.signals .badge{
+        background-color: @label-danger-bg !important;
+    }
+}
+.navbar {
+    min-height: @navbar-height; // Ensure a navbar always shows (e.g., without a .navbar-brand in collapsed mode)
+    margin-bottom: @navbar-margin-bottom;
+    border: 0;
+}
+.navbar-nav {
+  margin: 0;
+  padding: 0;
+}
+.navbar-brand {
+    padding: 0;
+}
+#footer {
+    padding:40px 0;
+    color: #A9A7AF;
+    text-align: center;
+    background-color: #42454D;
+    border-top: 1px solid #e5e5e5;
+}
+#warning{
+    text-align: center;
+}
+/* Blog */
+#article-list{
+    margin-top:10px;
+    margin-bottom: 10px;
+    > .pagination{
+
+    }
+    > .pagination a{
+
+    }
+    > .article{
+      margin-bottom: 10px;
+    }
+    > .last{
+      margin-bottom: 0;
+    }
+    > .article header.article-header{
+       
+    }
+    > .article header.article-header img{
+       
+    }
+    > .article header.article-header h1{
+        padding:0;
+        margin:0;
+        text-indent: 1em;
+        line-height: 100px;
+    }
+    > .article header.article-header a{
+        
+    }
+    > .article .article-body{
+        padding-top:10px;
+    }
+    > .article .article-body ul.article-meta{
+        padding:0;
+        margin:0;
+        list-style: none;
+    }
+    > .article .article-body ul.article-meta li{
+        display:inline;
+        font-size: @font-size-h5;
+    }
+    > .article .article-body ul.article-meta li span a{
+        cursor: pointer;
+    }
+    > .article .article-body ul.article-meta li.article-tags i:after{
+        content:" ";
+    }
+    > .article .article-body div.article-content{
+        font-size: @font-size-h3;
+    }
+    > .article .article-footer{
+       
+    }
+    @media (max-width: @grid-float-breakpoint-max) {
+        > .article header.article-header > a{
+            float: none;
+            display: none;
+        }
+    }
+}
+#article-details{
+    margin-top:10px;
+    margin-bottom: 10px;
+    > .pagination{
+
+    }
+    > .pagination a{
+        
+    }
+    > .article{
+     
+    }
+    > .article header.article-header{
+       
+    }
+    > .article header.article-header img{
+       
+    }
+    > .article header.article-header h1{
+        padding:0;
+        margin:0;
+        text-indent: 1em;
+        line-height: 100px;
+    }
+    > .article header.article-header a{
+        
+    }
+    > .article .article-body{
+        padding-top:10px;
+    }
+    > .article .article-body ul.article-meta{
+        padding:0;
+        margin:0;
+        list-style: none;
+    }
+    > .article .article-body ul.article-meta li{
+       display:inline;
+       font-size: @font-size-h5;
+    }
+    > .article .article-body ul.article-meta li.article-tags i:after{
+       content:" ";
+    }
+    > .article .article-body div.article-content{
+       font-size: @font-size-h4;
+    }
+    @media (max-width: @grid-float-breakpoint-max) {
+        > .article header.article-header > a{
+            float: none;
+            display: none;
+        }
+    }
+}
+.comment-box{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    > h5{}
+    > h6{
+        color:@gray-dark;
+    }
+}
+.comment-box > article{
+    padding-left: 5px;
+    > h5{}
+    > h6{
+        color:@gray-dark;
+    }
+}
+.ui-view-container {
+    min-height:100px;
+    position: relative;
+}
+div.animation.ng-enter, div.animation.ng-leave {
+    position: absolute;
+    left: 0;
+    right: 0;
+    -webkit-transition:all .5s ease-in-out;
+    -moz-transition:all .5s ease-in-out;
+    -o-transition:all .5s ease-in-out;
+    transition:all .5s ease-in-out;
+}
+
+div.animation.ng-enter {
+    opacity: 0;
+    -webkit-transform:scale3d(0.5, 0.5, 0.5);
+    -moz-transform:scale3d(0.5, 0.5, 0.5);
+    transform:scale3d(0.5, 0.5, 0.5);
+}
+
+div.animation.ng-enter-active {
+    opacity: 1;
+    -webkit-transform:scale3d(1, 1, 1);
+    -moz-transform:scale3d(1, 1, 1);
+    transform:scale3d(1, 1, 1);
+}
+
+div.animation.ng-leave {
+    opacity: 1; 
+    -webkit-transform:translate3d(0, 0, 0);
+    -moz-transform:translate3d(0, 0, 0);
+    transform:translate3d(0, 0, 0);
+}
+
+div.animation.ng-leave-active {
+    opacity: 0;
+    -webkit-transform:translate3d(100px, 0, 0);
+    -moz-transform:translate3d(100px, 0, 0);
+    transform:translate3d(100px, 0, 0);
+}  

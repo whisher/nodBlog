@@ -12,7 +12,7 @@ var fs = require('fs'),
     Comment = mongoose.model('Comment'),
     _ = require('lodash');
 
-var uploadDir = path.normalize(__dirname + '/../../../public/upload');
+var uploadDir = path.normalize(__dirname + '/../../../public/system/upload');
 
 /**
  * Find post by id

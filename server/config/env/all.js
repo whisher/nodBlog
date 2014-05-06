@@ -11,7 +11,7 @@ var path = require('path'),
 module.exports = {
     root: rootPath,
     sroot: serverPath,
-    proot: publicPath,
+    proot:  (process.env.NODE_ENV === 'production') ? publicPath + '/dist' : publicPath ,
     tmp :tmp,
     port: process.env.PORT || 3000,
     db: process.env.MONGOHQ_URL,

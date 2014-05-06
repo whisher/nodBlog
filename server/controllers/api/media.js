@@ -12,7 +12,7 @@ var fs = require('fs'),
     im = require('imagemagick'),
     _ = require('lodash');
     
-var uploadDir = path.normalize(__dirname + '/../../../public/upload');
+var uploadDir = path.normalize(__dirname + '/../../../public/system/upload');
 
 /**
  * Find media by id

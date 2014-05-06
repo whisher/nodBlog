@@ -2,7 +2,7 @@
 
 module.exports = {
     distFolder:'',
-    db: "mongodb://localhost/nodeblog-dev-test",
+    db: "mongodb://localhost/test-nodblog",
     app: {
         name: "ilwebdifabio"
     }
