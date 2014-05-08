@@ -6,7 +6,7 @@
         $stateProvider
         .state('media', {
             url: '/media',
-            templateUrl:'public/admin/media/media.tpl.html',
+            templateUrl:'/public/admin/media/media.tpl.html',
             resolve: {
                 medias: function(Media){
                     return Media.all();
@@ -16,12 +16,12 @@
         })
         .state('media_create', {
             url: '/media/create',
-            templateUrl: 'public/admin/media/create.tpl.html',
+            templateUrl: '/public/admin/media/create.tpl.html',
             controller: 'MediaCreateCtrl'
         })
         .state('media_edit', {
             url: '/media/edit/:id',
-            templateUrl:'public/admin/media/edit.tpl.html',
+            templateUrl:'/public/admin/media/edit.tpl.html',
             resolve: {
                 media: function(Media, $stateParams){
                     return Media.one($stateParams.id);
@@ -31,7 +31,7 @@
         })
         .state('media_view', {
             url: '/media/view/:id',
-            templateUrl:'public/admin/media/view.tpl.html',
+            templateUrl:'/public/admin/media/view.tpl.html',
             resolve: {
                 media: function(Media, $stateParams){
                     return Media.one($stateParams.id);
@@ -41,7 +41,7 @@
         })
         .state('media_delete', {
             url: '/media/delete/:id',
-            templateUrl: 'public/admin/media/delete.tpl.html',
+            templateUrl: '/public/admin/media/delete.tpl.html',
             resolve: {
                 media: function(Media,$stateParams){
                     return Media.one($stateParams.id);

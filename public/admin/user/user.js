@@ -6,7 +6,7 @@
         $stateProvider
         .state('user', {
             url: '/user',
-            templateUrl: 'public/admin/user/user.tpl.html',
+            templateUrl: '/public/admin/user/user.tpl.html',
             resolve: {
                 users: function(User){
                     return User.all();
@@ -16,7 +16,7 @@
         })
         .state('user_create', {
             url: '/user/create',
-            templateUrl: 'public/admin/user/form.tpl.html',
+            templateUrl: '/public/admin/user/form.tpl.html',
             resolve: {
                 users: function(User){
                     return User.all();
@@ -26,7 +26,7 @@
         })
         .state('user_edit', {
             url: '/user/edit/:id',
-            templateUrl:'public/admin/user/form.tpl.html',
+            templateUrl:'/public/admin/user/form.tpl.html',
             resolve: {
                 user: function(User, $stateParams){
                     return User.one($stateParams.id);
@@ -36,7 +36,7 @@
         })
         .state('user_delete', {
             url: '/user/delete/:id',
-            templateUrl: 'public/admin/user/delete.tpl.html',
+            templateUrl: '/public/admin/user/delete.tpl.html',
             resolve: {
                 user: function(User,$stateParams){
                     return User.one($stateParams.id);
@@ -46,7 +46,7 @@
         })
         .state('user_profile', {
             url: '/user/profile/:id',
-            templateUrl: 'public/admin/user/profile.tpl.html',
+            templateUrl: '/public/admin/user/profile.tpl.html',
             resolve: {
                 user: function(User,$stateParams){
                     return User.one($stateParams.id);

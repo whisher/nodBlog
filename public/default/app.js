@@ -4,7 +4,7 @@
     .constant('BODY_PADDING_TOP',70)
     .constant('PREFIX_LOCAL_STORAGE','xiferpgolbdon')
     .config(function(PREFIX_LOCAL_STORAGE,$locationProvider,$urlRouterProvider,localStorageServiceProvider,$uiViewScrollProvider) {
-        $urlRouterProvider.otherwise('/');
+        //$urlRouterProvider.otherwise('/');
         $locationProvider.html5Mode(true);
         localStorageServiceProvider.setPrefix(PREFIX_LOCAL_STORAGE);
         $uiViewScrollProvider.useAnchorScroll();
@@ -22,10 +22,6 @@
                     WindowUtils.setTitle(title);
                 }
             }
-        });
-        $rootScope.$on('$viewContentLoaded', function(evt) {
-            //console.log(evt);
-            $rootScope.htmlReady();
         });
     })
     .factory('WindowUtils', function($window) {
@@ -70,9 +66,6 @@
             approved_comment:'blog_details({id:signal.post_id,slug:signal.post_slug,scrollTo:signal.id})',
             replied_comment:'blog_details({id:signal.post_id,slug:signal.post_slug,scrollTo:signal.id})'
         };
-    /* $scope.signals.push({_id:'534f9ccb520daa8c167b3431',slug:'setting-up-email-for-my-domain','label':'added_post',title:'Ah cje bel'});
-        $scope.signals.push({_id:'534f9ccb520daa8c167b3431',slug:'setting-up-email-for-my-domain','label':'approved_comment',title:'Ah cje bel'});
-        $scope.signals.push({_id:'534f9ccb520daa8c167b3431',slug:'setting-up-email-for-my-domain','label':'replied_comment',title:'Ah cje bel'});*/
     })
     .controller('viewCtrl', function ($scope,$rootScope) {
         $scope.$on('$stateChangeSuccess', function (event, toState) {

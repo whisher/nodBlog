@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html id="ng-app" xmlns:ng="http://angularjs.org" lang="it">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <title>ilwebdifabio</title>
+        <meta name="title" content="nodBlog login">
+        <meta name="description" content="nodBlog login">
+        <meta name="author" content="whisher">
+        <meta name="Copyright" content="Copyright  2012. All Rights Reserved">
+        <link rel="shortcut icon" href="favicon.ico">
+        <link rel="bookmark" href="/public/favicon.ico">
+        {% for file in assets.css %}
+            <link rel="stylesheet" href="/{{file}}">
+        {% endfor %}
+        <!--[if lt IE 9]> <script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script> <![endif]-->
+        <!--[if lt IE 9]> <script src='//cdnjs.cloudflare.com/ajax/libs/json3/3.3.0/json3.min.js'></script> <![endif]-->
+    </head>
+    <body>
+        <div data-ng-controller="MainCtrl" class="container">
+            <form role="form" name="form" data-auth="" data-ng-submit="getAuth()" class="form-signin">  
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <input type="text" name="email" placeholder="Email address" required="required" autofocus="autofocus" data-ng-model="user.email" class="form-control">
+                <input type="password" name="password" placeholder="Password" required="required" data-ng-model="user.password" class="form-control">
+                <label class="checkbox">
+                    <input type="checkbox" value="remember-me">Remember me
+                </label>
+                <input type="submit" value="Sign in" data-ng-disabled="form.$invalid" class="btn btn-lg btn-primary btn-block">
+            </form>
+        </div>
+        
+        {% for file in assets.js %}
+            <script type="text/javascript" src="/{{file}}"></script>
+        {% endfor %}
+
+        {% if (process.env.NODE_ENV == 'development') %}
+            <script type="text/javascript" src="{{'http://' + req.host + ':35729/livereload.js'}}"></script>
+        {% endif %}
+    </body>
+</html>

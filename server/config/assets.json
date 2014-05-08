@@ -1,65 +1,92 @@
 {
-    "css": {
-        "app":{
-            "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css":"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css",
-            "public/dist/default/assets/css/dist.min.css": [
-            "public/default/assets/css/*.css"
+    "admin":{
+        "css":{
+            "//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css":"//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css",
+            "public/build/admin/assets/css/dist.min.css": [
+                "public/admin/assets/css/bootstrap.css",
+                "public/admin/assets/css/theme.css",
+                "public/system/lib/Jcrop/css/jquery.Jcrop.min.css"
             ]
         },
-        "login":{
-            "public/src/dist/login/css/dist.min.css": [
-            "public/src/assets/default/css/*.css"
-            ]
-        },
-        "admin":{
-            "public/src/dist/admin/css/dist.min.css": [
-            "public/src/assets/admin/css/*.css"
+        "js": {
+            "//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js":"//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
+            "public/build/admin/js/vendor.min.js": [
+                "public/system/lib/jquery/jquery.js",
+                "public/system/lib/Jcrop/js/jquery.Jcrop.min.js",
+                "public/system/lib/bootstrap/dist/js/bootstrap.js",
+                "public/system/lib/lodash/dist/lodash.js",
+                "public/system/lib/angular/angular.js",
+                "public/system/lib/angular-ui-router/release/angular-ui-router.js",
+                "public/system/lib/restangular/dist/restangular.js",
+                "public/system/lib/angular-bootstrap/ui-bootstrap-tpls.js",
+                "public/system/lib/ng-file-upload/angular-file-upload-html5-shim.js",
+                "public/system/lib/ng-file-upload/angular-file-upload.js",
+                "public/system/lib/angular-cookies/angular-cookies.js"
+            ],
+            "public/build/admin/js/scripts.min.js": [
+                "public/system/common/services/base.js",
+                "public/system/common/services/socket.js",
+                "public/system/common/ui/paginators/elastic.js",
+                "public/admin/index/index.js",
+                "public/admin/post/post.js",
+                "public/admin/media/media.js",
+                "public/admin/user/user.js",
+                "public/admin/contact/contact.js",
+                "public/admin/app.js",
+                "public/admin/init.js"
             ]
         }
     },
-    "js": {
-        "app":{
-            "public/build/js/dist.min.js": [
-            "public/system/lib/angular/angular.js",
-            "public/system/lib/angular-cookies/angular-cookies.js",
-            "public/system/lib/angular-resource/angular-resource.js",
-            "public/system/lib/angular-ui-router/release/angular-ui-router.js",
-            "public/system/lib/angular-bootstrap/ui-bootstrap.js",
-            "public/system/lib/angular-bootstrap/ui-bootstrap-tpls.js",
-            "public/init.js",
-            "public/*/*.js",
-            "public/*/*/*.js",
-            "!public/build/**"
+    "app":{
+        "css":{
+            "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css":"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css",
+            "public/build/default/assets/css/dist.min.css": [
+                "public/default/assets/css/bootstrap.css",
+                "public/default/assets/css/theme.css"
             ]
         },
-        "login":{
-            "public/build/js/dist.min.js": [
-            "public/system/lib/angular/angular.js",
-            "public/system/lib/angular-cookies/angular-cookies.js",
-            "public/system/lib/angular-resource/angular-resource.js",
-            "public/system/lib/angular-ui-router/release/angular-ui-router.js",
-            "public/system/lib/angular-bootstrap/ui-bootstrap.js",
-            "public/system/lib/angular-bootstrap/ui-bootstrap-tpls.js",
-            "public/init.js",
-            "public/*/*.js",
-            "public/*/*/*.js",
-            "!public/build/**"
+        "js": {
+            "public/build/default/js/vendor.min.js": [
+                "public/system/lib/lodash/dist/lodash.js",
+                "public/system/lib/jquery/jquery.js",
+                "public/system/lib/bootstrap/dist/js/bootstrap.js",
+                "public/system/lib/angular/angular.js",
+                "public/system/lib/angular-ui-router/release/angular-ui-router.js",
+                "public/system/lib/angular-animate/angular-animate.js",
+                "public/system/lib/restangular/dist/restangular.js",
+                "public/system/lib/angular-sanitize/angular-sanitize.js",
+                "public/system/lib/angular-local-storage/angular-local-storage.js",
+                "public/system/lib/angular-bootstrap/ui-bootstrap-tpls.js",
+                "public/system/lib/angular-seo/angular-seo.js"
+            ],
+            "public/build/default/js/scripts.min.js": [
+                "public/system/common/services/base.js",
+                "public/system/common/services/socket.js",
+                "public/system/common/ui/paginators/simple.js",
+                "public/default/site/site.js",
+                "public/default/blog/blog.js",
+                "public/default/app.js",
+                "public/default/init.js"
+            ]
+        }
+    },
+    "login":{
+        "css":{
+            "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css":"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css",
+            "public/build/login/assets/css/dist.min.css": [
+                "public/login/assets/css/bootstrap.css",
+                "public/login/assets/css/theme.css"
             ]
         },
-        "admin":{
-            "public/build/js/dist.min.js": [
-            "public/system/lib/angular/angular.js",
-            "public/system/lib/angular-cookies/angular-cookies.js",
-            "public/system/lib/angular-resource/angular-resource.js",
-            "public/system/lib/angular-ui-router/release/angular-ui-router.js",
-            "public/system/lib/angular-bootstrap/ui-bootstrap.js",
-            "public/system/lib/angular-bootstrap/ui-bootstrap-tpls.js",
-            "public/init.js",
-            "public/*/*.js",
-            "public/*/*/*.js",
-            "!public/build/**"
+        "js": {
+            "public/build/login/js/vendor.min.js": [
+                "public/system/lib/jquery/jquery.js",
+                "public/system/lib/angular/angular.js"
+            ],
+            "public/build/login/js/scripts.min.js": [
+                "public/login/app.js",
+                "public/login/init.js"
             ]
         }
     }
 }
-

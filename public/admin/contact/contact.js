@@ -6,7 +6,7 @@
         $stateProvider
         .state('contact', {
             url: '/contact',
-            templateUrl: 'public/admin/contact/contact.tpl.html',
+            templateUrl: '/public/admin/contact/contact.tpl.html',
             resolve: {
                 contacts: function(Contact){
                     return Contact.all();
@@ -16,7 +16,7 @@
         })
         .state('contact_view', {
             url: '/contact/view/:id',
-            templateUrl:'public/admin/contact/view.tpl.html',
+            templateUrl:'/public/admin/contact/view.tpl.html',
             resolve: {
                 contact: function(Contact, $stateParams){
                     return Contact.one($stateParams.id);

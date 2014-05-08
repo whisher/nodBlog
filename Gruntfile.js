@@ -1,34 +1,60 @@
 'use strict';
 
+var  _ = require('lodash');
+
 var paths = {
-    js: ['public/**/*.js','!public/system/lib/**'],
+    js: ['Gruntfile.js','public/**/*.js','!public/system/lib/**'],
     html: ['public/**/views/**/*.html', 'server/views/**/*.html'],
     css: ['public/**/css/**/*.css', '!public/system/lib/**']
 };
 
 
+
 module.exports = function(grunt) {
+    function getLoginAssets(){
+        var scripts = {};
+        var assets = grunt.file.readJSON('server/config/assets.json');
+        _.each(['admin', 'app', 'login'], function (module,index){
+            scripts[module] = {};
+            _.each(assets[module], function (current, type) {
+                scripts[module][type] = {};
+                _.each(current, function (value, key) {
+                    if (_.isString(key)) {
+                        var regex = new RegExp('^(http://|https://|//)');
+                        if (!regex.test(key)) {
+                            scripts[module][type][key] = {};
+                            scripts[module][type][key] = current[key];
+                            //scripts[module][type][key].push(current[key]);
+                        }
+                    }
+                });
+            });
+        });
+        return scripts;
+    }
+    
     // Project configuration.
     grunt.initConfig({
         
         // This line makes your node configurations available for use
         pkg: grunt.file.readJSON('package.json'),
+        assets:getLoginAssets(),
         banner:
         '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
         '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
         ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>;\n' +
         ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
-        dist: 'public/dist',
+        dist: 'public/build',
         lib: 'public/system/lib',
         modulesDev:{
             admin:'public/admin',
             app:'public/default',
-            login:'public/login' 
+            login:'public/login'
         },
         modulesDist:{
-            admin:'public/dist/admin',
-            app:'public/dist/default',
-            login:'public/dist/login' 
+            admin:'<%= dist %>/admin',
+            app:'<%= dist %>/default',
+            login:'<%= dist %>/login'
         },
         jshint: {
             all: {
@@ -40,13 +66,48 @@ module.exports = function(grunt) {
         },
         clean: ['<%= dist %>/*','<%= modulesDev.app %>/assets/css','<%= modulesDev.app %>/assets/fonts','<%= modulesDev.admin %>/assets/css','<%= modulesDev.admin %>/assets/fonts','<%= modulesDev.login %>/assets/css','<%= modulesDev.login %>/assets/fonts'],
         concat:{
-           app:{
+            adminCss:{
                 options: {
                     banner: '<%= banner %>'
                 },
-                src:['<%= src.jsModules.app %>','<%= src.jsModules.common %>','<%= distdir %>/templates/app.js','<%= distdir %>/templates/common.js'],
-                dest:'<%= distdir %>/default/<%= pkg.name %>.js'
-            } 
+                files: '<%= assets.admin.css %>',
+                nonull: true
+            },
+            adminJs:{
+                options: {
+                    banner: '<%= banner %>'
+                },
+                files: '<%= assets.admin.js %>',
+                nonull: true
+            },
+            appCss:{
+                options: {
+                    banner: '<%= banner %>'
+                },
+                files: '<%= assets.app.css %>',
+                nonull: true
+            },
+            appJs:{
+                options: {
+                    banner: '<%= banner %>'
+                },
+                files: '<%= assets.app.js %>',
+                nonull: true
+            },
+            loginCss:{
+                options: {
+                    banner: '<%= banner %>'
+                },
+                files: '<%= assets.login.css %>',
+                nonull: true
+            },
+            loginJs:{
+                options: {
+                    banner: '<%= banner %>'
+                },
+                files: '<%= assets.login.js %>',
+                nonull: true
+            }
         },
         copy: {
             fontsAdmin: {
@@ -101,15 +162,15 @@ module.exports = function(grunt) {
             },
             compileThemeApp: {
                 options: {
-                  banner: '<%= banner %>',
-                  strictMath: true,
-                  sourceMap: true,
-                  outputSourceFiles: true,
-                  sourceMapURL: 'theme.css.map',
-                  sourceMapFilename: '<%= modulesDev.app %>/assets/css/theme.css.map'
+                    banner: '<%= banner %>',
+                    strictMath: true,
+                    sourceMap: true,
+                    outputSourceFiles: true,
+                    sourceMapURL: 'theme.css.map',
+                    sourceMapFilename: '<%= modulesDev.app %>/assets/css/theme.css.map'
                 },
                 files: {
-                  '<%= modulesDev.app %>/assets/css/theme.css': '<%= modulesDev.app %>/less/theme.less'
+                    '<%= modulesDev.app %>/assets/css/theme.css': '<%= modulesDev.app %>/less/theme.less'
                 }
             },
             bootstrapAdmin: {
@@ -126,15 +187,15 @@ module.exports = function(grunt) {
             },
             compileThemeAdmin: {
                 options: {
-                  banner: '<%= banner %>',
-                  strictMath: true,
-                  sourceMap: true,
-                  outputSourceFiles: true,
-                  sourceMapURL: 'theme.css.map',
-                  sourceMapFilename: '<%= modulesDev.admin %>/assets/css/theme.css.map'
+                    banner: '<%= banner %>',
+                    strictMath: true,
+                    sourceMap: true,
+                    outputSourceFiles: true,
+                    sourceMapURL: 'theme.css.map',
+                    sourceMapFilename: '<%= modulesDev.admin %>/assets/css/theme.css.map'
                 },
                 files: {
-                  '<%= modulesDev.admin %>/assets/css/theme.css': '<%= modulesDev.admin %>/less/theme.less'
+                    '<%= modulesDev.admin %>/assets/css/theme.css': '<%= modulesDev.admin %>/less/theme.less'
                 }
             },
             bootstrapLogin: {
@@ -151,26 +212,26 @@ module.exports = function(grunt) {
             },
             compileThemeLogin: {
                 options: {
-                  banner: '<%= banner %>',
-                  strictMath: true,
-                  sourceMap: true,
-                  outputSourceFiles: true,
-                  sourceMapURL: 'theme.css.map',
-                  sourceMapFilename: '<%= modulesDev.login %>/assets/css/theme.css.map'
+                    banner: '<%= banner %>',
+                    strictMath: true,
+                    sourceMap: true,
+                    outputSourceFiles: true,
+                    sourceMapURL: 'theme.css.map',
+                    sourceMapFilename: '<%= modulesDev.login %>/assets/css/theme.css.map'
                 },
                 files: {
-                  '<%= modulesDev.login %>/assets/css/theme.css': '<%= modulesDev.login %>/less/theme.less'
+                    '<%= modulesDev.login %>/assets/css/theme.css': '<%= modulesDev.login %>/less/theme.less'
                 }
             }
         }
     });
-    
+    //console.log(grunt.config('assets').login.js);
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
 
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
-    
-    grunt.registerTask('default', ['jshint','clean','less','copy']);
+    //grunt.registerTask('default', ['jshint','clean','less','copy','concat']);
+    grunt.registerTask('default', ['jshint','clean','less','copy','concat']);
 };
 

@@ -10,14 +10,18 @@ var express = require('express'),
     protectJson = require('./protectJson'),
     xsrf = require('./xsrf'),
     config = require('./config'),
-    assetmanager = require('assetmanager');
+    swig = require('swig');
 
 module.exports = function(app,passport,db) {
     app.set('showStackError', true);
 
+
     //Prettify HTML
     app.locals.pretty = true;
 
+    // cache=memory or swig dies in NODE_ENV=production
+    app.locals.cache = 'memory';
+    
     //Json vulnerability protection
     app.use(protectJson);
     
@@ -34,13 +38,14 @@ module.exports = function(app,passport,db) {
         app.use(express.logger('dev'));
     }
 
-    //app.engine('html', 'swig');
+    // assign the template engine to .html files
+    app.engine('html', swig.renderFile);
 
     // set .html as the default extension
-   // app.set('view engine', 'html');
-    //Set views path, template engine and default layout
+    app.set('view engine', 'html');
+
+    // Set views path, template engine and default layout
     app.set('views', config.sroot + '/views');
-    app.set('view engine', 'jade');
 
     //Enable jsonp
     app.enable("jsonp callback");
@@ -90,27 +95,32 @@ module.exports = function(app,passport,db) {
 
         
         
-        //Assume "not found" in the error msgs is a 404. this is somewhat silly, but valid, you can do whatever you like, set properties, use instanceof etc.
-        app.use(function(err, req, res, next) {
-            //Treat as 404
-            if (~err.message.indexOf('not found')) return next();
+        // Assume "not found" in the error msgs is a 404. this is somewhat
+            // silly, but valid, you can do whatever you like, set properties,
+            // use instanceof etc.
+            app.use(function(err, req, res, next) {
+                // Treat as 404
+                if (~err.message.indexOf('not found')) return next();
 
-            //Log it
-            console.error(err.stack);
+                // Log it
+                console.error(err.stack);
 
-            //Error page
-            res.status(500).render('500', {
-                error: err.stack
+                // Error page
+                res.status(500).render('500', {
+                    error: err.stack
+                });
             });
-        });
 
-        //Assume 404 since no middleware responded
-        app.use(function(req, res, next) {
-            res.status(404).render('404', {
-                url: req.originalUrl,
-                error: 'Not found'
+            // Assume 404 since no middleware responded
+            app.use(function(req, res) {
+                var assetmanager = require(config.sroot+'/utils/assetsmanager')(config.sroot,'app');
+                res.status(404).render('404', {
+                    url: req.originalUrl,
+                    error: 'Not found',
+                    appTitle:'ilwebdifabio',
+                    assets:assetmanager.getCurrentAssets()
+                });
             });
-        });
 
     });
 };

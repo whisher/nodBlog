@@ -3,11 +3,13 @@ npm-debug.log
 nbproject/
 node_modules/
 server/tmp
-public/dist
+public/build
 public/system/lib
-public/upload
-public/src/assets/admin/css
-public/src/assets/admin/fonts
-public/src/assets/default/css
-public/src/assets/default/fonts
+public/system/upload
+public/admin/assets/css
+public/admin/assets/fonts
+public/default/assets/css
+public/default/assets/fonts
+public/login/assets/css
+public/login/assets/fonts
 

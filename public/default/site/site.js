@@ -6,7 +6,7 @@
         $stateProvider
         .state('index', {
             url: '/',
-            templateUrl: 'public/default/site/site.tpl.html',
+            templateUrl: '/public/default/site/site.tpl.html',
             controller: 'IndexCtrl'
         });
     })

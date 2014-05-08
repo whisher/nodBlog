@@ -6,7 +6,7 @@
         $stateProvider
         .state('post', {
             url: '/post',
-            templateUrl: 'public/admin/post/post.tpl.html',
+            templateUrl: '/public/admin/post/post.tpl.html',
             resolve: {
                 posts: function(Post){
                     return Post.all();
@@ -16,12 +16,12 @@
         })
         .state('post_create', {
             url: '/post/create',
-            templateUrl: 'public/admin/post/form.tpl.html',
+            templateUrl: '/public/admin/post/form.tpl.html',
             controller: 'PostCreateCtrl'
         })
         .state('post_edit', {
             url: '/post/edit/:id',
-            templateUrl:'public/admin/post/form.tpl.html',
+            templateUrl:'/public/admin/post/form.tpl.html',
             resolve: {
                 post: function(Post, $stateParams){
                     return Post.one($stateParams.id);
@@ -31,7 +31,7 @@
         })
         .state('post_delete', {
             url: '/post/delete/:id',
-            templateUrl: 'public/admin/post/delete.tpl.html',
+            templateUrl: '/public/admin/post/delete.tpl.html',
             resolve: {
                 post: function(Post,$stateParams){
                     return Post.one($stateParams.id);
@@ -41,7 +41,7 @@
         })
         .state('post_comments', {
             url: '/post/comments/:id/:slug',
-            templateUrl:'public/admin/post/comments.tpl.html',
+            templateUrl:'/public/admin/post/comments.tpl.html',
             resolve: {
                 comments: function(Post,$stateParams){
                     return Post.commentsByPostId($stateParams.id);

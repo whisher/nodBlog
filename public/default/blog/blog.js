@@ -6,7 +6,7 @@
         $stateProvider
         .state('blog', {
             url: '/blog',
-            templateUrl: 'public/default/blog/blog.tpl.html',
+            templateUrl: '/public/default/blog/blog.tpl.html',
             resolve: {
                 posts: function(Post){
                     return Post.all();
@@ -16,7 +16,7 @@
         })
         .state('blog_details', {
             url: '/blog/:id/:slug?scrollTo',
-            templateUrl: 'public/default/blog/details.tpl.html',
+            templateUrl: '/public/default/blog/details.tpl.html',
             resolve: {
                 current: function(Post,$stateParams){
                     return Post.one($stateParams.id);
@@ -35,7 +35,7 @@
         })
         .state('blog_tag', {
             url: '/blog/tag/:tag',
-            templateUrl: 'public/default/blog/blog.tpl.html',
+            templateUrl: '/public/default/blog/blog.tpl.html',
             resolve: {
                 post: function(Post,$stateParams){
                     return Post.one($stateParams.tag);

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html id="ng-app" xmlns:ng="http://angularjs.org" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="robots" content="noindex,nofollow">
+        <meta name="fragment" content="!">
+        <title>ilwebdifabio Admin</title>
+        <meta name="title" content="nodBlog">
+        <meta name="description" content="nodBlog">
+        <meta name="author" content="Fabio Bedini aka Whisher">
+        <meta name="Copyright" content="&amp;#169; 2014 All Rights Reserved">
+        <link rel="author" href="/public/humans.txt">
+        <link rel="shortcut icon" href="/public/favicon.ico" type="image/x-icon">
+        <link rel="bookmark" href="/public/favicon.ico">
+        {% for file in assets.css %}
+        <link rel="stylesheet" href="/{{file}}">
+        {% endfor %}
+        <!--[if lt IE 9]> <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script> <![endif]-->
+        <!--[if lt IE 9]> <script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.0/json3.min.js"></script> <![endif]-->
+        <script>
+            var nB = nB || {};
+            nB.user = {"id":"5367cd3eb4f0c85823048314","name":"User Admin","email":"info@ilwebdifabio.it","role":"admin"};
+        </script>
+    </head>
+    <body data-ng-controller="MainCtrl">
+        <div id="wrap">
+            <div role="navigation" class="navbar navbar-default navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header"><a href="/" target="_blank" class="navbar-brand">Nodblog</a><a href="#" data-toggle="collapse" data-target="#nb-navbar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar">    </span></a></div>
+                    <div id="nb-navbar-collapse" class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li data-ng-class="{ active: $state.includes('index') }"><a data-ui-sref="index"><i class="glyphicon glyphicon-home"></i>
+                                    <div class="span">Home</div></a></li>
+                            <li data-ng-class="{ active: $state.includes('post') }"><a data-ui-sref="post"><i class="glyphicon glyphicon-pencil"></i>
+                                    <div class="span">Post</div></a></li>
+                            <li data-ng-class="{ active: $state.includes('media') }"><a data-ui-sref="media"><i class="glyphicon glyphicon-pushpin"></i>
+                                    <div class="span">Media</div></a></li>
+                            <li data-ng-if="currentUser.isAdmin()" data-ng-class="{ active: $state.includes('user') }"><a data-ui-sref="user"><i class="glyphicon glyphicon-user"></i>
+                                    <div class="span">User</div></a></li>
+                            <li data-ng-if="currentUser.isAdmin()" data-ng-class="{ active: $state.includes('contact') }"><a data-ui-sref="contact"><i class="glyphicon glyphicon-envelope"></i>
+                                    <div class="span">Contact</div></a></li>
+                            <li class="dropdown"><a class="dropdown-toggle"><i class="glyphicon glyphicon-plus"></i>
+                                    <div class="span">Add</div></a>
+                                <ul class="dropdown-menu">
+                                    <li data-ng-repeat="choice in items"><a data-ui-sref="{{choice.route}}">{{choice.title}}</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="signals"><a href="#"><span data-ng-bind="num" data-ng-class="isVisited()?'label-danger':'label-default'" data-ng-click="update()" class="label">0</span></a></li>
+                            <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="glyphicon glyphicon-user"></i><span data-ng-bind="currentUser.user.name"></span><b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a data-ui-sref="user_profile({ id: currentUser.user.id })">My Profile</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="/signout">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div data-ui-view></div>
+            </div>
+        </div>
+        <div id="footer">
+            <div class="container">
+                <p>&copy; nodBlog 2014</p>
+            </div>
+        </div>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+        {% for file in assets.js %}
+            <script type="text/javascript" src="/{{file}}"></script>
+        {% endfor %}
+
+        {% if (process.env.NODE_ENV == 'development') %}
+            <script type="text/javascript" src="{{'http://' + req.host + ':35729/livereload.js'}}"></script>
+        {% endif %}
+
+    </body>
+</html>
