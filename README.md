@@ -29,10 +29,9 @@ $ npm install -g bower
     cd nodBlog
     npm install
     node init.js
-    npm install -g grunt-cli
-    npm install -g bower
-    bower install
-    grunt my
+    grunt tpl
     grunt
+    node phantomjs
+   
   
 

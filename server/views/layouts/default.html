@@ -42,18 +42,18 @@
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-            ga('create', 'UA-XXXXX-X');
+            ga('create', 'UA-51035980-1', 'ilwebdifabio.it');
             ga('send', 'pageview');
         </script>
         <!--[if lt IE 9]> <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script> <![endif]-->
         <!--[if lt IE 9]> <script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.0/json3.min.js"></script> <![endif]-->
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         {% for file in assets.js %}
-        <script type="text/javascript" src="/[[file]]"></script>
+            <script type="text/javascript" src="/[[file]]"></script>
         {% endfor %}
 
         {% if (process.env.NODE_ENV == 'development') %}
-        <script type="text/javascript" src="[['http://' + req.host + ':35729/livereload.js']]"></script>
+            <script type="text/javascript" src="[['http://' + req.host + ':35729/livereload.js']]"></script>
         {% endif %}
     </body>
 </html>
