@@ -45,21 +45,21 @@ var ContactSchema = new Schema({
  * Validations
  */
 ContactSchema.path('username').validate(function(username) {
-    if(typeof username !== "undefined" && username !== null){
-        return username.length > 0
+    if(typeof username !== 'undefined' && username !== null){
+        return username.length > 0;
     }
     return false;
 }, 'Username cannot be empty');
 
 ContactSchema.path('email').validate(function(email) {
-    if(typeof email !== "undefined" && email !== null){
+    if(typeof email !== 'undefined' && email !== null){
         return email.length;
     }
     return false;
 }, 'Email cannot be empty');
 
 ContactSchema.path('email').validate(function(email) {
-    if(typeof email !== "undefined" && email !== null){
+    if(typeof email !== 'undefined' && email !== null){
         var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         return emailRegex.test(email);
     }
@@ -67,8 +67,8 @@ ContactSchema.path('email').validate(function(email) {
 }, 'The email is not a valid email');
 
 ContactSchema.path('msg').validate(function(msg) {
-    if(typeof msg !== "undefined" && msg !== null){
-        return msg.length > 0
+    if(typeof msg !== 'undefined' && msg !== null){
+        return msg.length > 0;
     }
     return false;
 }, 'The message cannot be empty');

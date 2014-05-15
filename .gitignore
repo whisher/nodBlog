@@ -4,6 +4,7 @@ nbproject/
 node_modules/
 server/tmp
 public/build
+public/default/snapshots
 public/system/lib
 public/system/upload
 public/admin/assets/css

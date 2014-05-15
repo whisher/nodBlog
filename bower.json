@@ -11,12 +11,10 @@
     "ng-file-upload": "~1.2.4",
     "angular-sanitize": "~1.2.10",
     "angular-local-storage": "git://github.com/grevory/angular-local-storage.git",
-    "angular-cookies": "latest",
     "angular-mocks": "latest",
     "angular-animate": "~1.2.14",
     "font-awesome": "~4.0.3",
     "bootstrap-social": "~4.2.1",
-    "Jcrop": "https://github.com/tapmodo/Jcrop.git#master",
-    "angular-seo": "*"
+    "Jcrop": "https://github.com/tapmodo/Jcrop.git#master"
   }
 }

@@ -9,10 +9,7 @@ var express = require('express'),
     logger = require('mean-logger');
 
 
-/**
- * Main application entry file.
- * Please note that the order of loading is important.
- */
+
 
 //Load configurations
 //Set the node enviornment variable if not set before
@@ -24,9 +21,10 @@ var config = require(__dirname + '/server/config/config'),
     mongoose = require('mongoose');
 
 //Use only for development env
-if (process.env.NODE_ENV === 'development') {
-    //mongoose.set('debug', true);
-}
+/*if (process.env.NODE_ENV === 'development') {
+    mongoose.set('debug', true);
+}*/
+
 // set temp directory for uploads
 process.env.TMPDIR = config.tmp;
 
@@ -55,10 +53,10 @@ walk(modelsPath);
 //bootstrap passport config
 require(config.sroot + '/config/passport')(passport);
 
-var app = express()
-    , http = require('http')
-    , server = http.createServer(app)
-    , io = require('socket.io').listen(server);
+var app = express(),
+    http = require('http'),
+    server = http.createServer(app),
+    io = require('socket.io').listen(server);
 
 //express settings
 require(config.sroot + '/config/express')(app,passport,db);

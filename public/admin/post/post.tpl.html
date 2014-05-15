@@ -35,7 +35,7 @@
                         <span class="text-warning" title="pending">{{post.comments.pending}}</span>/<span class="text-success" title="approved">{{post.comments.approved}}</span>
                     </a>
                 </td>
-                <td><img alt="{{post.title}}" title="{{post.title}}" class="post-avatar" data-ng-src="public/system/upload/{{post.avatar}}"></td>
+                <td><img alt="{{post.title}}" title="{{post.title}}" class="post-avatar" data-ng-src="/public/system/upload/{{post.avatar}}"></td>
                 <td>{{post.status}}</td>
                 <td>
                     <a data-ng-disabled="currentUser.isActionDisabled(post)" data-ui-sref="post_edit({ id: post.id })" class="btn btn-warning btn-sm" title="edit post">

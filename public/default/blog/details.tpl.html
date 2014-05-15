@@ -1,5 +1,5 @@
 <div id="article-details" class="row">
-    <div class="panel panel-default">
+    <div class="panel panel-default" data-ng-if="hasNext && hasPrevious">
         <div class="panel-body clearfix">
             <a class="pull-left" data-ui-sref="blog_details({ id: previous._id,slug: previous.slug })" data-ng-show="hasPrevious">
                 <span class="badge" title="{{previous.title}}">&lt;-{{previous.title}}</span>
@@ -13,10 +13,10 @@
         <header class="article-header clearfix">
             <a href="#" class="pull-left">
                 <!--article thumbnail-->
-                <img alt="thumbnail-article" data-ng-src="/upload/{{article.avatar}}" />
+                <img alt="thumbnail-article" data-ng-src="/public/system/upload/{{article.avatar}}" />
             </a>
             <h1>
-                <a data-ui-sref="blog_details({ id: article.id,slug: article.slug })" title="{{article.title}}">
+                <a data-ui-sref="blog_details({ id: article._id,slug: article.slug })" title="{{article.title}}">
                     {{article.title}}
                 </a>
             </h1>   

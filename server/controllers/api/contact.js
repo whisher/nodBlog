@@ -5,28 +5,32 @@
  */
 var mongoose = require('mongoose'),
     Contact = mongoose.model('Contact'),
-    mail = require('../../services/mail'); 
+    mail = require('../../services/mail');
  
- /**
+/**
  * Find comment by id
  */
 exports.contact = function(req, res, next, id) {
     if (!/^[0-9a-fA-F]{24}$/.test(id)) {
-        return res.jsonp(404,{ error: 'Failed to load contact with id ' + id });
+        return res.jsonp(404,{
+            error: 'Failed to load contact with id ' + id
+        });
     }
     Contact.findById(id).exec(function (err, contact) {
         if (err) {
             return next(err);
         }
         if (!contact) {
-            return res.json(404,{ error: 'Failed to load contact ' + id });
+            return res.json(404,{
+                error: 'Failed to load contact ' + id
+            });
         }
         req.contact = contact;
         next();
     });
 };
 
- /**
+/**
  * Create a contact
  */
 exports.create = function(req, res) {
@@ -36,12 +40,10 @@ exports.create = function(req, res) {
     var contact = new Contact(data);
     contact.save(function(err) {
         if (err) {
-            var errs = Object.keys(err.errors);
-            if (errs.length > 0){
-               return res.json(500,{ error: err.errors[errs[0]].message }); 
-            }
-            return res.json(500,{ error: 'Cannot save the contact' });
-        } 
+            return res.json(500,{
+                error: 'Cannot save the contact'
+            });
+        }
         res.json(200,contact);
     });
     mail.addContactNotice(data.username,data.email,data.msg);
@@ -53,16 +55,10 @@ exports.create = function(req, res) {
 exports.all = function(req, res) {
     Contact.find().sort('-created').exec(function(err,contacts) {
         if (err) {
-            var errs = Object.keys(err.errors);
-            if (errs.length > 0){
-                return res.json(500,{
-                    error: err.errors[errs[0]].message
-                }); 
-            }
             return res.json(500,{
                 error: 'Cannot get all the contacts'
             });
-        } 
+        }
         res.json(200,contacts);
     });
 };

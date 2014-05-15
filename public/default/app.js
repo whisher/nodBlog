@@ -1,26 +1,54 @@
 (function(window, angular, undefined) {
     'use strict';
-    angular.module('nodblog',[/*'templates.app'*/,'ui.router','ngAnimate','restangular','LocalStorageModule','ui.bootstrap','seo','nodblog.services.base','nodblog.services.socket','nodblog.site','nodblog.blog'])
+    angular.module('nodblog',['templates.app', 'ui.router', 'ngAnimate', 'restangular', 'LocalStorageModule', 'ui.bootstrap', 'nodblog.services.base', 'nodblog.services.socket', 'nodblog.site', 'nodblog.blog'])
     .constant('BODY_PADDING_TOP',70)
     .constant('PREFIX_LOCAL_STORAGE','xiferpgolbdon')
-    .config(function(PREFIX_LOCAL_STORAGE,$locationProvider,$urlRouterProvider,localStorageServiceProvider,$uiViewScrollProvider) {
-        //$urlRouterProvider.otherwise('/');
-        $locationProvider.html5Mode(true);
+    .config(function(PREFIX_LOCAL_STORAGE,$urlRouterProvider,localStorageServiceProvider) {
+        $urlRouterProvider.otherwise('blog');
         localStorageServiceProvider.setPrefix(PREFIX_LOCAL_STORAGE);
-        $uiViewScrollProvider.useAnchorScroll();
+    })
+    .config(function($locationProvider) {
+        $locationProvider.html5Mode(true);
     })
     .run(function ($state,$rootScope,$log,$filter,WindowUtils) {
-        $state.transitionTo('index');
+        //$state.transitionTo('index');
         $rootScope.$log = $log;
         $rootScope.$state = $state;
-        $rootScope.$on('$stateChangeSuccess', function(evt) {
-            var stateName = $state.current.name;
-            if(stateName){
+        $rootScope.isDetailsSection = false;
+        /* Seo */
+        var _getTopScope = function() {
+            return $rootScope;
+        };
+        $rootScope.ready = function() {
+            var $scope = _getTopScope();
+            $scope.status = 'ready';
+            if(!$scope.$$phase){
+                $scope.$apply();
+            }
+        };
+        $rootScope.loading = function() {
+            var $scope = _getTopScope();
+            $scope.status = 'loading';
+            if(!$scope.$$phase){
+                $scope.$apply();
+            }
+        };
+        $rootScope.$on('$stateChangeStart', function(event, toState) {
+            _getTopScope().loading();
+            
+        });
+        
+        $rootScope.$on('$stateChangeSuccess', function(event, toState) {
+            var stateName = toState.name;
+            if(stateName!=='index'){
                 var title = stateName.split('_').join(' ');
-                if(title!=='index'){
-                    title = $filter('ucfirst')(title);
-                    WindowUtils.setTitle(title);
-                }
+                title = $filter('ucfirst')(title);
+                WindowUtils.setTitle(title);
+                $rootScope.$broadcast('resetActiveClass', 1);
+                $rootScope.animation = true;
+            }
+            else {
+                $rootScope.animation = false;
             }
         });
     })
@@ -67,16 +95,6 @@
             replied_comment:'blog_details({id:signal.post_id,slug:signal.post_slug,scrollTo:signal.id})'
         };
     })
-    .controller('viewCtrl', function ($scope,$rootScope) {
-        $scope.$on('$stateChangeSuccess', function (event, toState) {
-            if (toState.name !== 'index') {
-                $rootScope.$broadcast('resetActiveClass', 1);
-                $scope.animation = true;
-            } else {
-                $scope.animation = false;
-            }
-        });
-    })
     .directive('nbScroll', function ($timeout,BODY_PADDING_TOP) {
         return {
             link:function(scope,element,attrs){
@@ -110,12 +128,10 @@
             compile:function(element){
                 var windowHeight = $(window).height();
                 var navHeight = $('#nav').height();
-                //var navFooter = $('#footer').height();
                 var currentElHeigh = element.height();
-                var totHeight = navHeight + currentElHeigh;
+                var totHeight = navHeight + currentElHeigh - BODY_PADDING_TOP;
                 if(windowHeight > totHeight){
-                    //var paddding = Math.floor((windowHeight - totHeight + BODY_PADDING_TOP)/2);
-                    element.height(windowHeight-navHeight);
+                   element.height(windowHeight-navHeight);
                 }
             }
         };
@@ -173,6 +189,39 @@
                     });
                 },true);
                 
+            }
+        };
+    })
+    .directive('nbNotFound',function($state,Post) {
+        return {
+            restrict: 'A',
+            controller: function($scope,$element,$attrs) {
+                var chunks = $attrs.nbNotFound.substring(1).replace(/\/$/, '').split('/');
+                var len = chunks.length;
+                if(len===1){
+                    if(chunks[0]==='blog'){
+                        $state.transitionTo('blog');
+                    }
+                    else{
+                        $state.transitionTo('index');
+                    }
+                }
+                else{
+                    if((chunks[0]==='blog') && /^[0-9a-fA-F]{24}$/.test(chunks[1])){
+                        Post.one(chunks[1]).then(
+                            function(data){
+                                $state.transitionTo('blog_details',{id:data._id,slug:data.slug});
+                            },
+                            function(){
+                                $state.transitionTo('index');
+                            }
+                        );
+                    }
+                    else{
+                        $state.transitionTo('index');
+                    }
+                }
+                console.log('HHHHHHHHHHHHHH');
             }
         };
     });

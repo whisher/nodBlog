@@ -1,8 +1,6 @@
 'use strict';
 
 module.exports = {
-    db: "mongodb://localhost/dev-nodblog",
-    app: {
-        name: "ilwebdifabio"
-    }
-}
+    db: 'mongodb://localhost/dev-nodblog',
+    url: 'http://localhost:3000'
+};

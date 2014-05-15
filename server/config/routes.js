@@ -1,23 +1,24 @@
 'use strict';
 
-var config = require('./config');
 
 module.exports = function(app, passport,auth,io) {
     
     /* Default Index */
     var indexDefaultController = require('../controllers/default/index');
-    app.get('/', indexDefaultController.render(config));
+    app.get('/', indexDefaultController.render);
     
     /* Login Index */
     var loginController = require('../controllers/login/index');
-    app.get('/signin',loginController.render(config));
+    app.get('/signin',loginController.render);
+    
+    /* Admin Index */
+    var indexAdminController = require('../controllers/admin/index');
+    app.get('/admin',auth.requiresLogin ,indexAdminController.render);
     
     app.post('/user/auth', loginController.auth(passport));
     app.get('/signout', loginController.signout);
     
-    /* Admin Index */
-    var indexAdminController = require('../controllers/admin/index');
-    app.get('/admin',auth.requiresLogin ,indexAdminController.render(config));
+    
     
     /* Admin Post Api */
     var postController = require('../controllers/api/post');
@@ -91,10 +92,7 @@ module.exports = function(app, passport,auth,io) {
     
     /* Contact Id Param */
     app.param('contactId', contactController.contact);
-    app.all('/*', function(req, res,next) {
-        //var requestedURL = require('url').parse( req.url );
-        //console.log(requestedURL);
-        next();
-        
-    });
-}
+    
+   
+    
+};

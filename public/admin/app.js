@@ -1,6 +1,6 @@
 (function(window, angular, undefined) {
     'use strict';
-    angular.module('nodblog.admin',[/*'templates.admin'*/,'ui.router','restangular','ui.bootstrap','ngCookies','angularFileUpload','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user','nodblog.admin.contact'])
+    angular.module('nodblog.admin',[/*'templates.admin'*/,'ui.router','restangular','ui.bootstrap','angularFileUpload','nodblog.services.base','nodblog.services.socket','nodblog.ui.paginators.elastic','nodblog.admin.index','nodblog.admin.post','nodblog.admin.media','nodblog.admin.user','nodblog.admin.contact'])
     .config(function($urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
     })
@@ -18,13 +18,12 @@
         });
         $rootScope.currentUser = Global;
     })
-    .factory('Global', function($cookieStore) {
-        var user = $cookieStore.get('USER');
+    .factory('Global', function() {
         var _this = this;
         _this._data = {
-            user: user,
-            _authenticated: !!user,
-            _isAdmin: (user.role==='admin'),
+            user: window.user,
+            _authenticated: !!window.user,
+            _isAdmin: (window.user.role==='admin'),
             isAuthenticated: function() {
                 return this._authenticated;
             },

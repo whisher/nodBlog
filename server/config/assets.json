@@ -9,7 +9,6 @@
             ]
         },
         "js": {
-            "//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js":"//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
             "public/build/admin/js/vendor.min.js": [
                 "public/system/lib/jquery/jquery.js",
                 "public/system/lib/Jcrop/js/jquery.Jcrop.min.js",
@@ -20,8 +19,7 @@
                 "public/system/lib/restangular/dist/restangular.js",
                 "public/system/lib/angular-bootstrap/ui-bootstrap-tpls.js",
                 "public/system/lib/ng-file-upload/angular-file-upload-html5-shim.js",
-                "public/system/lib/ng-file-upload/angular-file-upload.js",
-                "public/system/lib/angular-cookies/angular-cookies.js"
+                "public/system/lib/ng-file-upload/angular-file-upload.js"
             ],
             "public/build/admin/js/scripts.min.js": [
                 "public/system/common/services/base.js",
@@ -47,22 +45,22 @@
         },
         "js": {
             "public/build/default/js/vendor.min.js": [
-                "public/system/lib/lodash/dist/lodash.js",
-                "public/system/lib/jquery/jquery.js",
-                "public/system/lib/bootstrap/dist/js/bootstrap.js",
-                "public/system/lib/angular/angular.js",
-                "public/system/lib/angular-ui-router/release/angular-ui-router.js",
-                "public/system/lib/angular-animate/angular-animate.js",
-                "public/system/lib/restangular/dist/restangular.js",
-                "public/system/lib/angular-sanitize/angular-sanitize.js",
-                "public/system/lib/angular-local-storage/angular-local-storage.js",
-                "public/system/lib/angular-bootstrap/ui-bootstrap-tpls.js",
-                "public/system/lib/angular-seo/angular-seo.js"
+                "public/system/lib/lodash/dist/lodash.min.js",
+                "public/system/lib/jquery/jquery.min.js",
+                "public/system/lib/bootstrap/dist/js/bootstrap.min.js",
+                "public/system/lib/angular/angular.min.js",
+                "public/system/lib/angular-ui-router/release/angular-ui-router.min.js",
+                "public/system/lib/angular-animate/angular-animate.min.js",
+                "public/system/lib/restangular/dist/restangular.min.js",
+                "public/system/lib/angular-sanitize/angular-sanitize.min.js",
+                "public/system/lib/angular-local-storage/angular-local-storage.min.js",
+                "public/system/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"
             ],
             "public/build/default/js/scripts.min.js": [
                 "public/system/common/services/base.js",
                 "public/system/common/services/socket.js",
                 "public/system/common/ui/paginators/simple.js",
+                "public/default/cache/templates.js",
                 "public/default/site/site.js",
                 "public/default/blog/blog.js",
                 "public/default/app.js",

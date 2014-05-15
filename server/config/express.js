@@ -12,6 +12,16 @@ var express = require('express'),
     config = require('./config'),
     swig = require('swig');
 
+function manageNotFound(res,status,msg,url,assets){
+    res.status(status).render('404', {
+        url: url,
+        error: msg,
+        status:status,
+        assets:assets
+    });
+}
+
+
 module.exports = function(app,passport,db) {
     app.set('showStackError', true);
 
@@ -21,7 +31,9 @@ module.exports = function(app,passport,db) {
 
     // cache=memory or swig dies in NODE_ENV=production
     app.locals.cache = 'memory';
-    
+    swig.setDefaults({
+        varControls: ['[[', ']]']
+    });
     //Json vulnerability protection
     app.use(protectJson);
     
@@ -48,7 +60,7 @@ module.exports = function(app,passport,db) {
     app.set('views', config.sroot + '/views');
 
     //Enable jsonp
-    app.enable("jsonp callback");
+    app.enable('jsonp callback');
 
     app.configure(function() {
         //cookieParser should be above session
@@ -59,6 +71,11 @@ module.exports = function(app,passport,db) {
         app.use(express.json());
         app.use(express.methodOverride());
 
+        // Add config to local variables
+        app.use(function(req, res, next) {
+            res.locals.config = config;
+            next();
+        });
         
         //express/mongo session storage
         app.use(express.session({
@@ -76,51 +93,73 @@ module.exports = function(app,passport,db) {
         app.use(helpers(config.app.name));
 
         //use passport session
-       app.use(passport.initialize());
-       app.use(passport.session());
+        app.use(passport.initialize());
+        app.use(passport.session());
 
         //xsrf vulnerability protection
-        app.use(xsrf); 
-        
+        app.use(xsrf);
         
         //routes should be at the last
         app.use(app.router);
         
         //Setting the fav icon and static folder
         app.use(express.favicon());
-        //TODO
-
         app.use('/public', express.static(config.proot));
-        //app.use(express.static(config.proot));
-
-        
         
         // Assume "not found" in the error msgs is a 404. this is somewhat
-            // silly, but valid, you can do whatever you like, set properties,
-            // use instanceof etc.
-            app.use(function(err, req, res, next) {
-                // Treat as 404
-                if (~err.message.indexOf('not found')) return next();
+        // silly, but valid, you can do whatever you like, set properties,
+        // use instanceof etc.
+        app.use(function(err, req, res, next) {
+            // Treat as 404
+            if (~err.message.indexOf('not found')) return next();
 
-                // Log it
-                console.error(err.stack);
+            // Log it
+            console.error(err.stack);
 
-                // Error page
-                res.status(500).render('500', {
-                    error: err.stack
-                });
+            // Error page
+            res.status(500).render('500', {
+                error: err.stack
             });
-
-            // Assume 404 since no middleware responded
-            app.use(function(req, res) {
-                var assetmanager = require(config.sroot+'/utils/assetsmanager')(config.sroot,'app');
-                res.status(404).render('404', {
-                    url: req.originalUrl,
-                    error: 'Not found',
-                    appTitle:'ilwebdifabio',
-                    assets:assetmanager.getCurrentAssets()
-                });
-            });
-
+        });
+        
+        
+        
+        // Assume 404 since no middleware responded
+        app.use(function(req, res) {
+            var assetmanager = require(config.sroot+'/utils/assetsmanager')(config.sroot,'app');
+            var url = req.originalUrl;
+            var chunks = url.substring(1).replace(/\/$/, '').split('/');
+            var len = chunks.length;
+            if(len===1){
+                if(chunks[0]==='blog'){
+                    manageNotFound(res,200,'Ok',url,assetmanager.getCurrentAssets());
+                }
+                else{
+                    manageNotFound(res,404,'Not found',url,assetmanager.getCurrentAssets());
+                }
+            }
+            else{
+                if((chunks[0]==='blog') && /^[0-9a-fA-F]{24}$/.test(chunks[1])){
+                    var mongoose = require('mongoose');
+                    var Post = mongoose.model('Post');
+                    Post.findById(chunks[1], function (err, post) {
+                        if(err){
+                            res.status(500).render('500', {
+                                error: 'Error on 404'
+                            });
+                        }
+                        if(!post){
+                            manageNotFound(res,404,'Not found',url,assetmanager.getCurrentAssets());
+                        }
+                        else{
+                            manageNotFound(res,200,'Ok',url,assetmanager.getCurrentAssets());
+                        }
+                    });
+                }
+                else{
+                    manageNotFound(res,404,'Not found',url,assetmanager.getCurrentAssets());
+                }
+            }
+        });
     });
 };

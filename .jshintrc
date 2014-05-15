@@ -6,7 +6,7 @@
     "camelcase": false, // Permit only camelcase for `var` and `object indexes`.
     "curly": false, // Require {} for every new block or scope.
     "eqeqeq": true, // Require triple equals i.e. `===`.
-    "immed": true, // Require immediate invocations to be wrapped in parens e.g. `( function(){}() );`
+    "immed": false, // Require immediate invocations to be wrapped in parens e.g. `( function(){}() );`
     "latedef": true, // Prohibit variable use before definition.
     "newcap": false, // Require capitalization of all constructor functions e.g. `new F()`.
     "noarg": true, // Prohibit use of `arguments.caller` and `arguments.callee`.
@@ -21,7 +21,8 @@
         "angular": true,
         "$": true,
         "_": true,
-        "io": true
+        "io": true,
+        "phantom":true
     },
     "predef": [ // Extra globals.
         "define",
@@ -39,5 +40,6 @@
     ],
     "indent": 4, // Specify indentation spacing
     "devel": true, // Allow development statements e.g. `console.log();`.
-    "noempty": true // Prohibit use of empty blocks.
+    "noempty": true, // Prohibit use of empty blocks.
+    "-W058": true
 }

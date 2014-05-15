@@ -197,12 +197,13 @@
                 );
         };
         $scope.cropped = function(){
+            console.log($scope.crop);
             Media.crop(media._id,$scope.crop);
-            $state.transitionTo('media');
+            $state.transitionTo('media',{reload:true});
         };
         $scope.resized = function(){
             Media.resize(media._id,$scope.resize);
-            $state.transitionTo('media');
+            $state.transitionTo('media',{reload:true});
         };
     })
     .controller('MediaViewCtrl', function ($scope,$state,media) {
@@ -270,11 +271,11 @@
                     scope.$apply();
                 }
                 var url = $interpolate($(element).attr('data-ng-src'))(scope);
-                var $element = $(element).parent();
+                //var $element = $(element).parent();
                 var img = new Image();
                 img.onload = function () {
-                    scope.crop.cw = $element.width();
-                    scope.crop.ch = $element.height();
+                    scope.crop.cw = img.width;
+                    scope.crop.ch = img.height;
                     $(element).Jcrop({
                         onChange: showCoords,
                         onSelect: showCoords

@@ -176,7 +176,8 @@
         PostUploader.success = function(data, status, headers, config) {
             $timeout(function() {
                 $scope.post.avatar = data.url;
-            });
+                $scope.dataUrl =  '/public/system/upload/'+data.url;
+            },100);
         };
         
         $scope.$watch('avatar',function(newVal, oldVal){
@@ -266,11 +267,10 @@
         $scope.status = Post.status;
         var original = post;
         $scope.post = Post.copy(original);
-        
+        $scope.minDate = original.published;
        
-        
         $timeout(function(){
-            $scope.dataUrl = '/upload/'+post.avatar;
+            $scope.dataUrl = '/public/system/upload/'+post.avatar;
         });
        
         $scope.isClean = function() {

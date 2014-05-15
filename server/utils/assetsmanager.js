@@ -21,10 +21,11 @@ module.exports = function (path,route) {
                 files = files.concat(getAssets(path));
             });
         } else if (_.isString(pattern)) {
-            var regex = new RegExp('^(http://|https://|//)');
+            var regex = new RegExp('^(//)');
             if (regex.test(pattern)) {
                 // Source is external
-                files.push(pattern);
+                //For the / in the template against 404
+                files.push(pattern.substring(1));
             } else {
                 files.push(pattern);
             }
@@ -53,5 +54,5 @@ module.exports = function (path,route) {
     
     return {
         getCurrentAssets: getCurrentAssets
-    }
-}
+    };
+};

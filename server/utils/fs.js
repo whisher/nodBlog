@@ -4,30 +4,29 @@ module.exports = function(fs) {
     var FsWrapper = function(){};
     FsWrapper.prototype.fs = fs;
     FsWrapper.prototype.mkdir = function(path,mode,callback) {
-        if (typeof mask === 'function') { 
+        if (typeof mask === 'function') {
             callback = mode;
             mode = 511;
         }
         this.fs.mkdir(path,mode,function(err) {
             if (err) {
                 if (err.code === 'EEXIST') {
-                    callback(null); 
+                    callback(null);
                 }
                 else{
-                    callback(new Error(err.code)); 
+                    callback(new Error(err.code));
                 }
-            } 
-            else { 
+            }
+            else {
                 callback(null);
             }
         });
     };
     FsWrapper.prototype.mkdirSync = function(path, mode){
-        if (typeof mode == 'undefined') { 
+        if (typeof mode === 'undefined') {
             mode = 484;
         }
-        return this.fs.mkdirSync(path, mode)
+        return this.fs.mkdirSync(path, mode);
     };
-    
     return new FsWrapper();
-}
+};

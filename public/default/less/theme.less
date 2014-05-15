@@ -215,4 +215,40 @@ div.animation.ng-leave-active {
     -webkit-transform:translate3d(100px, 0, 0);
     -moz-transform:translate3d(100px, 0, 0);
     transform:translate3d(100px, 0, 0);
-}  
+} 
+@media (min-width:320px) { 
+    /* smartphones, iPhone, portrait 480x320 phones */ 
+    #content{
+        min-height:150px;
+    } 
+}
+@media (min-width:481px) { 
+    /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ 
+    #content{
+        min-height:200px;
+    } 
+}
+@media (min-width:641px) { 
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ 
+    #content{
+        min-height:200px;
+    } 
+}
+@media (min-width:961px) { 
+    /* tablet, landscape iPad, lo-res laptops ands desktops */ 
+    #content{
+        min-height:300px;
+    } 
+}
+@media (min-width:1025px) { 
+    /* big landscape tablets, laptops, and desktops */ 
+    #content{
+        min-height:350px;
+    } 
+}
+@media (min-width:1281px) { 
+    /* hi-res laptops and desktops */ 
+    #content{
+        min-height:400px;
+    } 
+}

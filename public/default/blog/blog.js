@@ -6,7 +6,7 @@
         $stateProvider
         .state('blog', {
             url: '/blog',
-            templateUrl: '/public/default/blog/blog.tpl.html',
+            templateUrl: 'public/default/blog/blog.tpl.html',
             resolve: {
                 posts: function(Post){
                     return Post.all();
@@ -16,7 +16,7 @@
         })
         .state('blog_details', {
             url: '/blog/:id/:slug?scrollTo',
-            templateUrl: '/public/default/blog/details.tpl.html',
+            templateUrl: 'public/default/blog/details.tpl.html',
             resolve: {
                 current: function(Post,$stateParams){
                     return Post.one($stateParams.id);
@@ -32,16 +32,6 @@
                 }
             },
             controller: 'BlogDetailsCtrl'
-        })
-        .state('blog_tag', {
-            url: '/blog/tag/:tag',
-            templateUrl: '/public/default/blog/blog.tpl.html',
-            resolve: {
-                post: function(Post,$stateParams){
-                    return Post.one($stateParams.tag);
-                }
-            },
-            controller: 'BlogTagCtrl'
         });
         RestangularProvider.setBaseUrl('/api');
         RestangularProvider.setRestangularFields({
@@ -121,9 +111,14 @@
         var itemsLength = $scope.paginator.items.length;
         $scope.hasItems = (itemsLength > 0);
         $scope.hasPagination = $scope.hasItems && ($scope.paginator.getNumOfItems() > itemsLength);
-        
+        $scope.ready();
     })
-    .controller('BlogDetailsCtrl', function ($scope,$state,localStorageService,current,next,previous,comments,Comment,PreparedComments,Socket) {
+    .controller('BlogDetailsCtrl', function ($scope,$rootScope,$state,$timeout,localStorageService,current,next,previous,comments,Comment,PreparedComments,Socket) {
+        
+        $timeout(function() {
+            $rootScope.isDetailsSection = true;
+        });
+        
         $scope.isCollapsed = true;
         $scope.article = current;
         $scope.comments = PreparedComments.get(comments);
@@ -164,6 +159,7 @@
         $scope.cancel = function(){
             $scope.isCollapsed = true;
         };
+        $scope.ready();
     })
     .directive('nbNavTags',function() {
         return {

@@ -52,7 +52,7 @@ var PostSchema = new Schema({
         type: [String]
     },
     tags: {
-        type: [String], 
+        type: [String],
         required: true,
         index: true
     },
@@ -80,15 +80,15 @@ var PostSchema = new Schema({
  */
 
 PostSchema.path('title').validate(function(title) {
-    if(typeof title !== "undefined" && title !== null){
-        return title.length > 0
+    if(typeof title !== 'undefined' && title !== null){
+        return title.length > 0;
     }
     return false;
 }, 'Title cannot be empty');
 
 PostSchema.path('body').validate(function(body) {
-    if(typeof body !== "undefined" && body !== null){
-        return body.length > 0
+    if(typeof body !== 'undefined' && body !== null){
+        return body.length > 0;
     }
     return false;
 }, 'Body cannot be empty');
@@ -102,15 +102,15 @@ PostSchema.path('status').validate(function(status) {
 }, 'Is not a valid status');
 
 PostSchema.path('categories').validate(function(categories) {
-    if(typeof categories !== "undefined" && categories !== null){
-        return categories.length > 0
+    if(typeof categories !== 'undefined' && categories !== null){
+        return categories.length > 0;
     }
     return false;
 }, 'Categories cannot be empty');
 
 PostSchema.path('tags').validate(function(tags) {
-    if(typeof tags !== "undefined" && tags !== null){
-        return tags.length > 0
+    if(typeof tags !== 'undefined' && tags !== null){
+        return tags.length > 0;
     }
     return false;
 }, 'Tags cannot be empty');
@@ -125,9 +125,9 @@ PostSchema.statics.load = function(id, cb) {
 };
 
 PostSchema.plugin(monguurl({
-  source: 'title',
-  target: 'slug',
-  length: 40
+    source: 'title',
+    target: 'slug',
+    length: 40
 }));
 
 mongoose.model('Post', PostSchema);

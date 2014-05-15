@@ -4,13 +4,12 @@
  * Module dependencies.
  */
 var fs = require('fs'),
-    path = require('path'),
-    formidable = require('formidable'),
-    mongoose = require('mongoose'),
-    Media = mongoose.model('Media'),
-    easyimg = require('easyimage'),
-    im = require('imagemagick'),
-    _ = require('lodash');
+path = require('path'),
+formidable = require('formidable'),
+mongoose = require('mongoose'),
+Media = mongoose.model('Media'),
+easyimg = require('easyimage'),
+_ = require('lodash');
     
 var uploadDir = path.normalize(__dirname + '/../../../public/system/upload');
 
@@ -53,7 +52,7 @@ exports.create = function(io) {
         form.parse(req, function(err, fields, files){
             if(err){
                 return res.json(500, err.message);
-            } 
+            }
             var name = path.basename(files.media.path);
             var ext = path.extname(files.media.name);
             var url = name + ext;
@@ -76,21 +75,15 @@ exports.create = function(io) {
                 media.user = req.user;
                 media.save(function(err) {
                     if (err) {
-                        var errs = Object.keys(err.errors);
-                        if (errs.length > 0){
-                            return res.json(500,{
-                                error: err.errors[errs[0]].message
-                            }); 
-                        }
                         return res.json(500,{
                             error: 'Cannot save the media'
                         });
-                    } 
+                    }
                     res.json(media);
-                });   
+                });
             });
-        }); 
-    }
+        });
+    };
 };
 
 /**
@@ -99,16 +92,10 @@ exports.create = function(io) {
 exports.all = function(req, res) {
     Media.find().sort('-created').populate('user', '_id name username role').exec(function(err, medias) {
         if (err) {
-            var errs = Object.keys(err.errors);
-            if (errs.length > 0){
-                return res.json(500,{
-                    error: err.errors[errs[0]].message
-                }); 
-            }
             return res.json(500,{
                 error: 'Cannot get all the medias'
             });
-        } 
+        }
         res.json(200,medias);
     });
 };
@@ -130,16 +117,10 @@ exports.update = function(req, res) {
     media.slug = media.title;
     media.save(function(err) {
         if (err) {
-            var errs = Object.keys(err.errors);
-            if (errs.length > 0){
-                return res.json(500,{
-                    error: err.errors[errs[0]].message
-                }); 
-            }
             return res.json(500,{
                 error: 'Cannot update the media'
             });
-        } 
+        }
         res.json(200,media);
     });
 };
@@ -151,14 +132,14 @@ exports.crop = function(req, res) {
     var newName = Date.now();
     var dst = newName + req.media.ext;
     easyimg.rescrop({
-        src: uploadDir + '/' +oldName, 
+        src: uploadDir + '/' +oldName,
         dst:uploadDir + '/' + dst,
-        width:req.body.cw, 
+        width:req.body.cw,
         height:req.body.ch,
-        cropwidth:req.body.w, 
+        cropwidth:req.body.w,
         cropheight:req.body.h,
         gravity:'NorthWest',
-        x:req.body.x, 
+        x:req.body.x,
         y:req.body.y
     },
     function(err, image) {
@@ -178,18 +159,12 @@ exports.crop = function(req, res) {
         media.user = req.user;
         media.save(function(err) {
             if (err) {
-                var errs = Object.keys(err.errors);
-                if (errs.length > 0){
-                    return res.json(500,{
-                        error: err.errors[errs[0]].message
-                    }); 
-                }
                 return res.json(500,{
                     error: 'Cannot save the media'
                 });
-            } 
+            }
             res.json(media);
-        });   
+        });
     });
 };
 
@@ -201,9 +176,9 @@ exports.resize = function(req, res) {
     var newName = Date.now();
     var dst = newName + req.media.ext;
     easyimg.resize({
-        src: uploadDir + '/' +oldName, 
+        src: uploadDir + '/' +oldName,
         dst:uploadDir + '/' + dst,
-        width:req.body.w, 
+        width:req.body.w,
         height:req.body.h
     },
     function(err, image) {
@@ -223,18 +198,12 @@ exports.resize = function(req, res) {
         media.user = req.user;
         media.save(function(err) {
             if (err) {
-                var errs = Object.keys(err.errors);
-                if (errs.length > 0){
-                    return res.json(500,{
-                        error: err.errors[errs[0]].message
-                    }); 
-                }
                 return res.json(500,{
                     error: 'Cannot save the media'
                 });
-            } 
+            }
             res.json(media);
-        });   
+        });
     });
 };
 
@@ -245,12 +214,10 @@ exports.destroy = function(req, res) {
     var media = req.media;
     media.remove(function(err) {
         if (err) {
-            var errs = Object.keys(err.errors);
-            if (errs.length > 0){
-               return res.json(500,{ error: err.errors[errs[0]].message }); 
-            }
-            return res.json(500,{ error: 'Cannot delete the media' });
-        } 
+            return res.json(500,{
+                error: 'Cannot delete the media'
+            });
+        }
         res.json(200,media);
-   });
+    });
 };

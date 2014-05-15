@@ -20,8 +20,14 @@ exports.user = function(req, res, next, id) {
         })
         .select('name username email')
         .exec(function(err, user) {
-            if (err) return next(err);
-            if (!user) return next(new Error('Failed to load User ' + id));
+            if (err){
+                return next(err);
+            }
+            if (!user) {
+                return res.jsonp(404,{
+                    error: 'Failed to load user with id ' + id
+                });
+            }
             req.profile = user;
             next();
         });
@@ -59,7 +65,7 @@ exports.create = function(req, res, next) {
                     message = 'Please fill all the required fields';
             }
             return res.json(500,{ error: message });
-        } 
+        }
         res.json(200,user);
     });
 };
@@ -72,12 +78,8 @@ exports.update = function(req, res) {
     user = _.extend(user, req.body);
     user.save(function(err) {
         if (err) {
-            var errs = Object.keys(err.errors);
-            if (errs.length > 0){
-               return res.json(500,{ error: err.errors[errs[0]].message }); 
-            }
             return res.json(500,{ error: 'Cannot update the user' });
-        } 
+        }
         res.json(200,user);
     });
 };
@@ -88,8 +90,8 @@ exports.update = function(req, res) {
 exports.all = function(req, res) {
     User.find().where('role').ne('admin').sort('-created').select('name username email').exec(function(err, users) {
         if (err) {
-           return res.json(500,{ error: 'Cannot get all the posts' });
-        } 
+            return res.json(500,{ error: 'Cannot get all the posts' });
+        }
         res.json(200,users);
     });
 };
@@ -107,8 +109,8 @@ exports.show = function(req, res) {
 exports.showUserByEmail = function(req, res) {
     if (!req.email){
         return  res.json(200,{email:0});
-     }
-     return  res.json(200,{email:1});
+    }
+    return  res.json(200,{email:1});
 };
 
 /**
@@ -125,14 +127,10 @@ exports.destroy = function(req, res) {
     var user = req.user;
     user.remove(function(err) {
         if (err) {
-            var errs = Object.keys(err.errors);
-            if (errs.length > 0){
-               return res.json(500,{ error: err.errors[errs[0]].message }); 
-            }
             return res.json(500,{ error: 'Cannot delete the user' });
-        } 
+        }
         res.json(200,user);
-   });
+    });
 };
 
 

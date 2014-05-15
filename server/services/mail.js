@@ -1,3 +1,5 @@
+'use strict';
+
 var mandrill = require('node-mandrill')('-eto0RYfFJvoP1cZ8P1P0g');
 
 var emailTo = 'whisher06@gmail.com',
@@ -15,10 +17,10 @@ exports.addCommentNotice = function(userEmail,postId,data) {
                 website: website
             }
         }
-    }, 
+    },
     function(error, response){
         //uh oh, there was an error
-        if (error){ 
+        if (error){
             console.log(JSON.stringify(error));
             return;
         }
@@ -38,14 +40,14 @@ exports.addContactNotice = function(username,email,msg) {
                 website: website
             }
         }
-    }, 
+    },
     function(error, response){
         //uh oh, there was an error
-        if (error){ 
+        if (error){
             console.log(JSON.stringify(error));
             return;
         }
         //everything's good, lets see what mandrill said
         console.log(response);
     });
-}
+};

@@ -1,25 +1,32 @@
 <div class="jumbotron" id="index" role="index" data-ng-controller="IndexCtrl" data-nb-panel>
-    <h2>Sviluppo e design e un pizzico di ...</h2>
-    <h2>siti applicazioni web e compagnia</h2>
+    <h2 class="clearfix">Sviluppo, design e un pizzico di ...<span class="glyphicon glyphicon-home pull-right"></span></h2>
+    <h3>Siti, applicazioni web e compagnia.</h3>
     <p>Sviluppa il tuo marchio e la tua presenza in rete.</p>
-    <p>Creare una buona presenza in rete aumenta la conoscenza di te azienda tra i tuoi clienti.Fabio  con qualità, seguendo i principi del buon design, dell'usabilità e dell'accessibilità collegato Social media Facebook, Twitter, Social Networks è compito di Il web di Fabio (me)  realizzare per te un sito solido, efficace e semplice da gestire.</p>
+    <p>Creare una buona presenza in rete aumenta la conoscenza di te azienda tra i tuoi clienti.</p>
+    <p>Fabio con qualità, seguendo i principi del buon design, dell'usabilità e dell'accessibilità basata sugli standard W3C,
+    realizza per te un sito solido, efficace, <strong>unico</strong>, semplice da gestire ed ottimizzato seo,
+    collegato a Facebook, Twitter, Google+ e a tutti i social networks che desideri.</p>
     <p>Fai guadagnare al tuo marchio  credibilità e forza, socializzati :).</p>
-    <p>Social media agency</p>
 </div>
 <div class="jumbotron" id="about" role="about" data-ng-controller="AboutCtrl" data-nb-panel>
-    <h2>Cosa faccio</h2>
+    <h2 class="clearfix">Chi sono ...<span class="glyphicon glyphicon-user pull-right"></span></h2>
+    <p>Sono un programmatore web freelancer.</p>
+    <p>Vivo nel nord italia ed ho una esperienza decennale come sviluppatore di siti/applicazioni web.</p>
+    <p>Metto a disposizione le mie competenze per lo sviluppo di progetti sia per privati che per la piccola e media impresa italiana e internazionale.</p>
+    <h2 class="clearfix">Cosa faccio <span class="glyphicon glyphicon-flash pull-right"></span></h2>
     <ul class="list-group">
-        <li class="list-group-item">HTML5/SPA/javascrip web application</li>
-        <li class="list-group-item">Mash up web application (Youtube,Facebook,Twitter,Google+,GoogleMap) Api</li>
-        <li class="list-group-item">PHP web application</li>
-        <li class="list-group-item">Phonegap</li>
-        <li class="list-group-item">Rete social</li>
-        <li class="list-group-item">CreateJS,D3</li>
-        <li class="list-group-item">App in real time socket.io, Firebase, Pusher</li>
+        <li class="list-group-item list-group-item-info">HTML5/CSS/SPA/javascrip web application responsive layout</li>
+        <li class="list-group-item list-group-item-info">Mash up web application (Youtube,Facebook,Twitter,Google+,GoogleMap) Api</li>
+        <li class="list-group-item list-group-item-info">PHP web application</li>
+        <li class="list-group-item list-group-item-info">Phonegap</li>
+        <li class="list-group-item list-group-item-info">Rete social</li>
+        <li class="list-group-item list-group-item-info">CreateJS,D3</li>
+        <li class="list-group-item list-group-item-info">Seo</li>
+        <li class="list-group-item list-group-item-info">App in real time socket.io, Firebase, Pusher</li>
     </ul>
 </div>
-<div class="jumbotron" id="contact" role="contact" data-ng-controller="ContactCtrl" data-nb-panel>
-    <h2>Chiedi un contatto</h2>
+<div class="jumbotron clearfix" id="contact" role="contact" data-ng-controller="ContactCtrl" data-nb-panel>
+    <h2 class="clearfix">Contattami <span class="glyphicon glyphicon-envelope pull-right"></span></h2>
     <script type="text/ng-template" id="contactModalOnSubmit.html">
         <div class="modal-header">
            <h3 class="text-info">Grazie per il feedback {{contact.username}}</h3>
@@ -31,28 +38,29 @@
             <button class="btn btn-primary" ng-click="ok()">OK</button>
         </div>
     </script>
-    <form class="form-horizontal" role="form" name="form" data-ng-submit="save()">
+    <div class="col-md-6">
+        <p>Non esitate a contattarmi per discutere i miei servizi, la mia disponibilità, e le mie tariffe, oppure solamente per salutarmi :).<br />
+        Mi farebbe molto piacere essere contattato da voi. Comunicatemi le vostre idee e i vostri progetti, non importa dove vi troviate, posso lavorare ovunque nel mondo.</p>
+    </div>
+    <form class="form-horizontal col-md-6" role="form" name="form" data-ng-submit="save()">
         <div class="form-group">
-            <label for="username" class="col-sm-2 control-label">Nome</label>
-            <div class="col-sm-10">
+           <div>
                 <input type="text" class="form-control" id="username" placeholder="Il tuo nome" required="required" data-input-feedback data-ng-model="contact.username" data-ng-minlength="3" data-ng-maxlength="30">
             </div>
         </div>
         <div class="form-group">
-            <label for="email" class="col-sm-2 control-label">Email</label>
-            <div class="col-sm-10">
+            <div>
                 <input type="email" class="form-control" id="email" placeholder="La tua email" required="required" data-input-feedback data-ng-model="contact.email">
             </div>
         </div>
         <div class="form-group">
-            <label for="msg" class="col-sm-2 control-label">Messaggio</label>
-            <div class="col-sm-10">
-                <textarea name="msg" id="msg" rows="3" class="form-control" placeholder="Il tuo messaggio" required="required" data-input-feedback data-ng-model="contact.msg" data-ng-minlength="10" data-ng-maxlength="300"></textarea>
+            <div>
+                <textarea name="msg" id="msg" rows="4" class="form-control" placeholder="Il tuo messaggio" required="required" data-input-feedback data-ng-model="contact.msg" data-ng-minlength="10" data-ng-maxlength="300"></textarea>
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-info" data-ng-disabled="form.$invalid">Salva</button>
+            <div class="clearfix">
+                <button type="submit" class="btn btn-info pull-right" data-ng-disabled="form.$invalid">Salva</button>
             </div>
         </div>
     </form>

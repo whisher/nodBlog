@@ -61,15 +61,15 @@ var MediaSchema = new Schema({
  * Validations
  */
 MediaSchema.path('title').validate(function(title) {
-    if(typeof title !== "undefined" && title !== null){
-        return title.length > 0
+    if(typeof title !== 'undefined' && title !== null){
+        return title.length > 0;
     }
     return false;
 }, 'Title cannot be empty');
 
 MediaSchema.path('name').validate(function(name) {
-    if(typeof name !== "undefined" && name !== null){
-        return name.length > 0
+    if(typeof name !== 'undefined' && name !== null){
+        return name.length > 0;
     }
     return false;
 }, 'Name cannot be empty');
@@ -85,9 +85,9 @@ MediaSchema.statics.load = function(id, cb) {
 };
 
 MediaSchema.plugin(monguurl({
-  source: 'title',
-  target: 'slug',
-  length: 40
+    source: 'title',
+    target: 'slug',
+    length: 40
 }));
 
 mongoose.model('Media', MediaSchema);
