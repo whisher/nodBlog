@@ -168,9 +168,10 @@ exports.upload = function(io) {
             },
             function(err, stdout, stderr) {
                 if (err) {
-                    return res.json(500,{
+                    /*return res.json(500,{
                         error: 'Cannot crop the thumbnail'
-                    });
+                    });*/
+                    return res.json(500,err);
                 }
                 fs.unlink(files.avatar.path, function (err) {
                     if (err) {
