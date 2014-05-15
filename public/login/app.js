@@ -18,7 +18,9 @@
                 this.send(data).then(
                     function(response){
                         if( (typeof response.data !== 'undefined') && (response.data === data.email)){
-                            $window.location.href = 'http://localhost:3000/admin';
+                            var location = window.location;
+                            var host = location.host;
+                            $window.location.href = 'http://'+host+'/admin';
                         }
                     },
                     callBackOnError

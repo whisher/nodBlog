@@ -65,7 +65,7 @@ require(config.sroot + '/config/express')(app,passport,db);
 require(config.sroot + '/config/routes')(app,passport,auth,io);
 
 //Start the app by listening on <port>
-var port = process.env.PORT || config.port;
+var port = (process.env.NODE_ENV === 'production')?80:3000;
 server.listen(port);
 
 io.sockets.on('connection', function (socket){
