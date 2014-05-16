@@ -315,6 +315,7 @@ module.exports = function(grunt) {
     
    // grunt.registerTask('default', ['clean:dist','jshint','less','copy','concat','ngmin','uglify','concurrent']);
     grunt.registerTask('default', ['clean:dist','less','copy','concat','ngmin','uglify','concurrent']);
+    grunt.registerTask('prod', ['clean:dist','less','copy','concat','ngmin','uglify']);
     
 };
 
