@@ -20,6 +20,7 @@
         {% endfor %}
     </head>
     <body data-ng-controller="MainCtrl" data-status="{{ status }}">
+        <div id="fb-root"></div>
         <!--[if lt IE 7]> <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p> <![endif]-->
         <div id="nav" role="navigation" class="navbar navbar-default navbar-fixed-top" data-ng-include="'public/default/header.tpl.html'"></div>
         <div class="container">
@@ -36,6 +37,15 @@
                 <p class="clearfix">&#169; 2014 All Rights Reserved <a href="#" class="label label-default pull-right" data-nb-scroll="content">Vai al top</a></p>
             </div>
         </div>
+        <script>
+           (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/it_IT/sdk.js#xfbml=1&appId=641970872558340&version=v2.0";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

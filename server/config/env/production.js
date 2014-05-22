@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = {
-    db: 'mongodb://localhost/prod-nodblog-bis',
+    db: 'mongodb://localhost/prod-nodblog-tris',
     url:'http://ilwebdifabio.it'
 };

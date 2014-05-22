@@ -55,8 +55,14 @@ require(config.sroot + '/config/passport')(passport);
 
 var app = express(),
     http = require('http'),
-    server = http.createServer(app),
-    io = require('socket.io').listen(server);
+    httpServer = http.createServer(app),
+    https = require('https'),
+    credentials = {
+        key: fs.readFileSync(config.root+'/server/ssh/key.pem'), 
+        cert: fs.readFileSync(config.root+'/server/ssh/key-cert.pem') 
+    },
+    httpsServer = https.createServer(credentials, app),
+    io = require('socket.io').listen(httpServer);
 
 //express settings
 require(config.sroot + '/config/express')(app,passport,db);
@@ -66,7 +72,10 @@ require(config.sroot + '/config/routes')(app,passport,auth,io);
 
 //Start the app by listening on <port>
 var port = (process.env.NODE_ENV === 'production')?80:3000;
-server.listen(port);
+var ports = (process.env.NODE_ENV === 'production')?443:3001;
+httpServer.listen(port);
+//httpsServer.listen(ports);
+
 
 io.sockets.on('connection', function (socket){
     socket.on('addPost', function (data) {

@@ -196,7 +196,7 @@ angular.module("public/default/header.tpl.html", []).run(["$templateCache", func
     "            <li data-nb-signals=\"\" signals=\"signals\" labels=\"mapLabels\" routes=\"mapRoutes\" class=\"dropdown signals\"></li>\n" +
     "            <li><a href=\"https://www.facebook.com/pages/Ilwebdifabio/756965764316135\" target=\"_blank\" class=\"btn btn-social-icon btn-facebook\"><i class=\"fa fa-facebook\"></i></a></li>\n" +
     "            <li><a href=\"https://plus.google.com/u/0/+FabioBedini/posts\" target=\"_blank\" class=\"btn btn-social-icon btn-google-plus\"><i class=\"fa fa-google-plus\"></i></a></li>\n" +
-    "            <li><a href=\"https://twitter.com/whisher06\" target=\"_blank\" class=\"btn btn-social-icon btn-sm btn-twitter\"><i class=\"fa fa-twitter\"></i></a></li>\n" +
+    "            <li><a href=\"https://twitter.com/ilwebdifabio\" target=\"_blank\" class=\"btn btn-social-icon btn-sm btn-twitter\"><i class=\"fa fa-twitter\"></i></a></li>\n" +
     "            <li><a class=\"btn btn-social-icon btn-instagram\"><i class=\"fa fa-instagram\"></i></a></li>\n" +
     "            <li><a href=\"http://instagram.com/whisher06\" target=\"_blank\" class=\"btn btn-social-icon btn-github\"><i class=\"fa fa-github\"></i></a></li>\n" +
     "            <li><a class=\"btn btn-social-icon btn-foursquare\"><i class=\"fa fa-foursquare\"></i></a></li>\n" +
