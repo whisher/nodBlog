@@ -1,6 +1,6 @@
 (function(window, angular, undefined) {
     'use strict';
-    angular.module('nodblog',[/*'templates.app',*/ 'ui.router', 'ngAnimate', 'restangular', 'LocalStorageModule', 'ui.bootstrap', 'nodblog.services.base', 'nodblog.services.socket', 'nodblog.site', 'nodblog.blog'])
+    angular.module('nodblog',['templates.app', 'ui.router', 'ngAnimate', 'restangular', 'LocalStorageModule', 'ui.bootstrap', 'nodblog.services.base', 'nodblog.services.socket', 'nodblog.site', 'nodblog.blog'])
     .constant('BODY_PADDING_TOP',70)
     .constant('PREFIX_LOCAL_STORAGE','xiferpgolbdon')
     .config(function(PREFIX_LOCAL_STORAGE,$urlRouterProvider,localStorageServiceProvider) {

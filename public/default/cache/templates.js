@@ -35,30 +35,54 @@ angular.module("public/default/blog/blog.tpl.html", []).run(["$templateCache", f
     "            </h1>   \n" +
     "        </header>\n" +
     "        <div class=\"article-body\">\n" +
-    "            <ul class=\"article-meta\">\n" +
-    "                <li>\n" +
-    "                    <span class=\"glyphicon glyphicon-calendar\"></span>\n" +
-    "                    <time pubdate date=\"{{article.published}}\">\n" +
-    "                        <em>{{article.published}}</em>\n" +
-    "                    </time> |  \n" +
-    "                </li>\n" +
-    "                <li>\n" +
-    "                    <span class=\"btn btn-default btn-xs\">\n" +
-    "                        <span class=\"glyphicon glyphicon-comment\"></span> {{article.comments}}\n" +
-    "                    </span> | \n" +
-    "                </li>\n" +
-    "                <li class=\"article-tags\" tags=\"article.tags\" filter=\"filter(tag)\" data-nb-nav-tags></li>\n" +
-    "            </ul>\n" +
-    "            <!--article prologue -->\n" +
-    "            <div class=\"article-content\" data-ng-bind-html=\"article.body\">\n" +
+    "            <div class=\"clearfix\">\n" +
+    "                <ul class=\"article-meta pull-left\">\n" +
+    "                    <li>\n" +
+    "                        <span class=\"glyphicon glyphicon-calendar\"></span>\n" +
+    "                        <time pubdate date=\"{{article.published}}\">\n" +
+    "                            <em>{{article.published}}</em>\n" +
+    "                        </time> |  \n" +
+    "                    </li>\n" +
+    "                    <li>\n" +
+    "                        <span class=\"btn btn-default btn-xs\">\n" +
+    "                            <span class=\"glyphicon glyphicon-comment\"></span> {{article.comments}}\n" +
+    "                        </span> | \n" +
+    "                    </li>\n" +
+    "                    <li class=\"article-tags\" tags=\"article.tags\" filter=\"filter(tag)\" data-nb-nav-tags></li>\n" +
+    "                </ul>\n" +
+    "                <ul class=\"article-socials pull-right\">\n" +
+    "                    <li>\n" +
+    "                        <div class=\"fb-like\" data-href=\"http://ilwebdifabio.it/blog/{{article.id}}/{{article.slug}}\" data-layout=\"standard\" data-action=\"like\" data-show-faces=\"false\" data-share=\"true\"></div>\n" +
+    "                    </li>\n" +
+    "                    <li>\n" +
+    "                        <a href=\"http://ilwebdifabio.it/blog/{{article.id}}/{{article.slug}}\" class=\"twitter-share-button\" data-via=\"ilwebdifabio\" data-lang=\"it\" data-related=\"ilwebdifabio\" data-hashtags=\"ilwebdifabio\">Tweet</a>\n" +
+    "                    </li>\n" +
+    "                    <li>\n" +
+    "                        <div class=\"g-plusone\" data-size=\"small\" data-width=\"150\" data-href=\"http://ilwebdifabio.it/blog/{{article.id}}/{{article.slug}}\"></div>\n" +
+    "                    </li>\n" +
+    "                </ul>\n" +
     "            </div>\n" +
+    "            <!--article prologue -->\n" +
+    "            <div class=\"article-content\" data-ng-bind-html=\"article.body\"></div>\n" +
     "        </div>\n" +
     "        <!--article footer -->\n" +
     "        <footer class=\"article-footer clearfix\">\n" +
     "            <a role=\"button\" data-ui-sref=\"blog_details({ id: article.id,slug: article.slug })\" class=\"label label-info pull-right\">Leggi »</a>  \n" +
     "        </footer>\n" +
     "    </article>\n" +
-    "</div>");
+    "</div>\n" +
+    "<script>\n" +
+    "    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');\n" +
+    "</script>\n" +
+    "<script>\n" +
+    "    window.___gcfg = {lang: 'it'};\n" +
+    "    (function() {\n" +
+    "        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;\n" +
+    "        po.src = 'https://apis.google.com/js/platform.js';\n" +
+    "        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);\n" +
+    "    })();\n" +
+    "</script>\n" +
+    "");
 }]);
 
 angular.module("public/default/blog/details.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -210,6 +234,19 @@ angular.module("public/default/site/site.tpl.html", []).run(["$templateCache", f
   "use strict";
   $templateCache.put("public/default/site/site.tpl.html",
     "<div class=\"jumbotron\" id=\"index\" role=\"index\" data-ng-controller=\"IndexCtrl\" data-nb-panel>\n" +
+    "    <div id=\"socials-bar\" class=\" clearfix\">\n" +
+    "        <ul class=\"pull-right\">\n" +
+    "            <li>\n" +
+    "                <div class=\"fb-like\" data-href=\"http://ilwebdifabio.it\" data-layout=\"standard\" data-action=\"like\" data-show-faces=\"false\" data-share=\"true\"></div>\n" +
+    "            </li>\n" +
+    "            <li>\n" +
+    "                <a href=\"http://ilwebdifabio.it\" class=\"twitter-share-button\" data-via=\"ilwebdifabio\" data-lang=\"it\" data-related=\"ilwebdifabio\" data-hashtags=\"ilwebdifabio\">Tweet</a>\n" +
+    "            </li>\n" +
+    "            <li>\n" +
+    "                <div class=\"g-plusone\" data-size=\"small\" data-width=\"150\" data-href=\"http://ilwebdifabio.it\"></div>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
+    "    </div>\n" +
     "    <h2 class=\"clearfix\">Sviluppo, design e un pizzico di ...<span class=\"glyphicon glyphicon-home pull-right\"></span></h2>\n" +
     "    <h3>Siti, applicazioni web e compagnia.</h3>\n" +
     "    <p>Sviluppa il tuo marchio e la tua presenza in rete.</p>\n" +
@@ -276,5 +313,15 @@ angular.module("public/default/site/site.tpl.html", []).run(["$templateCache", f
     "        </div>\n" +
     "    </form>\n" +
     "</div>\n" +
-    "");
+    "<script>\n" +
+    "    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');\n" +
+    "</script>\n" +
+    "<script>\n" +
+    "    window.___gcfg = {lang: 'it'};\n" +
+    "    (function() {\n" +
+    "        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;\n" +
+    "        po.src = 'https://apis.google.com/js/platform.js';\n" +
+    "        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);\n" +
+    "    })();\n" +
+    "</script>");
 }]);
