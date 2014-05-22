@@ -50,7 +50,7 @@ angular.module("public/default/blog/blog.tpl.html", []).run(["$templateCache", f
     "                    </li>\n" +
     "                    <li class=\"article-tags\" tags=\"article.tags\" filter=\"filter(tag)\" data-nb-nav-tags></li>\n" +
     "                </ul>\n" +
-    "                <ul class=\"article-socials pull-right\">\n" +
+    "               <!-- <ul class=\"article-socials pull-right\">\n" +
     "                    <li>\n" +
     "                        <div class=\"fb-like\" data-href=\"http://ilwebdifabio.it/blog/{{article.id}}/{{article.slug}}\" data-layout=\"standard\" data-action=\"like\" data-show-faces=\"false\" data-share=\"true\"></div>\n" +
     "                    </li>\n" +
@@ -60,7 +60,7 @@ angular.module("public/default/blog/blog.tpl.html", []).run(["$templateCache", f
     "                    <li>\n" +
     "                        <div class=\"g-plusone\" data-size=\"small\" data-width=\"150\" data-href=\"http://ilwebdifabio.it/blog/{{article.id}}/{{article.slug}}\"></div>\n" +
     "                    </li>\n" +
-    "                </ul>\n" +
+    "                </ul> -->\n" +
     "            </div>\n" +
     "            <!--article prologue -->\n" +
     "            <div class=\"article-content\" data-ng-bind-html=\"article.body\"></div>\n" +
@@ -71,7 +71,7 @@ angular.module("public/default/blog/blog.tpl.html", []).run(["$templateCache", f
     "        </footer>\n" +
     "    </article>\n" +
     "</div>\n" +
-    "<script>\n" +
+    "<!-- <script>\n" +
     "    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');\n" +
     "</script>\n" +
     "<script>\n" +
@@ -81,7 +81,7 @@ angular.module("public/default/blog/blog.tpl.html", []).run(["$templateCache", f
     "        po.src = 'https://apis.google.com/js/platform.js';\n" +
     "        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);\n" +
     "    })();\n" +
-    "</script>\n" +
+    "</script> -->\n" +
     "");
 }]);
 
@@ -233,8 +233,8 @@ angular.module("public/default/header.tpl.html", []).run(["$templateCache", func
 angular.module("public/default/site/site.tpl.html", []).run(["$templateCache", function($templateCache) {
   "use strict";
   $templateCache.put("public/default/site/site.tpl.html",
-    "<div class=\"jumbotron\" id=\"index\" role=\"index\" data-ng-controller=\"IndexCtrl\" data-nb-panel>\n" +
-    "    <div id=\"socials-bar\" class=\" clearfix\">\n" +
+    "<div class=\"jumbotron\" id=\"index\" role=\"index\" data-nb-panel>\n" +
+    "    <!-- <div id=\"socials-bar\" class=\" clearfix\">\n" +
     "        <ul class=\"pull-right\">\n" +
     "            <li>\n" +
     "                <div class=\"fb-like\" data-href=\"http://ilwebdifabio.it\" data-layout=\"standard\" data-action=\"like\" data-show-faces=\"false\" data-share=\"true\"></div>\n" +
@@ -246,7 +246,7 @@ angular.module("public/default/site/site.tpl.html", []).run(["$templateCache", f
     "                <div class=\"g-plusone\" data-size=\"small\" data-width=\"150\" data-href=\"http://ilwebdifabio.it\"></div>\n" +
     "            </li>\n" +
     "        </ul>\n" +
-    "    </div>\n" +
+    "    </div> -->\n" +
     "    <h2 class=\"clearfix\">Sviluppo, design e un pizzico di ...<span class=\"glyphicon glyphicon-home pull-right\"></span></h2>\n" +
     "    <h3>Siti, applicazioni web e compagnia.</h3>\n" +
     "    <p>Sviluppa il tuo marchio e la tua presenza in rete.</p>\n" +
@@ -313,7 +313,7 @@ angular.module("public/default/site/site.tpl.html", []).run(["$templateCache", f
     "        </div>\n" +
     "    </form>\n" +
     "</div>\n" +
-    "<script>\n" +
+    "<!-- <script>\n" +
     "    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');\n" +
     "</script>\n" +
     "<script>\n" +
@@ -323,5 +323,5 @@ angular.module("public/default/site/site.tpl.html", []).run(["$templateCache", f
     "        po.src = 'https://apis.google.com/js/platform.js';\n" +
     "        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);\n" +
     "    })();\n" +
-    "</script>");
+    "</script> -->");
 }]);
