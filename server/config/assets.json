@@ -20,6 +20,7 @@
                 "public/system/lib/angular-bootstrap/ui-bootstrap-tpls.js",
                 "public/system/lib/ng-file-upload/angular-file-upload-html5-shim.js",
                 "public/system/lib/ng-file-upload/angular-file-upload.js"
+               
             ],
             "public/build/admin/js/scripts.min.js": [
                 "public/system/common/services/base.js",
@@ -55,6 +56,7 @@
                 "public/system/lib/angular-sanitize/angular-sanitize.min.js",
                 "public/system/lib/angular-local-storage/angular-local-storage.min.js",
                 "public/system/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"
+                
             ],
             "public/build/default/js/scripts.min.js": [
                 "public/system/common/services/base.js",

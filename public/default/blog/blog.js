@@ -175,8 +175,9 @@
         };
     })
     .filter('nbStripTags', function () {
-        return function(input) {
-            return input.replace(/<\/?[^>]+(>|$)/g, '');
+        return function(input) {console.log(input);
+            //return input.replace(/<\/?[^>]+(>|$)/g, '');
+            return input;
         };
     })
     .filter('words', function () {

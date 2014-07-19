@@ -1,6 +1,6 @@
 (function(window, angular, undefined) {
     'use strict';
-    angular.module('nodblog',['templates.app', 'ui.router', 'ngAnimate', 'restangular', 'LocalStorageModule', 'ui.bootstrap', 'nodblog.services.base', 'nodblog.services.socket', 'nodblog.site', 'nodblog.blog'])
+    angular.module('nodblog',['templates.app', 'ui.router', 'ngAnimate', 'restangular', 'LocalStorageModule', 'ui.bootstrap', 'hljs', 'nodblog.services.base', 'nodblog.services.socket', 'nodblog.site', 'nodblog.blog'])
     .constant('BODY_PADDING_TOP',70)
     .constant('PREFIX_LOCAL_STORAGE','xiferpgolbdon')
     .config(function(PREFIX_LOCAL_STORAGE,$urlRouterProvider,localStorageServiceProvider) {
@@ -190,6 +190,30 @@
                 },true);
                 
             }
+        };
+    })
+    .directive('compile',function ($compile) {
+        return function(scope, element, attrs) {
+            var ensureCompileRunsOnce = scope.$watch(
+                function(scope) {
+                    // watch the 'compile' expression for changes
+                    return scope.$eval(attrs.compile);
+                },
+                function(value) {
+                    // when the 'compile' expression changes
+                    // assign it into the current DOM
+                    element.html(value);
+
+                    // compile the new DOM and link it to the current
+                    // scope.
+                    // NOTE: we only compile .childNodes so that
+                    // we don't get into infinite loop compiling ourselves
+                    $compile(element.contents())(scope);
+
+                    // Use un-watch feature to ensure compilation happens only once.
+                    ensureCompileRunsOnce();
+                }
+                );
         };
     })
     .directive('nbNotFound',function($state,Post) {

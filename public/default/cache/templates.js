@@ -67,7 +67,8 @@ angular.module("public/default/blog/blog.tpl.html", []).run(["$templateCache", f
     "        </div>\n" +
     "        <!--article footer -->\n" +
     "        <footer class=\"article-footer clearfix\">\n" +
-    "            <a role=\"button\" data-ui-sref=\"blog_details({ id: article.id,slug: article.slug })\" class=\"label label-info pull-right\">Leggi »</a>  \n" +
+    "            <a role=\"button\" data-ui-sref=\"blog_details({ id: article.id,slug: article.slug })\" class=\"btn btn-primary pull-right\">\n" +
+    "                Leggi <span class=\"icon fa fa-arrow-circle-right\"></span></a>  \n" +
     "        </footer>\n" +
     "    </article>\n" +
     "</div>\n" +
@@ -129,7 +130,7 @@ angular.module("public/default/blog/details.tpl.html", []).run(["$templateCache"
     "                </li>\n" +
     "            </ul>\n" +
     "            <!--article prologue -->\n" +
-    "            <div class=\"article-content\" data-ng-bind-html=\"article.body\">\n" +
+    "            <div class=\"article-content\" data-compile=\"article.body\">\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </article>\n" +

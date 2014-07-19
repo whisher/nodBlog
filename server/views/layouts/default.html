@@ -18,6 +18,7 @@
         {% for file in assets.css %}
             <link rel="stylesheet" href="/[[file]]">
         {% endfor %}
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/default.min.css">
     </head>
     <body data-ng-controller="MainCtrl" data-status="{{ status }}">
         <div id="fb-root"></div>
@@ -61,7 +62,8 @@
         {% for file in assets.js %}
             <script type="text/javascript" src="/[[file]]"></script>
         {% endfor %}
-
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
+        <script src="http://pc035860.github.io/angular-highlightjs/angular-highlightjs.min.js"></script>
         {% if (process.env.NODE_ENV == 'development') %}
             <script type="text/javascript" src="[['http://' + req.host + ':35729/livereload.js']]"></script>
         {% endif %}
