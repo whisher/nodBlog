@@ -65,3 +65,7 @@ exports.render = function(req, res) {
         });
     }
 };
+
+exports.bot = function(req, res) {
+     res.sendfile(process.cwd()+'/public/robots.txt');
+};
