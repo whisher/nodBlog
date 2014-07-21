@@ -52,7 +52,7 @@ angular.module("public/default/blog/blog.tpl.html", []).run(["$templateCache", f
     "                </ul>\n" +
     "               <!-- <ul class=\"article-socials pull-right\">\n" +
     "                    <li>\n" +
-    "                        <div class=\"fb-like\" data-href=\"http://ilwebdifabio.it/blog/{{article.id}}/{{article.slug}}\" data-layout=\"standard\" data-action=\"like\" data-show-faces=\"false\" data-share=\"true\"></div>\n" +
+    "                        <div class=\"fb-like\" data-colorscheme=\"light\" data-href=\"http://ilwebdifabio.it/blog/{{article.id}}/{{article.slug}}\" data-width=\"90\" data-layout=\"button_count\" data-action=\"like\" data-show-faces=\"false\" data-share=\"true\"></div>\n" +
     "                    </li>\n" +
     "                    <li>\n" +
     "                        <a href=\"http://ilwebdifabio.it/blog/{{article.id}}/{{article.slug}}\" class=\"twitter-share-button\" data-via=\"ilwebdifabio\" data-lang=\"it\" data-related=\"ilwebdifabio\" data-hashtags=\"ilwebdifabio\">Tweet</a>\n" +
@@ -60,7 +60,7 @@ angular.module("public/default/blog/blog.tpl.html", []).run(["$templateCache", f
     "                    <li>\n" +
     "                        <div class=\"g-plusone\" data-size=\"small\" data-width=\"150\" data-href=\"http://ilwebdifabio.it/blog/{{article.id}}/{{article.slug}}\"></div>\n" +
     "                    </li>\n" +
-    "                </ul> -->\n" +
+    "                </ul> --> \n" +
     "            </div>\n" +
     "            <!--article prologue -->\n" +
     "            <div class=\"article-content\" data-ng-bind-html=\"article.body\"></div>\n" +
@@ -113,22 +113,35 @@ angular.module("public/default/blog/details.tpl.html", []).run(["$templateCache"
     "            </h1>   \n" +
     "        </header>\n" +
     "        <div class=\"article-body\">\n" +
-    "            <ul class=\"article-meta\">\n" +
-    "                <li>\n" +
-    "                    <span class=\"glyphicon glyphicon-calendar\"></span>\n" +
-    "                    <time pubdate date=\"{{article.published | date:'dd/MM/yyyy'}}\">\n" +
-    "                        <em>{{article.published | date:'dd/MM/yyyy'}}</em>\n" +
-    "                    </time> |  \n" +
-    "                </li>\n" +
-    "                <li>\n" +
-    "                    <span class=\"btn btn-default btn-xs\">\n" +
-    "                        <span class=\"glyphicon glyphicon-comment\"></span> {{article.meta.comments.approved}}\n" +
-    "                    </span> | \n" +
-    "                </li>\n" +
-    "                <li class=\"article-tags\" tags=\"article.tags\" filter=\"filter(tag)\" data-nb-nav-tags>\n" +
-    "                    \n" +
-    "                </li>\n" +
-    "            </ul>\n" +
+    "            <div class=\"clearfix\">\n" +
+    "                <ul class=\"article-meta pull-left\">\n" +
+    "                    <li>\n" +
+    "                        <span class=\"glyphicon glyphicon-calendar\"></span>\n" +
+    "                        <time pubdate date=\"{{article.published | date:'dd/MM/yyyy'}}\">\n" +
+    "                            <em>{{article.published | date:'dd/MM/yyyy'}}</em>\n" +
+    "                        </time> |  \n" +
+    "                    </li>\n" +
+    "                    <li>\n" +
+    "                        <span class=\"btn btn-default btn-xs\">\n" +
+    "                            <span class=\"glyphicon glyphicon-comment\"></span> {{article.meta.comments.approved}}\n" +
+    "                        </span> | \n" +
+    "                    </li>\n" +
+    "                    <li class=\"article-tags\" tags=\"article.tags\" filter=\"filter(tag)\" data-nb-nav-tags>\n" +
+    "\n" +
+    "                    </li>\n" +
+    "                </ul>\n" +
+    "                <!-- <ul class=\"article-socials pull-right\">\n" +
+    "                        <li>\n" +
+    "                            <div class=\"fb-like\" data-href=\"http://ilwebdifabio.it/blog/{{article._id}}/{{article.slug}}\" data-layout=\"button_count\" data-action=\"like\" data-show-faces=\"false\" data-share=\"true\"></div>\n" +
+    "                        </li>\n" +
+    "                        <li>\n" +
+    "                            <a href=\"http://ilwebdifabio.it/blog/{{article._id}}/{{article.slug}}\" class=\"twitter-share-button\" data-via=\"ilwebdifabio\" data-lang=\"it\" data-related=\"ilwebdifabio\" data-hashtags=\"ilwebdifabio\">Tweet</a>\n" +
+    "                        </li>\n" +
+    "                        <li>\n" +
+    "                            <div class=\"g-plusone\" data-size=\"small\" data-width=\"150\" data-href=\"http://ilwebdifabio.it/blog/{{article._id}}/{{article.slug}}\"></div>\n" +
+    "                        </li>\n" +
+    "                </ul> -->\n" +
+    "            </div>    \n" +
     "            <!--article prologue -->\n" +
     "            <div class=\"article-content\" data-compile=\"article.body\">\n" +
     "            </div>\n" +
@@ -198,7 +211,19 @@ angular.module("public/default/blog/details.tpl.html", []).run(["$templateCache"
     "           </article>\n" +
     "        </article> \n" +
     "    </div>\n" +
-    "</div>    \n" +
+    "</div>   \n" +
+    "<!-- <script>\n" +
+    "    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');\n" +
+    "</script>\n" +
+    "<script>\n" +
+    "    window.___gcfg = {lang: 'it'};\n" +
+    "    (function() {\n" +
+    "        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;\n" +
+    "        po.src = 'https://apis.google.com/js/platform.js';\n" +
+    "        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);\n" +
+    "    })();\n" +
+    "</script>\n" +
+    "-->\n" +
     "");
 }]);
 
@@ -222,32 +247,21 @@ angular.module("public/default/header.tpl.html", []).run(["$templateCache", func
     "            <li><a href=\"https://www.facebook.com/pages/Ilwebdifabio/756965764316135\" target=\"_blank\" class=\"btn btn-social-icon btn-facebook\"><i class=\"fa fa-facebook\"></i></a></li>\n" +
     "            <li><a href=\"https://plus.google.com/u/0/+FabioBedini/posts\" target=\"_blank\" class=\"btn btn-social-icon btn-google-plus\"><i class=\"fa fa-google-plus\"></i></a></li>\n" +
     "            <li><a href=\"https://twitter.com/ilwebdifabio\" target=\"_blank\" class=\"btn btn-social-icon btn-sm btn-twitter\"><i class=\"fa fa-twitter\"></i></a></li>\n" +
-    "            <li><a class=\"btn btn-social-icon btn-instagram\"><i class=\"fa fa-instagram\"></i></a></li>\n" +
-    "            <li><a href=\"http://instagram.com/whisher06\" target=\"_blank\" class=\"btn btn-social-icon btn-github\"><i class=\"fa fa-github\"></i></a></li>\n" +
+    "            <li><a href=\"http://instagram.com/whisher06\" class=\"btn btn-social-icon btn-instagram\"><i class=\"fa fa-instagram\"></i></a></li>\n" +
+    "            <li><a href=\"https://github.com/whisher\" target=\"_blank\" class=\"btn btn-social-icon btn-github\"><i class=\"fa fa-github\"></i></a></li>\n" +
     "            <li><a class=\"btn btn-social-icon btn-foursquare\"><i class=\"fa fa-foursquare\"></i></a></li>\n" +
-    "            <li><a href=\"https://github.com/whisher\" target=\"_blank\" class=\"btn btn-social-icon btn-linkedin\"><i class=\"fa fa-linkedin\"></i></a></li>\n" +
+    "            <li><a href=\"it.linkedin.com/pub/fabio-bedini/65/850/475\" target=\"_blank\" class=\"btn btn-social-icon btn-linkedin\"><i class=\"fa fa-linkedin\"></i></a></li>\n" +
     "        </ul>\n" +
     "    </div>\n" +
-    "</div>");
+    "</div>\n" +
+    "\n" +
+    "");
 }]);
 
 angular.module("public/default/site/site.tpl.html", []).run(["$templateCache", function($templateCache) {
   "use strict";
   $templateCache.put("public/default/site/site.tpl.html",
     "<div class=\"jumbotron\" id=\"index\" role=\"index\" data-nb-panel>\n" +
-    "    <!-- <div id=\"socials-bar\" class=\" clearfix\">\n" +
-    "        <ul class=\"pull-right\">\n" +
-    "            <li>\n" +
-    "                <div class=\"fb-like\" data-href=\"http://ilwebdifabio.it\" data-layout=\"standard\" data-action=\"like\" data-show-faces=\"false\" data-share=\"true\"></div>\n" +
-    "            </li>\n" +
-    "            <li>\n" +
-    "                <a href=\"http://ilwebdifabio.it\" class=\"twitter-share-button\" data-via=\"ilwebdifabio\" data-lang=\"it\" data-related=\"ilwebdifabio\" data-hashtags=\"ilwebdifabio\">Tweet</a>\n" +
-    "            </li>\n" +
-    "            <li>\n" +
-    "                <div class=\"g-plusone\" data-size=\"small\" data-width=\"150\" data-href=\"http://ilwebdifabio.it\"></div>\n" +
-    "            </li>\n" +
-    "        </ul>\n" +
-    "    </div> -->\n" +
     "    <h2 class=\"clearfix\">Sviluppo, design e un pizzico di ...<span class=\"glyphicon glyphicon-home pull-right\"></span></h2>\n" +
     "    <h3>Siti, applicazioni web e compagnia.</h3>\n" +
     "    <p>Sviluppa il tuo marchio e la tua presenza in rete.</p>\n" +
@@ -314,15 +328,5 @@ angular.module("public/default/site/site.tpl.html", []).run(["$templateCache", f
     "        </div>\n" +
     "    </form>\n" +
     "</div>\n" +
-    "<!-- <script>\n" +
-    "    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');\n" +
-    "</script>\n" +
-    "<script>\n" +
-    "    window.___gcfg = {lang: 'it'};\n" +
-    "    (function() {\n" +
-    "        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;\n" +
-    "        po.src = 'https://apis.google.com/js/platform.js';\n" +
-    "        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);\n" +
-    "    })();\n" +
-    "</script> -->");
+    "");
 }]);

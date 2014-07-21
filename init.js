@@ -32,3 +32,4 @@ user.save(function(err) {
 
 db = null;
 model = null;
+    
