@@ -16,7 +16,7 @@ function uid(len) {
 //  
 module.exports = function(req, res, next) {
     // Generate XSRF token
-   /* var token = req.session._csrf || (req.session._csrf = uid(24));
+    var token = req.session._csrf || (req.session._csrf = uid(24));
     // Get the token in the current request
     var requestToken = req.header('X-XSRF-TOKEN');
     // Add it to the cookie
@@ -46,7 +46,7 @@ module.exports = function(req, res, next) {
                     error: 'Unauthorized'
                 });
             }
-    }*/
+    }
     // All is OK, continue as you were.
     return next();
 };
