@@ -93,10 +93,10 @@ angular.module("public/default/blog/details.tpl.html", []).run(["$templateCache"
     "    <div class=\"panel panel-default\" data-ng-if=\"hasNext && hasPrevious\">\n" +
     "        <div class=\"panel-body clearfix\">\n" +
     "            <a class=\"pull-left\" data-ui-sref=\"blog_details({ id: previous._id,slug: previous.slug })\" data-ng-show=\"hasPrevious\">\n" +
-    "                <span class=\"badge\" title=\"{{previous.title}}\">&lt;-{{previous.title}}</span>\n" +
+    "                <span class=\"badge\" title=\"{{previous.title}}\"><span class=\"glyphicon glyphicon-chevron-left\"> {{previous.title}}</span></span>\n" +
     "            </a>\n" +
     "            <a class=\"pull-right\" data-ui-sref=\"blog_details({ id: next._id,slug: next.slug })\" data-ng-show=\"hasNext\">\n" +
-    "                <span class=\"badge\" title=\"{{next.title}}\">{{next.title}}-&gt;</span>\n" +
+    "                <span class=\"badge\" title=\"{{next.title}}\">{{next.title}} <span class=\"glyphicon glyphicon-chevron-right\"></span></span>\n" +
     "            </a>\n" +
     "        </div>\n" +
     "    </div>\n" +
