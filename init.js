@@ -13,11 +13,11 @@ var fs = require('fs'),
     model = require(config.sroot+'/models/user'),
     User = mongoose.model('User');
     
-utilsFs.mkdirSync(upload,484);
-utilsFs.mkdirSync(tmp,484);
-utilsFs.mkdirSync(snapshots,484);
+//utilsFs.mkdirSync(upload,484);
+//utilsFs.mkdirSync(tmp,484);
+//utilsFs.mkdirSync(snapshots,484);
 
-var userData = { 'name' : 'User Admin', 'email' : 'info@ilwebdifabio.it', 'username' : 'admin','role' : 'admin','password':'admin'};
+var userData = { 'name' : 'User Admin', 'email' : 'io@ilwebdifabio.it', 'username' : 'admin','role' : 'admin','password':'1010AliceBe'};
 var user = new User(userData);
 user.provider = 'local';
 user.save(function(err) {
