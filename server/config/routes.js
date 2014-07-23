@@ -7,6 +7,7 @@ module.exports = function(app, passport,auth,io) {
     var indexDefaultController = require('../controllers/default/index');
     app.get('/', indexDefaultController.render);
     app.get('/robots.txt', indexDefaultController.bot);
+    app.get('/sitemap.xml', indexDefaultController.sitemap);
     
     /* Login Index */
     var loginController = require('../controllers/login/index');

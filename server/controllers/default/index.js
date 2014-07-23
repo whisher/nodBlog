@@ -69,3 +69,6 @@ exports.render = function(req, res) {
 exports.bot = function(req, res) {
      res.sendfile(process.cwd()+'/public/robots.txt');
 };
+exports.sitemap = function(req, res) {
+     res.sendfile(process.cwd()+'/public/sitemap.xml');
+};
