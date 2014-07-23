@@ -2,7 +2,7 @@
     <div class="panel panel-default" data-ng-if="hasNext && hasPrevious">
         <div class="panel-body clearfix">
             <a class="pull-left" data-ui-sref="blog_details({ id: previous._id,slug: previous.slug })" data-ng-show="hasPrevious">
-                <span class="badge" title="{{previous.title}}"><span class="glyphicon glyphicon-chevron-left"> {{previous.title}}</span></span>
+                <span class="badge" title="{{previous.title}}"><span class="glyphicon glyphicon-chevron-left"></span> {{previous.title}}</span>
             </a>
             <a class="pull-right" data-ui-sref="blog_details({ id: next._id,slug: next.slug })" data-ng-show="hasNext">
                 <span class="badge" title="{{next.title}}">{{next.title}} <span class="glyphicon glyphicon-chevron-right"></span></span>

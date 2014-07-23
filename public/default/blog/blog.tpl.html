@@ -9,10 +9,10 @@
     <div class="panel panel-default" data-ng-hide="!paginator.isClean()" data-ng-if="hasPagination">
         <div class="panel-body clearfix">
             <a class="pull-left" href="#" data-ng-show="paginator.hasOlder()" data-ng-click="paginator.older()">
-                <span class="badge" title="&lt;- Archivio">&lt;- Archivio</span>
+                <span class="badge" title="&lt;- Archivio"><span class="glyphicon glyphicon-chevron-left"></span> Archivio</span>
             </a>
             <a class="pull-right" href="#" data-ng-show="paginator.hasNewer()" data-ng-click="paginator.newer()">
-                <span class="badge" title="Recenti -&gt;">Recenti -&gt;</span>
+                <span class="badge" title="Recenti -&gt;">Recenti <span class="glyphicon glyphicon-chevron-right"></span></span>
             </a>
         </div>
     </div>

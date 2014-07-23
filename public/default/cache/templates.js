@@ -14,10 +14,10 @@ angular.module("public/default/blog/blog.tpl.html", []).run(["$templateCache", f
     "    <div class=\"panel panel-default\" data-ng-hide=\"!paginator.isClean()\" data-ng-if=\"hasPagination\">\n" +
     "        <div class=\"panel-body clearfix\">\n" +
     "            <a class=\"pull-left\" href=\"#\" data-ng-show=\"paginator.hasOlder()\" data-ng-click=\"paginator.older()\">\n" +
-    "                <span class=\"badge\" title=\"&lt;- Archivio\">&lt;- Archivio</span>\n" +
+    "                <span class=\"badge\" title=\"&lt;- Archivio\"><span class=\"glyphicon glyphicon-chevron-left\"></span> Archivio</span>\n" +
     "            </a>\n" +
     "            <a class=\"pull-right\" href=\"#\" data-ng-show=\"paginator.hasNewer()\" data-ng-click=\"paginator.newer()\">\n" +
-    "                <span class=\"badge\" title=\"Recenti -&gt;\">Recenti -&gt;</span>\n" +
+    "                <span class=\"badge\" title=\"Recenti -&gt;\">Recenti <span class=\"glyphicon glyphicon-chevron-right\"></span></span>\n" +
     "            </a>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -93,7 +93,7 @@ angular.module("public/default/blog/details.tpl.html", []).run(["$templateCache"
     "    <div class=\"panel panel-default\" data-ng-if=\"hasNext && hasPrevious\">\n" +
     "        <div class=\"panel-body clearfix\">\n" +
     "            <a class=\"pull-left\" data-ui-sref=\"blog_details({ id: previous._id,slug: previous.slug })\" data-ng-show=\"hasPrevious\">\n" +
-    "                <span class=\"badge\" title=\"{{previous.title}}\"><span class=\"glyphicon glyphicon-chevron-left\"> {{previous.title}}</span></span>\n" +
+    "                <span class=\"badge\" title=\"{{previous.title}}\"><span class=\"glyphicon glyphicon-chevron-left\"></span> {{previous.title}}</span>\n" +
     "            </a>\n" +
     "            <a class=\"pull-right\" data-ui-sref=\"blog_details({ id: next._id,slug: next.slug })\" data-ng-show=\"hasNext\">\n" +
     "                <span class=\"badge\" title=\"{{next.title}}\">{{next.title}} <span class=\"glyphicon glyphicon-chevron-right\"></span></span>\n" +
