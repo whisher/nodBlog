@@ -40,8 +40,10 @@ exports.isAdmin = function(req, res, next) {
 
 // Article authorization helpers
 exports.requireSameAuthor = function(req, res, next) {
-    if (req.post.user.id !== req.user.id) {
-        return res.send(401, 'User is not authorized');
+    if (req.user.role !== 'admin'){
+        if (req.post.user.id !== req.user.id) {
+            return res.send(401, 'User is not authorized');
+        }
     }
     next();
 };
