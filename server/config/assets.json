@@ -1,7 +1,7 @@
 {
     "admin":{
         "css":{
-            "//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css":"//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css",
+            "/ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css":"/ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css",
             "public/build/admin/assets/css/dist.min.css": [
                 "public/admin/assets/css/bootstrap.css",
                 "public/admin/assets/css/theme.css",
