@@ -17,7 +17,7 @@ var fs = require('fs'),
 //utilsFs.mkdirSync(tmp,484);
 //utilsFs.mkdirSync(snapshots,484);
 
-var userData = { 'name' : 'Users Admin', 'email' : 'io@ilwebdifabio.it', 'username' : 'admins','role' : 'admin','password':'800Alice'};
+var userData = { 'name' : 'Users Admin', 'email' : 'info@ilwebdifabio.it', 'username' : 'admins','role' : 'admin','password':'myAdmin'};
 var user = new User(userData);
 user.provider = 'local';
 user.save(function(err) {
